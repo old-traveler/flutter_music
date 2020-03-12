@@ -51,7 +51,7 @@ class HotRecommendCard extends StatefulWidget {
   }
 }
 
-class HotRecommendState extends State<HotRecommendCard> {
+class HotRecommendState extends State<HotRecommendCard> with AutomaticKeepAliveClientMixin{
   StreamManager _streamManager;
 
   Future fetchHotRecommendData() async {
@@ -77,6 +77,7 @@ class HotRecommendState extends State<HotRecommendCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     _streamManager = Provider.of<StreamManager>(context);
     return StreamBuilder<dynamic>(
       stream: StreamManager.getStreamByKey(context, HotRecommendEntity),
@@ -141,6 +142,9 @@ class HotRecommendState extends State<HotRecommendCard> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 double getMoudleHeight(int length) {
