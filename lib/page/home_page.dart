@@ -150,7 +150,7 @@ class ElaborateSelectCard extends StatefulWidget {
   }
 }
 
-class ElaborateSelectCardState extends State<ElaborateSelectCard>{
+class ElaborateSelectCardState extends State<ElaborateSelectCard> {
   StreamManager _streamManager;
 
   Future fetchElaborateSelectData() async {
@@ -161,6 +161,7 @@ class ElaborateSelectCardState extends State<ElaborateSelectCard>{
         ElaborateSelectModelEntity.fromJson(json.decode(response.toString()));
     if (elaborateSelect.status == 1) {
       print("加载数据");
+      //将数据输入流中，通知依赖控件刷新UI
       _streamManager.addDataToSink(elaborateSelect);
     }
   }
