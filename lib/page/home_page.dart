@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   StreamManager _streamManager = StreamManager();
 
   @override
@@ -32,6 +32,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return InheritedProvider.value(
         value: _streamManager,
         updateShouldNotify: (StreamManager old, StreamManager newManager) =>
@@ -42,6 +43,9 @@ class HomePageState extends State<HomePage> {
           ),
         ));
   }
+
+  @override
+  bool get wantKeepAlive => false;
 }
 
 class HotRecommendCard extends StatefulWidget {
@@ -51,7 +55,7 @@ class HotRecommendCard extends StatefulWidget {
   }
 }
 
-class HotRecommendState extends State<HotRecommendCard> with AutomaticKeepAliveClientMixin{
+class HotRecommendState extends State<HotRecommendCard> {
   StreamManager _streamManager;
 
   Future fetchHotRecommendData() async {
@@ -77,7 +81,6 @@ class HotRecommendState extends State<HotRecommendCard> with AutomaticKeepAliveC
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     _streamManager = Provider.of<StreamManager>(context);
     return StreamBuilder<dynamic>(
       stream: StreamManager.getStreamByKey(context, HotRecommendEntity),
@@ -142,9 +145,6 @@ class HotRecommendState extends State<HotRecommendCard> with AutomaticKeepAliveC
       ],
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 double getMoudleHeight(int length) {
