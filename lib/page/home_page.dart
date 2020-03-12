@@ -77,21 +77,34 @@ class HotRecommendState extends State<HotRecommendCard> {
           return Container();
         }
         print("加载数据到Widget上");
-        return Container(
-          height: 500,
-          padding: EdgeInsets.all(5.0),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 5.0,
-              crossAxisSpacing: 5.0,
-              childAspectRatio: 0.85,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 18, top: 10),
+              child: Text(
+                "热门推荐",
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              ),
             ),
-            itemBuilder: (BuildContext context, int index) =>
-                buildItemWidget(snapshot?.data?.data?.info[index]),
-            itemCount: snapshot?.data?.data?.info?.length ?? 0,
-            physics: NeverScrollableScrollPhysics(),
-          ),
+            Container(
+              height: 500,
+              padding:
+                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 5.0,
+                  crossAxisSpacing: 5.0,
+                  childAspectRatio: 0.85,
+                ),
+                itemBuilder: (BuildContext context, int index) =>
+                    buildItemWidget(snapshot?.data?.data?.info[index]),
+                itemCount: snapshot?.data?.data?.info?.length ?? 0,
+                physics: NeverScrollableScrollPhysics(),
+              ),
+            )
+          ],
         );
       },
     );
@@ -105,7 +118,7 @@ class HotRecommendState extends State<HotRecommendCard> {
           borderRadius: BorderRadius.circular(5),
           child: Image.network(
             info.bannerurl,
-            height: MediaQuery.of(context).size.width / 3 - 10,
+            height: MediaQuery.of(context).size.width / 3 - 18,
             fit: BoxFit.fitHeight,
           ),
         ),
@@ -113,7 +126,7 @@ class HotRecommendState extends State<HotRecommendCard> {
           child: Center(
             child: Text(
               info.name,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 15),
             ),
           ),
         )
