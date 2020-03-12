@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/http/http_manager.dart';
@@ -39,13 +40,42 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
             false,
         child: SingleChildScrollView(
           child: Column(
-            children: <Widget>[HotRecommendCard(), ElaborateSelectCard()],
+            children: <Widget>[
+              HomePageBanner(),
+              HotRecommendCard(),
+              ElaborateSelectCard()
+            ],
           ),
         ));
   }
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class HomePageBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 120,
+        child: Swiper(
+          itemBuilder: (BuildContext context, int index) {
+            return Image.asset("images/banner${index + 1}.jpg");
+          },
+          itemCount: 5,
+          pagination: SwiperPagination(
+              alignment: Alignment.bottomRight,
+              margin: EdgeInsets.only(bottom: 20.0, right: 20.0),
+              builder: SwiperPagination.dots),
+          autoplayDisableOnInteraction: true,
+          loop: true,
+          duration: 300,
+          autoplay: true,
+          itemHeight: 150,
+          viewportFraction: 0.8,
+          scale: 0.9,
+        ));
+  }
 }
 
 class HotRecommendCard extends StatelessWidget {
