@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
@@ -24,15 +25,22 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _streamManager.disposeAll();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InheritedProvider.value(
-      value: _streamManager,
-      updateShouldNotify: (StreamManager old, StreamManager newManager) =>
-          old != newManager,
-      child: ListView(
-        children: <Widget>[HotRecommendCard()],
-      ),
-    );
+        value: _streamManager,
+        updateShouldNotify: (StreamManager old, StreamManager newManager) =>
+            old != newManager,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[HotRecommendCard(), ElaborateSelectCard()],
+          ),
+        ));
   }
 }
 
@@ -81,14 +89,14 @@ class HotRecommendState extends State<HotRecommendCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(left: 18, top: 10),
+              padding: EdgeInsets.only(left: 18, top: 10, bottom: 5),
               child: Text(
                 "热门推荐",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              height: 500,
+              height: getMoudleHeight(snapshot?.data?.data?.info?.length ?? 0),
               padding:
                   EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: GridView.builder(
@@ -126,6 +134,126 @@ class HotRecommendState extends State<HotRecommendCard> {
           child: Center(
             child: Text(
               info.name,
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+double getMoudleHeight(int length) {
+  if (length <= 0) return 0.0;
+  var height = 0.0;
+  height = (length ~/ 3 + (length % 3 > 0 ? 1 : 0)) * 150.0;
+  return height + 15;
+}
+
+// ignore: must_be_immutable
+class ElaborateSelectCard extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return ElaborateSelectCardState();
+  }
+}
+
+class ElaborateSelectCardState extends State<ElaborateSelectCard> {
+  StreamManager _streamManager;
+
+  Future fetchElaborateSelectData() async {
+    Response response =
+        await HttpManager.getInstance().get("tag/list?pid=0&apiver=2&plat=0");
+    if (response == null) return;
+    final elaborateSelect =
+        ElaborateSelectModelEntity.fromJson(json.decode(response.toString()));
+    if (elaborateSelect.status == 1) {
+      print("加载数据");
+      _streamManager.addDataToSink(elaborateSelect);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchElaborateSelectData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _streamManager = StreamManager.of(context);
+    return StreamBuilder<dynamic>(
+        stream:
+            StreamManager.getStreamByKey(context, ElaborateSelectModelEntity),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot == null || snapshot.data == null) {
+            return Container();
+          }
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _buildInfo(snapshot.data));
+        });
+  }
+
+  List<Widget> _buildInfo(ElaborateSelectModelEntity data) {
+    List<Widget> widgets = List();
+    data.data.info.forEach((ElaborateSelectModelDataInfo info) {
+      widgets.addAll(_buildInfoChild(info));
+    });
+    return widgets;
+  }
+
+  List<Widget> _buildInfoChild(ElaborateSelectModelDataInfo info) {
+    List<Widget> widget = List();
+    if (info == null) return widget;
+    info?.children?.removeWhere((ElaborateSelectModelDataInfochild info) =>
+        info?.bannerurl?.isEmpty ?? true);
+    if (info.children?.isEmpty ?? true) {
+      return widget;
+    }
+    widget.add(Padding(
+      padding: EdgeInsets.only(left: 18, top: 10, bottom: 5),
+      child: Text(
+        info.name,
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+    ));
+    widget.add(Container(
+      height: getMoudleHeight(info?.children?.length ?? 0),
+      padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 5.0,
+          crossAxisSpacing: 5.0,
+          childAspectRatio: 0.85,
+        ),
+        itemBuilder: (BuildContext context, int index) =>
+            buildItemWidget(context, info?.children[index]),
+        itemCount: info?.children?.length ?? 0,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+    ));
+    return widget;
+  }
+
+  Widget buildItemWidget(
+      BuildContext context, ElaborateSelectModelDataInfochild children) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(
+            children.bannerurl,
+            height: MediaQuery.of(context).size.width / 3 - 18,
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Text(
+              children.name,
               style: TextStyle(fontSize: 15),
             ),
           ),
