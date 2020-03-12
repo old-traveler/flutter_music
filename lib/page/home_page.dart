@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
     return InheritedProvider.value(
         value: _streamManager,
         updateShouldNotify: (StreamManager old, StreamManager newManager) =>
-            old != newManager,
+            false,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[HotRecommendCard(), ElaborateSelectCard()],
@@ -45,17 +45,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }
 
-class HotRecommendCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return HotRecommendState();
-  }
-}
-
-class HotRecommendState extends State<HotRecommendCard> {
+class HotRecommendCard extends StatelessWidget {
   StreamManager _streamManager;
 
   Future fetchHotRecommendData() async {
@@ -74,13 +67,8 @@ class HotRecommendState extends State<HotRecommendCard> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    fetchHotRecommendData();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    fetchHotRecommendData();
     _streamManager = Provider.of<StreamManager>(context);
     return StreamBuilder<dynamic>(
       stream: StreamManager.getStreamByKey(context, HotRecommendEntity),
@@ -111,7 +99,7 @@ class HotRecommendState extends State<HotRecommendCard> {
                   childAspectRatio: 0.85,
                 ),
                 itemBuilder: (BuildContext context, int index) =>
-                    buildItemWidget(snapshot?.data?.data?.info[index]),
+                    buildItemWidget(context, snapshot?.data?.data?.info[index]),
                 itemCount: snapshot?.data?.data?.info?.length ?? 0,
                 physics: NeverScrollableScrollPhysics(),
               ),
@@ -122,7 +110,7 @@ class HotRecommendState extends State<HotRecommendCard> {
     );
   }
 
-  Widget buildItemWidget(HotRecommandDataInfo info) {
+  Widget buildItemWidget(BuildContext context, HotRecommandDataInfo info) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -162,7 +150,7 @@ class ElaborateSelectCard extends StatefulWidget {
   }
 }
 
-class ElaborateSelectCardState extends State<ElaborateSelectCard> {
+class ElaborateSelectCardState extends State<ElaborateSelectCard>{
   StreamManager _streamManager;
 
   Future fetchElaborateSelectData() async {
