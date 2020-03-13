@@ -55,78 +55,69 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 class HomePageBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: StreamManager.getStreamByKey(context, BannerEntity),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot == null || snapshot.data == null) {
-          return Container();
-        }
-        BannerEntity bannerEntity = snapshot.data;
-        return Container(
-            height: 120,
-            child: Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return Image.network(bannerEntity.banner[index]);
-              },
-              itemCount: bannerEntity.banner.length,
-              pagination: SwiperPagination(
-                  alignment: Alignment.bottomRight,
-                  margin: EdgeInsets.only(bottom: 20.0, right: 20.0),
-                  builder: SwiperPagination.dots),
-              autoplayDisableOnInteraction: true,
-              loop: true,
-              duration: 300,
-              autoplay: true,
-              itemHeight: 150,
-              viewportFraction: 0.8,
-              scale: 0.9,
-            ));
-      },
-    );
+    return smartStreamBuilder<BannerEntity>(
+        context: context,
+        builder: (BuildContext context, BannerEntity bannerEntity) {
+          return Container(
+              height: 120,
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.network(bannerEntity.banner[index]);
+                },
+                itemCount: bannerEntity.banner.length,
+                pagination: SwiperPagination(
+                    alignment: Alignment.bottomRight,
+                    margin: EdgeInsets.only(bottom: 20.0, right: 20.0),
+                    builder: SwiperPagination.dots),
+                autoplayDisableOnInteraction: true,
+                loop: true,
+                duration: 300,
+                autoplay: true,
+                itemHeight: 150,
+                viewportFraction: 0.8,
+                scale: 0.9,
+              ));
+        });
   }
 }
 
 class HotRecommendCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<dynamic>(
-      stream: StreamManager.getStreamByKey(context, HotRecommendEntity),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot == null || snapshot.data == null) {
-          return Container();
-        }
-        print("加载数据到Widget上");
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 18, top: 10, bottom: 5),
-              child: Text(
-                "热门推荐",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              height: getModularHeight(snapshot?.data?.data?.info?.length ?? 0),
-              padding:
-                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 5.0,
-                  crossAxisSpacing: 5.0,
-                  childAspectRatio: 0.85,
+    return smartStreamBuilder<HotRecommendEntity>(
+        context: context,
+        builder: (BuildContext context, HotRecommendEntity data) {
+          data.data.info.removeWhere((e) => e.bannerurl?.isEmpty ?? true);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 18, top: 10, bottom: 5),
+                child: Text(
+                  "热门推荐",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                itemBuilder: (BuildContext context, int index) =>
-                    buildItemWidget(context, snapshot?.data?.data?.info[index]),
-                itemCount: snapshot?.data?.data?.info?.length ?? 0,
-                physics: NeverScrollableScrollPhysics(),
               ),
-            )
-          ],
-        );
-      },
-    );
+              Container(
+                height: getModularHeight(data?.data?.info?.length ?? 0),
+                padding:
+                    EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 5.0,
+                    crossAxisSpacing: 5.0,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemBuilder: (BuildContext context, int index) =>
+                      buildItemWidget(context, data?.data?.info[index]),
+                  itemCount: data?.data?.info?.length ?? 0,
+                  physics: NeverScrollableScrollPhysics(),
+                ),
+              )
+            ],
+          );
+        });
   }
 
   Widget buildItemWidget(BuildContext context, HotRecommandDataInfo info) {
@@ -164,16 +155,12 @@ double getModularHeight(int length) {
 class ElaborateSelectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<dynamic>(
-        stream:
-            StreamManager.getStreamByKey(context, ElaborateSelectModelEntity),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot == null || snapshot.data == null) {
-            return Container();
-          }
+    return smartStreamBuilder<ElaborateSelectModelEntity>(
+        context: context,
+        builder: (BuildContext context, ElaborateSelectModelEntity data) {
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _buildInfo(snapshot.data));
+              children: _buildInfo(data));
         });
   }
 
