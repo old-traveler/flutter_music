@@ -43,14 +43,17 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         value: _homePageBloc.streamManager,
         updateShouldNotify: (StreamManager old, StreamManager newManager) =>
             false,
-        child: ListView(
-          children: <Widget>[
-            HomePageBanner(),
-            StationCard(),
-            SongSheetCard(),
-            HotRecommendCard(),
-            ElaborateSelectCard()
-          ],
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+            children: <Widget>[
+              HomePageBanner(),
+              StationCard(),
+              SongSheetCard(),
+              HotRecommendCard(),
+              ElaborateSelectCard()
+            ],
+          ),
         ));
   }
 
@@ -94,7 +97,7 @@ class StationCard extends StatelessWidget {
         context: context,
         builder: (BuildContext context, StationEntity data) {
           return Container(
-              height: 195.0,
+              height: 190.0,
               padding: EdgeInsets.only(left: 10, right: 10, top: 16),
               child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
