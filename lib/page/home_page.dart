@@ -95,7 +95,7 @@ class StationCard extends StatelessWidget {
         builder: (BuildContext context, StationEntity data) {
           return Container(
               height: 195.0,
-              padding: EdgeInsets.only(left: 10, right: 10, top: 15),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 16),
               child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -134,45 +134,60 @@ class SongSheetCard extends StatelessWidget {
     return smartStreamBuilder<SongSheetEntity>(
         context: context,
         builder: (BuildContext context, SongSheetEntity data) {
-          double leadingSize = (MediaQuery.of(context).size.width - 30) / 2;
-          return Container(
-            height: leadingSize + 20,
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildItemView(leadingSize, data.links[0], small: false),
-                SizedBox(width: 2.0),
-                Expanded(
-                  child: GridView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 5,
-                        crossAxisSpacing: 5,
-                      ),
-                      itemCount: 4,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _buildItemView(
-                            (leadingSize - 5) / 2, data.links[index + 1]);
-                      }),
-                )
-              ],
-            ),
+          double leadingSize = (MediaQuery.of(context).size.width - 46) / 2;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 18, top: 14),
+                child: Text(
+                  data.name,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                height: leadingSize + 30,
+                padding:
+                    EdgeInsets.only(left: 18, right: 18, top: 13, bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildItemView(leadingSize, data.links[0],
+                        small: false, height: leadingSize + 4),
+                    SizedBox(width: 2.0),
+                    Expanded(
+                      child: GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 2,
+                            crossAxisSpacing: 2,
+                          ),
+                          itemCount: 4,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _buildItemView(
+                                (leadingSize + 5) / 2, data.links[index + 1]);
+                          }),
+                    )
+                  ],
+                ),
+              )
+            ],
           );
         });
   }
 
-  Widget _buildItemView(double size, SongSheetLink info, {bool small = true}) {
+  Widget _buildItemView(double size, SongSheetLink info,
+      {bool small = true, double height}) {
     return Container(
-      width: size,
-      height: size,
+      height: small ? size : height,
       child: Stack(
         children: <Widget>[
           Image.network(
             info.url,
-            height: size,
             fit: BoxFit.fitHeight,
+            height: height,
           ),
           Positioned(
             top: 0,
@@ -205,24 +220,15 @@ class SongSheetCard extends StatelessWidget {
           ),
           Positioned(
             bottom: 0,
-            width: size,
+            width: small ? size : height,
             child: Container(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 1),
+              width: size,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
               color: Colors.black38,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    info.title,
-                    style: TextStyle(fontSize: 12, color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 2,
-                  )
-                ],
+              child: Text(
+                info.title,
+                style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
           )
