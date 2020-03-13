@@ -22,12 +22,12 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    _homePageBloc = HomePageBloc();
-    _homePageBloc.fetchBannerData();
-    _homePageBloc.fetchStationData();
-    _homePageBloc.fetchSongSheetData();
-    _homePageBloc.fetchHotRecommendData();
-    _homePageBloc.fetchElaborateSelectData();
+    _homePageBloc = HomePageBloc()
+      ..fetchBannerData()
+      ..fetchStationData()
+      ..fetchSongSheetData()
+      ..fetchHotRecommendData()
+      ..fetchElaborateSelectData();
   }
 
   @override
