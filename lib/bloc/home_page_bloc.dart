@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:music/entity/banner_entity.dart';
 import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/entity/entity_factory.dart';
@@ -11,6 +12,11 @@ class HomePageBloc implements StreamManager {
   final StreamManager _streamManager = StreamManager();
 
   StreamManager get streamManager => _streamManager;
+
+  Future fetchBannerData() async {
+    Response response = await HttpManager.getMockApi().get("banner.json");
+    _dealResponse<BannerEntity>(response);
+  }
 
   Future fetchHotRecommendData() async {
     Response response = await HttpManager.getInstance()

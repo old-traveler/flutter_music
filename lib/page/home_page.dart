@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:music/bloc/home_page_bloc.dart';
+import 'package:music/entity/banner_entity.dart';
 import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/util/stream_manager.dart';
@@ -20,6 +21,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     _homePageBloc = HomePageBloc();
+    _homePageBloc.fetchBannerData();
     _homePageBloc.fetchHotRecommendData();
     _homePageBloc.fetchElaborateSelectData();
   }
@@ -53,25 +55,34 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 class HomePageBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 120,
-        child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            return Image.asset("images/banner${index + 1}.jpg");
-          },
-          itemCount: 5,
-          pagination: SwiperPagination(
-              alignment: Alignment.bottomRight,
-              margin: EdgeInsets.only(bottom: 20.0, right: 20.0),
-              builder: SwiperPagination.dots),
-          autoplayDisableOnInteraction: true,
-          loop: true,
-          duration: 300,
-          autoplay: true,
-          itemHeight: 150,
-          viewportFraction: 0.8,
-          scale: 0.9,
-        ));
+    return StreamBuilder(
+      stream: StreamManager.getStreamByKey(context, BannerEntity),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot == null || snapshot.data == null) {
+          return Container();
+        }
+        BannerEntity bannerEntity = snapshot.data;
+        return Container(
+            height: 120,
+            child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return Image.network(bannerEntity.banner[index]);
+              },
+              itemCount: bannerEntity.banner.length,
+              pagination: SwiperPagination(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(bottom: 20.0, right: 20.0),
+                  builder: SwiperPagination.dots),
+              autoplayDisableOnInteraction: true,
+              loop: true,
+              duration: 300,
+              autoplay: true,
+              itemHeight: 150,
+              viewportFraction: 0.8,
+              scale: 0.9,
+            ));
+      },
+    );
   }
 }
 
