@@ -4,6 +4,8 @@ import 'package:music/bloc/home_page_bloc.dart';
 import 'package:music/entity/banner_entity.dart';
 import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
+import 'package:music/entity/song_sheet_entity.dart';
+import 'package:music/entity/station_entity.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +24,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
     super.initState();
     _homePageBloc = HomePageBloc();
     _homePageBloc.fetchBannerData();
+    _homePageBloc.fetchStationData();
+    _homePageBloc.fetchSongSheetData();
     _homePageBloc.fetchHotRecommendData();
     _homePageBloc.fetchElaborateSelectData();
   }
@@ -42,6 +46,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         child: ListView(
           children: <Widget>[
             HomePageBanner(),
+            StationCard(),
+            SongSheetCard(),
             HotRecommendCard(),
             ElaborateSelectCard()
           ],
@@ -78,6 +84,151 @@ class HomePageBanner extends StatelessWidget {
                 scale: 0.9,
               ));
         });
+  }
+}
+
+class StationCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return smartStreamBuilder<StationEntity>(
+        context: context,
+        builder: (BuildContext context, StationEntity data) {
+          return Container(
+              height: 195.0,
+              padding: EdgeInsets.only(left: 10, right: 10, top: 15),
+              child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    mainAxisSpacing: 5.0,
+                    childAspectRatio: 0.85,
+                    crossAxisSpacing: 5.0,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.network(
+                          data.links[index].url,
+                          height: MediaQuery.of(context).size.width / 5 - 28,
+                          fit: BoxFit.fitHeight,
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              data.links[index].name,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }));
+        });
+  }
+}
+
+class SongSheetCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return smartStreamBuilder<SongSheetEntity>(
+        context: context,
+        builder: (BuildContext context, SongSheetEntity data) {
+          double leadingSize = (MediaQuery.of(context).size.width - 30) / 2;
+          return Container(
+            height: leadingSize + 20,
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildItemView(leadingSize, data.links[0], small: false),
+                SizedBox(width: 2.0),
+                Expanded(
+                  child: GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                      ),
+                      itemCount: 4,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _buildItemView(
+                            (leadingSize - 5) / 2, data.links[index + 1]);
+                      }),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget _buildItemView(double size, SongSheetLink info, {bool small = true}) {
+    return Container(
+      width: size,
+      height: size,
+      child: Stack(
+        children: <Widget>[
+          Image.network(
+            info.url,
+            height: size,
+            fit: BoxFit.fitHeight,
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            width: small ? size / 1.5 : size / 1.8,
+            child: Container(
+              padding: EdgeInsets.only(top: 3, bottom: 3),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0x00000000), Color(0x8A000000)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Icon(
+                    Icons.headset,
+                    color: Colors.white,
+                    size: small ? 12 : 16,
+                  ),
+                  SizedBox(width: 5.0),
+                  Text(
+                    info.count,
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                  SizedBox(width: 5.0),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            width: size,
+            child: Container(
+              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 1),
+              color: Colors.black38,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    info.title,
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 1,
+                  ),
+                  SizedBox(
+                    height: 2,
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 

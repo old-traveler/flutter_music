@@ -1,5 +1,7 @@
 
 
+import 'package:music/entity/song_sheet_entity.dart';
+import 'package:music/entity/station_entity.dart';
 import 'banner_entity.dart';
 import 'elaborate_select_model_entity.dart';
 import 'hot_recommend_entity.dart';
@@ -14,6 +16,10 @@ class EntityFactory {
       return BannerEntity.fromJson(json) as T;
     } else if (T.toString() == "ElaborateSelectModelEntity") {
       return ElaborateSelectModelEntity.fromJson(json) as T;
+    } else if (T.toString() == "SongSheetEntity") {
+      return SongSheetEntity.fromJson(json) as T;
+    } else if (T.toString() == "StationEntity") {
+      return StationEntity.fromJson(json) as T;
     } else {
       return null;
     }
