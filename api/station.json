@@ -1,0 +1,48 @@
+{
+  "state": 1,
+  "name": "热门电台",
+
+  "links": [
+    {
+      "name": "KTV必点曲",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_1.jpg"
+    },
+    {
+      "name": "中文DJ",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_2.jpg"
+    },
+    {
+      "name": "酷狗热歌",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_3.jpg"
+    },
+    {
+      "name": "网络红歌",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_4.jpg"
+    },
+    {
+      "name": "经典",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_5.jpg"
+    },
+    {
+      "name": "老情歌",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_6.jpg"
+    },
+    {
+      "name": "新歌",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_7.jpg"
+    },
+    {
+      "name": "动漫",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_8.jpg"
+    },
+    {
+      "name": "轻音乐",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_9.jpg"
+    },
+    {
+      "name": "最爱成名曲",
+      "url": "https://staticssl.kugou.com/public/root/images/radio_10.jpg"
+    }
+
+  ]
+}

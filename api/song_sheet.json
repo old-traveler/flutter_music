@@ -1,0 +1,37 @@
+{
+  "state": 1,
+  "name": "精选歌单",
+  "links": [
+    {
+      "title": "震惊！这些歌的原版竟是英文歌",
+      "name": "gt",
+      "count": "100.5万",
+      "url": "https://imgessl.kugou.com/custom/480/20200311/20200311145221721454.jpg"
+    },
+    {
+      "title": "每周推荐歌曲",
+      "name": "酷狗号歌单君",
+      "count": "39610.4万",
+      "url": "https://imgessl.kugou.com/soft/collection/200/20200309/20200309122829195563.jpg"
+    },
+    {
+      "title": "国风新歌2020",
+      "name": "国风小编",
+      "count": "54.9万",
+      "url": "https://imgessl.kugou.com/soft/collection/150/20200211/20200211115431547351.jpg"
+    },
+    {
+      "title": "变身元气少女",
+      "name": "早早今天早",
+      "count": "15.0万",
+      "url": "https://imgessl.kugou.com/custom/150/20200306/20200306180422810135.jpg"
+    },
+    {
+      "title": "海绵宝宝",
+      "name": "飞行棋",
+      "count": "48.1万",
+      "url": "https://imgessl.kugou.com/custom/150/20200305/20200305235906942585.jpg"
+    }
+
+  ]
+}
