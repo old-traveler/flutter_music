@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class StreamManager {
   Map<dynamic, StreamController> _streamControllerMap = HashMap();
 
-  static StreamManager of(BuildContext context){
+  static StreamManager of(BuildContext context) {
     return Provider.of<StreamManager>(context);
   }
 
@@ -18,7 +18,7 @@ class StreamManager {
   }
 
   Stream _getStreamByKey(dynamic key) {
-    return (_streamControllerMap[key] ??= StreamController()).stream;
+    return (_streamControllerMap[key] ??= StreamController.broadcast()).stream;
   }
 
   static void addDataToSinkByContext(BuildContext context, dynamic data) {

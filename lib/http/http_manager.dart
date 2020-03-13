@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -5,23 +6,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:music/util/toast_util.dart';
 
 class HttpManager {
-  static HttpManager instance;
+  static Map<String, HttpManager> instance = HashMap();
   Dio dio;
   BaseOptions options;
 
   static HttpManager getInstance() {
-    if (null == instance) instance = HttpManager();
-    return instance;
+    return getInstanceByUrl("http://mobilecdnbj.kugou.com/api/v3/");
+  }
+
+  static HttpManager getMockApi() {
+    return getInstanceByUrl(
+        "https://raw.githubusercontent.com/old-traveler/flutter_music/master/api/");
+  }
+
+  static HttpManager getInstanceByUrl(String baseUrl) {
+    instance[baseUrl] ??= HttpManager(baseUrl);
+    return instance[baseUrl];
   }
 
   /*
    * config it and create
    */
-  HttpManager() {
+  HttpManager(String baseUrl) {
     //BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
     options = BaseOptions(
       //请求基地址,可以包含子路径
-      baseUrl: "http://mobilecdnbj.kugou.com/api/v3/",
+      baseUrl: baseUrl,
       //连接服务器超时时间，单位是毫秒.
       connectTimeout: 10000,
       //响应流上前后两次接受到数据的间隔，单位为毫秒。
