@@ -79,16 +79,50 @@ class SearchResultPageState extends State<SearchResultPage> {
                       return ListView.builder(
                         itemBuilder: (context, index) {
                           return ListTile(
-                            leading: Icon(Icons.add_circle_outline),
-                            title: Text(
-                                data.data.info[index].songname
-                                    .replaceAll("<em>", "")
-                                    .replaceAll("</em>", ""),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis),
-                            subtitle: Text(data.data.info[index].singername),
-                            trailing: Icon(Icons.more_horiz),
-                          );
+                            contentPadding: EdgeInsets.only(left: 25),
+                              title: Text(
+                                  data.data.info[index].songname
+                                      .replaceAll("<em>", "")
+                                      .replaceAll("</em>", ""),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis),
+                              subtitle: Text(data.data.info[index].singername),
+                              trailing: PopupMenuButton<String>(
+                                padding: EdgeInsets.zero,
+                                onSelected: (value) {},
+                                itemBuilder: (context) =>
+                                    <PopupMenuEntry<String>>[
+                                  PopupMenuItem<String>(
+                                    value: "star",
+                                    child: ListTile(
+                                      leading: Icon(Icons.star),
+                                      title: Text("收藏"),
+                                    ),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: "play",
+                                    child: ListTile(
+                                      leading: Icon(Icons.play_circle_outline),
+                                      title: Text("播放"),
+                                    ),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: "share",
+                                    child: ListTile(
+                                      leading: Icon(Icons.share),
+                                      title: Text("分享"),
+                                    ),
+                                  ),
+                                  PopupMenuDivider(),
+                                  PopupMenuItem<String>(
+                                    value: "remove",
+                                    child: ListTile(
+                                      leading: Icon(Icons.delete),
+                                      title: Text("删除"),
+                                    ),
+                                  ),
+                                ],
+                              ));
                         },
                         itemCount: data?.data?.info?.length ?? 0,
                       );
