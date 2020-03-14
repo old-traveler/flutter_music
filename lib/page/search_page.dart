@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/search_page_bloc.dart';
 import 'package:music/entity/association_entity.dart';
+import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    _searchPageBloc = SearchPageBloc();
+    _searchPageBloc = SearchPageBloc()..fetchHotSearchData();
     _controller = TextEditingController();
   }
 
@@ -41,11 +42,9 @@ class SearchPageState extends State<SearchPage> {
               appBar: AppBar(centerTitle: true, title: _buildSearchInput()),
               body: _input?.isNotEmpty ?? false
                   ? AssociationWidget()
-                  : _buildHotSearch(),
+                  : HotSearchWidget(),
             )));
   }
-
-  Widget _buildHotSearch() {}
 
   Widget _buildSearchInput() {
     print("构建搜索输入框");
@@ -110,19 +109,46 @@ class AssociationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder<AssociationEntity>(
         context: context,
-        builder: (BuildContext context, AssociationEntity data) {
-          return ListView.separated(
-              itemBuilder: (context, index) => ListTile(
-                contentPadding: EdgeInsets.only(left: 20),
+        builder: (BuildContext context, AssociationEntity data) =>
+            ListView.separated(
+                itemBuilder: (context, index) => ListTile(
+                      contentPadding: EdgeInsets.only(left: 20),
+                      leading: Icon(Icons.search),
+                      title: Text(data.data[index].keyword),
+                    ),
+                separatorBuilder: (context, index) => Divider(
+                      height: 1,
+                      thickness: 0.5,
+                    ),
+                itemCount: data.data?.length ?? 0));
+  }
+}
 
-                    leading: Icon(Icons.search),
-                    title: Text(data.data[index].keyword),
-                  ),
-              separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    thickness: 0.5,
-                  ),
-              itemCount: data.data?.length ?? 0);
+class HotSearchWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return smartStreamBuilder<HotSearchEntity>(
+        context: context,
+        builder: (context, data) {
+          List<Widget> widgets = List();
+          data.data.info?.forEach((item) {
+            widgets.add(Chip(
+              backgroundColor: Theme.of(context).accentColor,
+              avatar: CircleAvatar(
+                backgroundColor: Colors.redAccent,
+                child: Icon(Icons.whatshot,color: Colors.white,),
+              ),
+              label: Text(item.keyword,style: TextStyle(color: Colors.white,fontSize: 15),),
+              labelPadding: EdgeInsets.only(left: 5,right: 10,top: 1,bottom: 1),
+            ));
+          });
+          return Padding(
+            padding: EdgeInsets.only(left:15,top: 10,right: 20),
+            child: Wrap(
+              spacing: 8.0,
+              children: widgets,
+            ),
+          );
         });
   }
 }

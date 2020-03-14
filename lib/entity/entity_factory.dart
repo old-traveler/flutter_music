@@ -6,6 +6,7 @@ import 'association_entity.dart';
 import 'banner_entity.dart';
 import 'elaborate_select_model_entity.dart';
 import 'hot_recommend_entity.dart';
+import 'hot_search_entity.dart';
 
 class EntityFactory {
   static T generateOBJ<T>(json) {
@@ -23,6 +24,8 @@ class EntityFactory {
       return StationEntity.fromJson(json) as T;
     } else if (T.toString() == "AssociationEntity") {
       return AssociationEntity.fromJson(json) as T;
+    } else if (T.toString() == "HotSearchEntity") {
+      return HotSearchEntity.fromJson(json) as T;
     } else {
       return null;
     }

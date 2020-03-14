@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:music/entity/association_entity.dart';
 import 'package:music/entity/entity_factory.dart';
+import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
 
@@ -12,14 +13,19 @@ class SearchPageBloc implements StreamManager {
   StreamManager get streamManager => _streamManager;
 
   Future fetchAssociationData(String keyword) async {
-    if(keyword?.isEmpty ?? true){
-      addDataToSink(AssociationEntity()
-      ..status =1);
+    if (keyword?.isEmpty ?? true) {
+      addDataToSink(AssociationEntity()..status = 1);
     }
     Response response =
         await HttpManager.getInstanceByUrl("http://msearchcdn.kugou.com/").get(
             "new/app/i/search.php?student=0&cmd=302&keyword=$keyword&with_res_tag=1");
     _dealResponse<AssociationEntity>(response);
+  }
+
+  Future fetchHotSearchData() async {
+    Response response =
+        await HttpManager.getInstance().get("search/hot?count=20&plat=1");
+    _dealResponse<HotSearchEntity>(response);
   }
 
   void _dealResponse<T>(Response response) {
