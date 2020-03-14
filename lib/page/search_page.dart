@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:music/bloc/search_page_bloc.dart';
 import 'package:music/entity/association_entity.dart';
 import 'package:music/entity/hot_search_entity.dart';
+import 'package:music/page/search_result_page.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -115,6 +116,11 @@ class AssociationWidget extends StatelessWidget {
                       contentPadding: EdgeInsets.only(left: 20),
                       leading: Icon(Icons.search),
                       title: Text(data.data[index].keyword),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                SearchResultPage(data.data[index].keyword)));
+                      },
                     ),
                 separatorBuilder: (context, index) => Divider(
                       height: 1,

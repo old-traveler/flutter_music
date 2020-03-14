@@ -1,5 +1,6 @@
 
 
+import 'package:music/entity/search_song_entity.dart';
 import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
 import 'association_entity.dart';
@@ -26,6 +27,8 @@ class EntityFactory {
       return AssociationEntity.fromJson(json) as T;
     } else if (T.toString() == "HotSearchEntity") {
       return HotSearchEntity.fromJson(json) as T;
+    } else if (T.toString() == "SearchSongEntity") {
+      return SearchSongEntity.fromJson(json) as T;
     } else {
       return null;
     }
