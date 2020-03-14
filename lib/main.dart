@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music/page/home_page.dart';
 import 'package:music/page/other_page.dart';
+import 'package:music/page/search_page.dart';
 import 'package:music/provider/navigation_index.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,16 @@ class MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text("Music"),
         leading: Icon(Icons.music_note),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            tooltip: 'search',
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SearchPage()));
+            },
+          )
+        ],
       ),
       body: PageView(
         controller: _pageController,
@@ -74,7 +85,7 @@ class MainPageState extends State<MainPage> {
                   icon: Icon(Icons.music_note), title: Text("音乐")),
               BottomNavigationBarItem(
                 icon: Icon(Icons.apps),
-                title: Text("分类"),
+                title: Text("直播"),
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.equalizer), title: Text("排行榜")),
