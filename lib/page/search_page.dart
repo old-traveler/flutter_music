@@ -136,19 +136,41 @@ class HotSearchWidget extends StatelessWidget {
               backgroundColor: Theme.of(context).accentColor,
               avatar: CircleAvatar(
                 backgroundColor: Colors.redAccent,
-                child: Icon(Icons.whatshot,color: Colors.white,),
+                child: Icon(
+                  Icons.whatshot,
+                  color: Colors.white,
+                ),
               ),
-              label: Text(item.keyword,style: TextStyle(color: Colors.white,fontSize: 15),),
-              labelPadding: EdgeInsets.only(left: 5,right: 10,top: 1,bottom: 1),
+              label: Text(
+                item.keyword,
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
+              labelPadding:
+                  EdgeInsets.only(left: 5, right: 10, top: 1, bottom: 1),
             ));
           });
           return Padding(
-            padding: EdgeInsets.only(left:15,top: 10,right: 20),
-            child: Wrap(
-              spacing: 8.0,
-              children: widgets,
-            ),
-          );
+              padding: EdgeInsets.only(left: 15, top: 15, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 2),
+                    child: Text(
+                      "热门搜索",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Wrap(
+                    spacing: 8.0,
+                    children: widgets,
+                  ),
+                ],
+              ));
         });
   }
 }
