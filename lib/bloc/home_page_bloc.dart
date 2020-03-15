@@ -10,7 +10,7 @@ import 'package:music/entity/station_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
 
-class HomePageBloc implements StreamManager {
+class HomePageBloc  {
   final StreamManager _streamManager = StreamManager();
 
   StreamManager get streamManager => _streamManager;
@@ -61,17 +61,14 @@ class HomePageBloc implements StreamManager {
     }
   }
 
-  @override
   void addDataToSink(data) {
     _streamManager.addDataToSink(data);
   }
 
-  @override
   void dispose(key) {
     _streamManager.dispose(key);
   }
 
-  @override
   void disposeAll() {
     _streamManager.disposeAll();
   }

@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:music/bloc/base_bloc.dart';
+import 'package:music/components/state_widget.dart';
 import 'package:provider/provider.dart';
 
 typedef WidgetBuilder<T> = Widget Function(BuildContext context, T data);
+typedef PageStateWidget = Widget Function(BuildContext context);
+typedef IsNoData<T> = bool Function(T data);
 
 class StreamManager {
   Map<dynamic, StreamController> _streamControllerMap = HashMap();
@@ -37,9 +41,13 @@ class StreamManager {
   }
 
   void addDataToSink(dynamic data) {
-    _lastElementMap[data.runtimeType] = data;
+    addDataToSinkByKey(data.runtimeType, data);
+  }
+
+  void addDataToSinkByKey(dynamic key, dynamic data) {
+    _lastElementMap[key] = data;
     print("controller：${_streamControllerMap[data.runtimeType]}");
-    _streamControllerMap[data.runtimeType]?.add(data);
+    _streamControllerMap[key]?.add(data);
   }
 
   void disposeAll() {
@@ -68,4 +76,58 @@ StreamBuilder smartStreamBuilder<T>(
       return builder(context, snapshot.data);
     },
   );
+}
+
+Widget smartStreamBuilder2<T>({StreamManager streamManager,
+  BuildContext context,
+  @required WidgetBuilder<T> builder,
+  PageStateWidget noData,
+  PageStateWidget loading,
+  PageStateWidget error,
+  PageStateWidget noNet,
+  IsNoData<T> isNoData}) {
+  assert(builder != null);
+  assert(streamManager != null || context != null);
+  streamManager ??= Provider.of<StreamManager>(context);
+  return StreamBuilder(
+    initialData: streamManager._getLastElement(T),
+    stream: streamManager._getStreamByKey(T),
+    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      if (snapshot == null || snapshot.data == null) {
+        return getNonNullWidget(context, noData, () => NoDataWidget());
+      }
+      if (!(snapshot.data is PageData)) {
+        throw Exception("snapshot.data must is PageData");
+      }
+      PageData pageData = snapshot.data;
+      switch (pageData.state) {
+        case PageState.loading:
+          return getNonNullWidget(context, loading, () => LoadingWidget());
+        case PageState.noData:
+          return getNonNullWidget(context, noData, () => NoDataWidget());
+        case PageState.noNet:
+          return getNonNullWidget(context, noNet, () => NoNetWidget());
+        case PageState.complete:
+          if (isNoData != null && isNoData(pageData.data)) {
+            return NoDataWidget();
+          } else {
+            return builder(context, pageData.data);
+          }
+          break;
+        case PageState.error:
+          return getNonNullWidget(
+              context, noNet, () => OnErrorWidget(pageData.data));
+      }
+      throw Exception("not deal ${pageData.state}");
+    },
+  );
+}
+
+Widget getNonNullWidget(BuildContext context, PageStateWidget widgetProvider,
+    Widget Function() defaultWidget) {
+  assert(defaultWidget != null);
+  if (widgetProvider != null) {
+    return widgetProvider(context);
+  }
+  return defaultWidget();
 }

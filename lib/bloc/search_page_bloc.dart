@@ -7,7 +7,7 @@ import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
 
-class SearchPageBloc implements StreamManager {
+class SearchPageBloc {
   final StreamManager _streamManager = StreamManager();
 
   StreamManager get streamManager => _streamManager;
@@ -51,17 +51,14 @@ class SearchPageBloc implements StreamManager {
     }
   }
 
-  @override
   void addDataToSink(data) {
     _streamManager.addDataToSink(data);
   }
 
-  @override
   void dispose(key) {
     _streamManager.dispose(key);
   }
 
-  @override
   void disposeAll() {
     _streamManager.disposeAll();
   }
