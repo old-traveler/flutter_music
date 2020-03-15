@@ -8,6 +8,7 @@ import 'banner_entity.dart';
 import 'elaborate_select_model_entity.dart';
 import 'hot_recommend_entity.dart';
 import 'hot_search_entity.dart';
+import 'live_entity.dart';
 
 class EntityFactory {
   static T generateOBJ<T>(json) {
@@ -29,6 +30,8 @@ class EntityFactory {
       return HotSearchEntity.fromJson(json) as T;
     } else if (T.toString() == "SearchSongEntity") {
       return SearchSongEntity.fromJson(json) as T;
+    } else if (T.toString() == "LiveEntity") {
+      return LiveEntity.fromJson(json) as T;
     } else {
       return null;
     }
