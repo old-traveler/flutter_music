@@ -13,11 +13,10 @@ class BaseBloc {
 
   StreamManager get streamManager => _streamManager;
 
-  void dealResponse<T>({@required ResponseProvider responseProvider,void Function() stopLoading}) async {
+  void dealResponse<T>({@required ResponseProvider responseProvider,void Function(bool) stopLoading}) async {
     assert(responseProvider != null);
     _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
     Response response = await responseProvider();
-    stopLoading();
     if (response == null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.noNet(null));
       return;
@@ -34,11 +33,15 @@ class BaseBloc {
     if (data['status'] == 1 || data['code'] == 0) {
       _streamManager.addDataToSinkByKey(
           T, PageData<T>.complete(EntityFactory.generateOBJ<T>(data)));
+      stopLoading(true);
+      return;
     } else if (data['error'] != null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.error(data['error']));
     } else {
       _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
     }
+    stopLoading(false);
+
   }
 
   void dispose(key) {
