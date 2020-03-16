@@ -79,7 +79,7 @@ class LivePageState extends State<LivePage> {
           print("构建");
           return SmartRefresher(
               enablePullDown: true,
-              enablePullUp: true,
+              enablePullUp: data.data.hasNextPage == 1,
               header: ClassicHeader(),
               footer: ClassicFooter(),
               controller: _refreshController,
