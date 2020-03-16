@@ -20,22 +20,25 @@ class LiveBloc extends BaseBloc {
   LiveBloc(this._livePageState);
 
   void fetchListData(bool isRefresh) {
-    if(isRefresh) _page = 1;
+    if (isRefresh) _page = 1;
     print("page:$_page");
-    dealResponse<LiveEntity>(responseProvider: () {
-      return HttpManager.getInstanceByUrl(keGouBaseUrl)
-          .get(getLiveUrl(page: _page));
-    }, stopLoading: (isOk) {
-      print("调用stopLoading$isOk");
-      if (_page == 1) {
-        _livePageState._refreshController.refreshCompleted();
-      } else {
-        _livePageState._refreshController.loadComplete();
-      }
-      if (isOk) {
-        _page++;
-      }
-    });
+    dealResponse<LiveEntity>(
+        responseProvider: () {
+          return HttpManager.getInstanceByUrl(keGouBaseUrl)
+              .get(getLiveUrl(page: _page));
+        },
+        needLoading: isRefresh,
+        stopLoading: (isOk) {
+          print("调用stopLoading$isOk");
+          if (_page == 1) {
+            _livePageState._refreshController.refreshCompleted();
+          } else {
+            _livePageState._refreshController.loadComplete();
+          }
+          if (isOk) {
+            _page++;
+          }
+        });
   }
 }
 

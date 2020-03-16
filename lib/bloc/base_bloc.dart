@@ -13,9 +13,11 @@ class BaseBloc {
 
   StreamManager get streamManager => _streamManager;
 
-  void dealResponse<T>({@required ResponseProvider responseProvider,void Function(bool) stopLoading}) async {
+  void dealResponse<T>({@required ResponseProvider responseProvider,void Function(bool) stopLoading,bool needLoading}) async {
     assert(responseProvider != null);
-    _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
+    if (needLoading){
+      _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
+    }
     Response response = await responseProvider();
     if (response == null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.noNet(null));
