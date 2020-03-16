@@ -41,7 +41,9 @@ class LiveBloc extends BaseBloc {
         },
         dataConvert: (data) {
           PageData<LiveEntity> pageState = streamManager.getLastElement(LiveEntity);
-          data?.data?.xList?.addAll(pageState?.data?.data?.xList ?? List());
+          final list = pageState?.data?.data?.xList ?? List();
+          list.addAll(data?.data?.xList ?? List());
+          data?.data?.xList = list;
           return data;
         });
   }
