@@ -40,10 +40,13 @@ class LiveBloc extends BaseBloc {
           }
         },
         dataConvert: (data) {
-          PageData<LiveEntity> pageState = streamManager.getLastElement(LiveEntity);
-          final list = pageState?.data?.data?.xList ?? List();
-          list.addAll(data?.data?.xList ?? List());
-          data?.data?.xList = list;
+          if (!isRefresh) {
+            PageData<LiveEntity> pageState =
+                streamManager.getLastElement(LiveEntity);
+            final list = pageState?.data?.data?.xList ?? List();
+            list.addAll(data?.data?.xList ?? List());
+            data?.data?.xList = list;
+          }
           return data;
         });
   }
@@ -76,7 +79,6 @@ class LivePageState extends State<LivePage> {
         builder: (context, data) {
           data.data.xList.removeWhere((item) =>
               (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
-          print("构建");
           return SmartRefresher(
               enablePullDown: true,
               enablePullUp: data.data.hasNextPage == 1,
