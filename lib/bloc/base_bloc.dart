@@ -6,16 +6,20 @@ import 'package:music/entity/entity_factory.dart';
 import 'package:music/util/stream_manager.dart';
 
 typedef ResponseProvider = Future<dynamic> Function();
-typedef ContentProvider<D> = Widget Function(BuildContext context,D data);
+typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 
 class BaseBloc {
   StreamManager _streamManager = StreamManager();
 
   StreamManager get streamManager => _streamManager;
 
-  void dealResponse<T>({@required ResponseProvider responseProvider,void Function(bool) stopLoading,bool needLoading}) async {
+  void dealResponse<T>(
+      {@required ResponseProvider responseProvider,
+      void Function(bool) stopLoading,
+      bool needLoading,
+      T Function(T) dataConvert}) async {
     assert(responseProvider != null);
-    if (needLoading){
+    if (needLoading) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
     }
     Response response = await responseProvider();
@@ -33,8 +37,11 @@ class BaseBloc {
       return;
     }
     if (data['status'] == 1 || data['code'] == 0) {
+      T originData = EntityFactory.generateOBJ<T>(data);
       _streamManager.addDataToSinkByKey(
-          T, PageData<T>.complete(EntityFactory.generateOBJ<T>(data)));
+          T,
+          PageData<T>.complete(
+              dataConvert == null ? originData : dataConvert(originData)));
       stopLoading(true);
       return;
     } else if (data['error'] != null) {
@@ -43,7 +50,6 @@ class BaseBloc {
       _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
     }
     stopLoading(false);
-
   }
 
   void dispose(key) {
@@ -79,5 +85,3 @@ class PageData<D> {
 
   PageData.error(D data) : this(PageState.error, data);
 }
-
-

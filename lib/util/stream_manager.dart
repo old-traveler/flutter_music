@@ -32,11 +32,11 @@ class StreamManager {
     Provider.of<StreamManager>(context)?.addDataToSink(data);
   }
 
-  static dynamic getLastElement(BuildContext context, dynamic key) {
-    return Provider.of<StreamManager>(context)._getLastElement(key);
+  static dynamic getLastElementByContext(BuildContext context, dynamic key) {
+    return Provider.of<StreamManager>(context).getLastElement(key);
   }
 
-  dynamic _getLastElement(dynamic key) {
+  dynamic getLastElement(dynamic key) {
     return _lastElementMap[key];
   }
 
@@ -67,7 +67,7 @@ StreamBuilder smartStreamBuilder<T>(
     {@required BuildContext context, @required WidgetBuilder<T> builder}) {
   StreamManager streamManager = Provider.of<StreamManager>(context);
   return StreamBuilder(
-    initialData: streamManager._getLastElement(T),
+    initialData: streamManager.getLastElement(T),
     stream: StreamManager.getStreamByKey(context, T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {
@@ -90,7 +90,7 @@ Widget smartStreamBuilder2<T>({StreamManager streamManager,
   assert(streamManager != null || context != null);
   streamManager ??= Provider.of<StreamManager>(context);
   return StreamBuilder(
-    initialData: streamManager._getLastElement(T),
+    initialData: streamManager.getLastElement(T),
     stream: streamManager._getStreamByKey(T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {
