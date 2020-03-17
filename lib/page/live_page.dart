@@ -29,7 +29,6 @@ class LiveBloc extends BaseBloc {
         },
         needLoading: isRefresh,
         stopLoading: (isOk) {
-          print("调用stopLoading$isOk");
           if (_page == 1) {
             _livePageState._refreshController.refreshCompleted();
           } else {
