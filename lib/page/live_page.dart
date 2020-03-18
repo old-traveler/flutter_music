@@ -92,7 +92,7 @@ class LivePageState extends State<LivePage> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 6.0,
                     crossAxisSpacing: 0.0,
-                    childAspectRatio: 1.15),
+                    childAspectRatio: 1.18),
                 itemBuilder: (context, index) =>
                     _buildItemWidget(data.data.xList[index]),
                 itemCount: data.data.xList.length ?? 0,
