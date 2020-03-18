@@ -91,7 +91,7 @@ class LivePageState extends State<LivePage> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 6.0,
                     crossAxisSpacing: 0.0,
-                    childAspectRatio: 1.2),
+                    childAspectRatio: 1.15),
                 itemBuilder: (context, index) {
                   final itemData = data.data.xList[index];
                   return Column(
