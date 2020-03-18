@@ -93,69 +93,8 @@ class LivePageState extends State<LivePage> {
                     mainAxisSpacing: 6.0,
                     crossAxisSpacing: 0.0,
                     childAspectRatio: 1.15),
-                itemBuilder: (context, index) {
-                  final itemData = data.data.xList[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Stack(
-                            children: <Widget>[
-                              Image.network(
-                                itemData.imgPath.contains("http")
-                                    ? itemData.imgPath
-                                    : itemData.userLogo,
-                                width:
-                                    MediaQuery.of(context).size.width / 2 - 10,
-                                height: (MediaQuery.of(context).size.width / 2 -
-                                        10) *
-                                    0.75,
-                                fit: BoxFit.fill,
-                              ),
-                              Positioned(
-                                left: 10,
-                                bottom: 3,
-                                child: Text(
-                                  itemData.nickName,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
-                              ),
-                              Positioned(
-                                  right: 10,
-                                  bottom: 3,
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 14,
-                                      ),
-                                      SizedBox(
-                                        width: 2,
-                                      ),
-                                      Text(
-                                        '${itemData?.viewerNum ?? 1}万',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ),
-                                    ],
-                                  )),
-                              _buildTagWidget(itemData.tags)
-                            ],
-                          )),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            itemData.label ?? "null",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                },
+                itemBuilder: (context, index) =>
+                    _buildItemWidget(data.data.xList[index]),
                 itemCount: data.data.xList.length ?? 0,
               ));
         });
@@ -167,6 +106,64 @@ class LivePageState extends State<LivePage> {
 
   void _onLoading() {
     _liveBloc.fetchListData(false);
+  }
+
+  Widget _buildItemWidget(LiveDataList itemData) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Stack(
+              children: <Widget>[
+                Image.network(
+                  itemData.imgPath.contains("http")
+                      ? itemData.imgPath
+                      : itemData.userLogo,
+                  width: MediaQuery.of(context).size.width / 2 - 10,
+                  height: (MediaQuery.of(context).size.width / 2 - 10) * 0.75,
+                  fit: BoxFit.fill,
+                ),
+                Positioned(
+                  left: 10,
+                  bottom: 3,
+                  child: Text(
+                    itemData.nickName,
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+                Positioned(
+                    right: 10,
+                    bottom: 3,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          '${itemData?.viewerNum ?? 1}万',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
+                    )),
+                _buildTagWidget(itemData.tags)
+              ],
+            )),
+        Expanded(
+          child: Center(
+            child: Text(
+              itemData.label ?? "null",
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _buildTagWidget(List<LiveDataListTag> tags) {
