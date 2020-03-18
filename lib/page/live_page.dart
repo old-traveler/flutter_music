@@ -3,6 +3,7 @@ import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/live_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/util/color_util.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -98,17 +99,52 @@ class LivePageState extends State<LivePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
-                          itemData.imgPath.contains("http")
-                              ? itemData.imgPath
-                              : itemData.userLogo,
-                          width: MediaQuery.of(context).size.width / 2 - 10,
-                          height: (MediaQuery.of(context).size.width / 2 - 10) *
-                              0.75,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(5),
+                          child: Stack(
+                            children: <Widget>[
+                              Image.network(
+                                itemData.imgPath.contains("http")
+                                    ? itemData.imgPath
+                                    : itemData.userLogo,
+                                width:
+                                    MediaQuery.of(context).size.width / 2 - 10,
+                                height: (MediaQuery.of(context).size.width / 2 -
+                                        10) *
+                                    0.75,
+                                fit: BoxFit.fill,
+                              ),
+                              Positioned(
+                                left: 10,
+                                bottom: 3,
+                                child: Text(
+                                  itemData.nickName,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
+                              ),
+                              Positioned(
+                                  right: 10,
+                                  bottom: 3,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 14,
+                                      ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        '${itemData?.viewerNum ?? 1}万',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ],
+                                  )),
+                              _buildTagWidget(itemData.tags)
+                            ],
+                          )),
                       Expanded(
                         child: Center(
                           child: Text(
@@ -131,5 +167,29 @@ class LivePageState extends State<LivePage> {
 
   void _onLoading() {
     _liveBloc.fetchListData(false);
+  }
+
+  Widget _buildTagWidget(List<LiveDataListTag> tags) {
+    if (tags?.isEmpty ?? true) {
+      return SizedBox();
+    }
+    final tag = tags[0];
+    if (tag?.tagUrl?.isNotEmpty ?? false) {
+      return Image.network(
+        tag.tagUrl,
+        height: 20,
+        fit: BoxFit.fitHeight,
+      );
+    }
+    return Container(
+      padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+      decoration: BoxDecoration(
+          color: parseColor(tag.tagColor),
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0))),
+      child: Text(
+        tag.tagName,
+        style: TextStyle(color: Colors.white, fontSize: 12),
+      ),
+    );
   }
 }
