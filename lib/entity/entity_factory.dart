@@ -1,8 +1,8 @@
-
-
+import 'package:music/entity/hot_singer_entity.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
+import 'package:music/generated/json/hot_singer_entity_helper.dart';
 import 'association_entity.dart';
 import 'banner_entity.dart';
 import 'elaborate_select_model_entity.dart';
@@ -32,6 +32,8 @@ class EntityFactory {
       return SearchSongEntity.fromJson(json) as T;
     } else if (T.toString() == "LiveEntity") {
       return LiveEntity.fromJson(json) as T;
+    } else if (T.toString() == 'HotSingerEntity') {
+      return hotSingerEntityFromJson(HotSingerEntity(), json);
     } else {
       return null;
     }

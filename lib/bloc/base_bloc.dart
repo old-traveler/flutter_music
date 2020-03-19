@@ -16,7 +16,7 @@ class BaseBloc {
   void dealResponse<T>(
       {@required ResponseProvider responseProvider,
       void Function(bool) stopLoading,
-      bool needLoading,
+      bool needLoading = true,
       T Function(T) dataConvert}) async {
     assert(responseProvider != null);
     if (needLoading) {
@@ -42,14 +42,18 @@ class BaseBloc {
           T,
           PageData<T>.complete(
               dataConvert == null ? originData : dataConvert(originData)));
-      stopLoading(true);
+      if(stopLoading != null){
+        stopLoading(true);
+      }
       return;
     } else if (data['error'] != null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.error(data['error']));
     } else {
       _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
     }
-    stopLoading(false);
+    if(stopLoading != null){
+      stopLoading(false);
+    }
   }
 
   void dispose(key) {
