@@ -59,7 +59,7 @@ class HotSingerState extends State<HotSingerPage> {
       children: <Widget>[
         Image.network(
           firstData.imgurl.replaceFirst("{size}", '200'),
-          height: 200,
+          height: 270,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.fitWidth,
         ),
@@ -68,14 +68,15 @@ class HotSingerState extends State<HotSingerPage> {
           bottom: 40,
           child: Text(
             'NO.1 ${firstData.singername}',
-            style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         Positioned(
           left: 15,
           bottom: 15,
           child: Text('恭喜占领本期榜单封面',
-              style: TextStyle(fontSize: 14,color: Colors.white)),
+              style: TextStyle(fontSize: 14, color: Colors.white)),
         ),
       ],
     );
@@ -90,30 +91,32 @@ class HotSingerState extends State<HotSingerPage> {
           _buildRanking(itemData, index),
           Expanded(
             child: ListTile(
-              contentPadding: EdgeInsets.only(left: 5,right: 15),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  itemData.imgurl.replaceFirst('{size}', '100'),
-                ),
-              ),
-              title: Text(itemData.singername,style: TextStyle(fontSize: 15),),
-              subtitle: Text('${itemData.heat}热度'),
-              trailing: SizedBox(
-                height: 25,
-                width: 60,
-                child: FlatButton(
-                  padding: EdgeInsets.zero,
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Text(
-                    '关注',
-                    style: TextStyle(color: Colors.white),
+                contentPadding: EdgeInsets.only(left: 5, right: 15),
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    itemData.imgurl.replaceFirst('{size}', '100'),
                   ),
-                  onPressed: () {},
                 ),
-              )
-            ),
+                title: Text(
+                  itemData.singername,
+                  style: TextStyle(fontSize: 15),
+                ),
+                subtitle: Text('${itemData.heat}热度'),
+                trailing: SizedBox(
+                  height: 25,
+                  width: 60,
+                  child: FlatButton(
+                    padding: EdgeInsets.zero,
+                    color: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Text(
+                      '关注',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {},
+                  ),
+                )),
           )
         ],
       ),
@@ -123,7 +126,11 @@ class HotSingerState extends State<HotSingerPage> {
   Widget _buildRanking(HotSingerDataInfo itemData, int index) {
     final list = <Widget>[];
     list.add(index < 3
-        ? Image.asset('images/rank${index + 1}.png',width: 25,fit: BoxFit.fitWidth,)
+        ? Image.asset(
+            'images/rank${index + 1}.png',
+            width: 25,
+            fit: BoxFit.fitWidth,
+          )
         : Text(index.toString()));
     if (itemData.mvcount > 0) {
       list.add(Text('+${itemData.heatoffset}'));
@@ -132,8 +139,10 @@ class HotSingerState extends State<HotSingerPage> {
     }
     return Container(
       width: 45,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,children: list),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: list),
     );
   }
 }
