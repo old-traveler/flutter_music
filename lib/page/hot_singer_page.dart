@@ -16,11 +16,9 @@ class HotSingerPage extends StatefulWidget {
 class HotSingerBloc extends BaseBloc {
   void _fetchHotSingerData() {
     dealResponse<HotSingerEntity>(
-      responseProvider: () {
-        return HttpManager.getInstanceByUrl('http://mobilecdnbj.kugou.com/')
-            .get(api_url.singerUrl);
-      },
-    );
+        responseProvider: () =>
+            HttpManager.getInstanceByUrl('http://mobilecdnbj.kugou.com/')
+                .get(api_url.singerUrl));
   }
 }
 
@@ -40,16 +38,12 @@ class HotSingerState extends State<HotSingerPage> {
       updateShouldNotify: (o, n) => false,
       child: smartStreamBuilder2<HotSingerEntity>(
         streamManager: _hotSingerBloc.streamManager,
-        builder: (context, data) {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return index == 0
-                  ? _buildHeaderView(data.data.info[0])
-                  : _buildItemView(data.data.info[index - 1], index - 1);
-            },
-            itemCount: (data?.data?.info?.length ?? 0) + 1,
-          );
-        },
+        builder: (context, data) => ListView.builder(
+          itemBuilder: (context, index) => index == 0
+              ? _buildHeaderView(data.data.info[0])
+              : _buildItemView(data.data.info[index - 1], index - 1),
+          itemCount: (data?.data?.info?.length ?? 0) + 1,
+        ),
       ),
     );
   }
