@@ -23,7 +23,10 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: LinearProgressIndicator(),
+      child: Container(
+        width: 120,
+        child: LinearProgressIndicator(),
+      ),
     );
   }
 }
