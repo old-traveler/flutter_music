@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music/page/home_page.dart';
 import 'package:music/page/hot_singer_page.dart';
 import 'package:music/page/live_page.dart';
+import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/other_page.dart';
 import 'package:music/page/search_page.dart';
 import 'package:music/provider/navigation_index.dart';
@@ -17,7 +18,7 @@ class MusicApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) =>
-              TabIndex(0, [HomePage(), LivePage(), HotSingerPage(), MyPage()]),
+              TabIndex(0, [HomePage(), LivePage(), HotSingerPage(), MyProfilePage()]),
         )
       ],
       child: MaterialApp(
@@ -51,6 +52,7 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     _tabIndex = Provider.of<TabIndex>(context);
     return Scaffold(
+      backgroundColor: Color(0xFFF8F8F8),
       appBar: AppBar(
         title: Text("Music"),
         leading: Icon(Icons.music_note),

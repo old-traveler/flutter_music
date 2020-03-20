@@ -60,6 +60,13 @@ flutter:
     - images/rank3.png
     - images/no_data.png
     - images/no_net.png
+    - images/default_image.png
+    - images/vip.png
+    - images/duv.png
+    - images/dux.png
+    - images/duz.png
+    - images/dv4.png
+    - images/dv6.png
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
