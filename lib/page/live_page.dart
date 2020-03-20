@@ -28,7 +28,8 @@ class LiveBloc extends BaseBloc {
           return HttpManager.getInstanceByUrl(keGouBaseUrl)
               .get(getLiveUrl(page: _page));
         },
-        needLoading: isRefresh,
+        needLoading: !_livePageState._refreshController.isRefresh &&
+            !_livePageState._refreshController.isLoading,
         stopLoading: (isOk) {
           if (_page == 1) {
             _livePageState._refreshController.refreshCompleted();
