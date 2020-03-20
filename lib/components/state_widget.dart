@@ -2,10 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NoNetWidget extends StatelessWidget {
+  final VoidCallback _voidCallback;
+
+  NoNetWidget(this._voidCallback);
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("无网络"),
+    return Container(
+      alignment: Alignment.center,
+      child: FlatButton(
+        child: Text("无网络,点击刷新"),
+        onPressed: _voidCallback,
+      ),
     );
   }
 }

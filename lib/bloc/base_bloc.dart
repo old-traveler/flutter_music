@@ -7,11 +7,26 @@ import 'package:music/util/stream_manager.dart';
 
 typedef ResponseProvider = Future<dynamic> Function();
 typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
+typedef RefreshProvider = void Function();
 
 class BaseBloc {
   StreamManager _streamManager = StreamManager();
+  Map<dynamic, RefreshProvider> _refreshProviderMap = {};
 
   StreamManager get streamManager => _streamManager;
+
+  BaseBloc() {
+    _streamManager.getStreamByKey(BaseBloc).listen((data) {
+      if (!(data is PageMessage)) {
+        throw Exception('data must be a PageMessage');
+      }
+      PageMessage pageMessage = data;
+      if (pageMessage.messageType == MessageType.refresh &&
+          _refreshProviderMap[pageMessage.key] != null) {
+        _refreshProviderMap[pageMessage.key]();
+      }
+    });
+  }
 
   void dealResponse<T>(
       {@required ResponseProvider responseProvider,
@@ -23,6 +38,13 @@ class BaseBloc {
       _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
     }
     Response response = await responseProvider();
+    _refreshProviderMap[T] = () {
+      dealResponse(
+          responseProvider: responseProvider,
+          stopLoading: stopLoading,
+          needLoading: needLoading,
+          dataConvert: dataConvert);
+    };
     if (response == null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.noNet(null));
       return;
@@ -42,7 +64,7 @@ class BaseBloc {
           T,
           PageData<T>.complete(
               dataConvert == null ? originData : dataConvert(originData)));
-      if(stopLoading != null){
+      if (stopLoading != null) {
         stopLoading(true);
       }
       return;
@@ -51,7 +73,7 @@ class BaseBloc {
     } else {
       _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
     }
-    if(stopLoading != null){
+    if (stopLoading != null) {
       stopLoading(false);
     }
   }
@@ -62,7 +84,19 @@ class BaseBloc {
 
   void disposeAll() {
     _streamManager.disposeAll();
+    _refreshProviderMap.clear();
   }
+}
+
+enum MessageType { refresh }
+
+class PageMessage {
+  MessageType messageType;
+  dynamic key;
+
+  PageMessage(this.messageType, this.key);
+
+  PageMessage.refresh(dynamic key) : this(MessageType.refresh, key);
 }
 
 enum PageState {

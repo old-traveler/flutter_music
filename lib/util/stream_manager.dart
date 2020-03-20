@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/components/state_widget.dart';
@@ -12,19 +10,19 @@ typedef PageStateWidget = Widget Function(BuildContext context);
 typedef IsNoData<T> = bool Function(T data);
 
 class StreamManager {
-  Map<dynamic, StreamController> _streamControllerMap = HashMap();
-  Map<dynamic, dynamic> _lastElementMap = HashMap();
+  Map<dynamic, StreamController> _streamControllerMap = {};
+  Map<dynamic, dynamic> _lastElementMap = {};
 
   static StreamManager of(BuildContext context) {
     return Provider.of<StreamManager>(context);
   }
 
   //推荐使用type作为key
-  static Stream getStreamByKey(BuildContext context, dynamic key) {
-    return Provider.of<StreamManager>(context)._getStreamByKey(key);
+  static Stream getStreamByContextAndKey(BuildContext context, dynamic key) {
+    return Provider.of<StreamManager>(context).getStreamByKey(key);
   }
 
-  Stream _getStreamByKey(dynamic key) {
+  Stream getStreamByKey(dynamic key) {
     return (_streamControllerMap[key] ??= StreamController.broadcast()).stream;
   }
 
@@ -68,7 +66,7 @@ StreamBuilder smartStreamBuilder<T>(
   StreamManager streamManager = Provider.of<StreamManager>(context);
   return StreamBuilder(
     initialData: streamManager.getLastElement(T),
-    stream: StreamManager.getStreamByKey(context, T),
+    stream: StreamManager.getStreamByContextAndKey(context, T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {
         return Container();
@@ -78,20 +76,21 @@ StreamBuilder smartStreamBuilder<T>(
   );
 }
 
-Widget smartStreamBuilder2<T>({StreamManager streamManager,
-  BuildContext context,
-  @required WidgetBuilder<T> builder,
-  PageStateWidget noData,
-  PageStateWidget loading,
-  PageStateWidget error,
-  PageStateWidget noNet,
-  IsNoData<T> isNoData}) {
+Widget smartStreamBuilder2<T>(
+    {StreamManager streamManager,
+    BuildContext context,
+    @required WidgetBuilder<T> builder,
+    PageStateWidget noData,
+    PageStateWidget loading,
+    PageStateWidget error,
+    PageStateWidget noNet,
+    IsNoData<T> isNoData}) {
   assert(builder != null);
   assert(streamManager != null || context != null);
   streamManager ??= Provider.of<StreamManager>(context);
   return StreamBuilder(
     initialData: streamManager.getLastElement(T),
-    stream: streamManager._getStreamByKey(T),
+    stream: streamManager.getStreamByKey(T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {
         return getNonNullWidget(context, noData, () => NoDataWidget());
@@ -106,7 +105,11 @@ Widget smartStreamBuilder2<T>({StreamManager streamManager,
         case PageState.noData:
           return getNonNullWidget(context, noData, () => NoDataWidget());
         case PageState.noNet:
-          return getNonNullWidget(context, noNet, () => NoNetWidget());
+          return getNonNullWidget(
+              context,
+              noNet,
+              () => NoNetWidget(() => streamManager.addDataToSinkByKey(
+                  BaseBloc, PageMessage.refresh(T))));
         case PageState.complete:
           if (isNoData != null && isNoData(pageData.data)) {
             return NoDataWidget();
