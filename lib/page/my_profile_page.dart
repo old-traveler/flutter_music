@@ -296,7 +296,7 @@ class PromoteState extends State<PromoteWidget> {
           ),
           Expanded(
             child: PageView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               controller: _pageController,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
