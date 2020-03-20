@@ -240,7 +240,7 @@ class PromoteWidget extends StatefulWidget {
   }
 }
 
-class PromoteState extends State<PromoteWidget> {
+class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
   Timer _timer;
   PageController _pageController;
   int _curIndex = 0;
@@ -248,6 +248,7 @@ class PromoteState extends State<PromoteWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pageController = PageController();
     _startAnimation();
   }
@@ -267,8 +268,23 @@ class PromoteState extends State<PromoteWidget> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _timer = null;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    /// 监听app前后台切换事件，避免无用计时器行为
+    if (state == AppLifecycleState.paused) {
+      print('取消_timer计时行为');
+      _timer?.cancel();
+    } else if (state == AppLifecycleState.resumed) {
+      print('开启_timer计时行为');
+      _startAnimation();
+    }
   }
 
   @override
