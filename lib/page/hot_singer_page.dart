@@ -22,7 +22,7 @@ class HotSingerBloc extends BaseBloc {
   }
 }
 
-class HotSingerState extends State<HotSingerPage> {
+class HotSingerState extends State<HotSingerPage> with AutomaticKeepAliveClientMixin{
   HotSingerBloc _hotSingerBloc = HotSingerBloc();
 
   @override
@@ -33,6 +33,7 @@ class HotSingerState extends State<HotSingerPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return InheritedProvider.value(
       value: _hotSingerBloc.streamManager,
       updateShouldNotify: (o, n) => false,
@@ -82,7 +83,7 @@ class HotSingerState extends State<HotSingerPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          _buildRanking(itemData, index),
+          _buildRanking(itemData, index + 1),
           Expanded(
             child: ListTile(
                 contentPadding: EdgeInsets.only(left: 5, right: 15),
@@ -119,18 +120,31 @@ class HotSingerState extends State<HotSingerPage> {
 
   Widget _buildRanking(HotSingerDataInfo itemData, int index) {
     final list = <Widget>[];
-    list.add(index < 3
+    list.add(index <= 3
         ? Image.asset(
-            'images/rank${index + 1}.png',
+            'images/rank$index.png',
             width: 25,
             fit: BoxFit.fitWidth,
           )
         : Text(index.toString()));
-    if (itemData.mvcount > 0) {
-      list.add(Text('+${itemData.heatoffset}'));
-    } else if (itemData.mvcount < 0) {
-      list.add(Text('${itemData.heatoffset}'));
+    list.add(SizedBox(
+      height: 3,
+    ));
+    Color changeColor = Colors.black;
+    String change = itemData.heatoffset.toString();
+    if (itemData.heatoffset > 0) {
+      change = '+ ${itemData.heatoffset}';
+      changeColor = Colors.green;
+    } else if (itemData.heatoffset == 0) {
+      change = '—';
+    } else {
+      change = '- ${itemData.heatoffset.abs()}';
+      changeColor = Colors.red;
     }
+    list.add(Text(
+      change,
+      style: TextStyle(fontSize: 9, color: changeColor),
+    ));
     return Container(
       width: 45,
       child: Column(
@@ -139,4 +153,7 @@ class HotSingerState extends State<HotSingerPage> {
           children: list),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

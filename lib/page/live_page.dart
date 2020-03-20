@@ -52,7 +52,7 @@ class LiveBloc extends BaseBloc {
   }
 }
 
-class LivePageState extends State<LivePage> {
+class LivePageState extends State<LivePage> with AutomaticKeepAliveClientMixin {
   LiveBloc _liveBloc;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -73,6 +73,7 @@ class LivePageState extends State<LivePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return smartStreamBuilder2<LiveEntity>(
         streamManager: _liveBloc.streamManager,
         isNoData: (data) => (data?.data?.xList?.isEmpty ?? true),
@@ -189,4 +190,7 @@ class LivePageState extends State<LivePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
