@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
@@ -10,11 +12,13 @@ class MyProfilePage extends StatefulWidget {
 
 class MyProfileBloc extends BaseBloc {}
 
-class MyProfileState extends State<MyProfilePage> {
+class MyProfileState extends State<MyProfilePage>
+    with AutomaticKeepAliveClientMixin {
   MyProfileBloc _myProfileBloc = MyProfileBloc();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return InheritedProvider.value(
         value: _myProfileBloc.streamManager,
         updateShouldNotify: (o, n) => false,
@@ -51,17 +55,49 @@ class MyProfileState extends State<MyProfilePage> {
                 ],
               ),
               RibbonWidget(),
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 20, right: 20),
+                leading: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF4899D),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Image.asset(
+                    'images/like.png',
+                    width: 25,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                title: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    '我喜欢',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                subtitle: Text('189首', style: TextStyle(fontSize: 12)),
+                trailing: Icon(
+                  Icons.more_horiz,
+                  size: 15,
+                ),
+              ),
+              PromoteWidget(),
             ],
           ),
         ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class RibbonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
       height: 165,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular((10.0))),
@@ -178,4 +214,98 @@ class ProfileItem {
   String count;
 
   ProfileItem(this.assetUrl, this.name, this.count);
+}
+
+class PromoteWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return PromoteState();
+  }
+}
+
+class PromoteState extends State<PromoteWidget> {
+  Timer _timer;
+  PageController _pageController;
+  int _curIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _startAnimation();
+  }
+
+  void _startAnimation() {
+    _timer?.cancel();
+    const period = const Duration(seconds: 5);
+    Timer.periodic(period, (timer) {
+      _timer = timer;
+      setState(() {
+        _pageController.animateToPage(++_curIndex,
+            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      height: 30,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '推广',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Image.asset(
+            'images/broadcast.png',
+            width: 20,
+            fit: BoxFit.fitWidth,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: PageView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return _buildPromoteItem(index);
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPromoteItem(int index) {
+    final textList = [
+      '看得见的铃声，解锁来电新玩法',
+      '都2020年了，不许你不知道这个识曲神器',
+      '【乐舞雅集】二次元直播专场',
+      '30个小时长续航，运动必备'
+    ];
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        textList[index % textList.length],
+        style: TextStyle(color: Colors.black54),
+      ),
+    );
+  }
 }

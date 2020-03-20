@@ -67,6 +67,8 @@ flutter:
     - images/duz.png
     - images/dv4.png
     - images/dv6.png
+    - images/like.png
+    - images/broadcast.png
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
