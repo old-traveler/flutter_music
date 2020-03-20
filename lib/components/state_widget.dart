@@ -46,7 +46,14 @@ class NoNetWidget extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class NoDataWidget extends StatelessWidget {
+  String _title;
+
+  NoDataWidget({title}) {
+    _title = title;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,7 +72,7 @@ class NoDataWidget extends StatelessWidget {
               height: 10,
             ),
             Text(
-              '暂无数据',
+              _title ?? '暂无数据',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
