@@ -336,12 +336,15 @@ class SongListWidget extends StatelessWidget {
         builder: (context, data) {
           final widgets = <Widget>[];
           widgets.add(Padding(
-            padding: EdgeInsets.only(left: 20, top: 10,bottom: 5),
-            child: Text('你可能感兴趣的歌单',style: TextStyle(color: Colors.black54,fontSize: 12),),
+            padding: EdgeInsets.only(left: 20, top: 10, bottom: 5),
+            child: Text(
+              '你可能感兴趣的歌单',
+              style: TextStyle(color: Colors.black54, fontSize: 12),
+            ),
           ));
           for (var value in data.data.info) {
             widgets.add(ListTile(
-              contentPadding: EdgeInsets.only(left: 20,right: 20),
+              contentPadding: EdgeInsets.only(left: 20, right: 20),
               leading: Image.network(value.imgurl),
               title: Padding(
                 padding: EdgeInsets.only(bottom: 5),
@@ -354,7 +357,10 @@ class SongListWidget extends StatelessWidget {
               subtitle: Text(value.singername),
             ));
           }
-          return Column(children: widgets,crossAxisAlignment: CrossAxisAlignment.start,);
+          return Column(
+            children: widgets,
+            crossAxisAlignment: CrossAxisAlignment.start,
+          );
         });
   }
 }
