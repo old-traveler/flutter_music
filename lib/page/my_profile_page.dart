@@ -331,6 +331,7 @@ class SongListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return smartStreamBuilder2<SongListEntity>(
+        height: 400,
         context: context,
         isNoData: (data) => (data?.data?.info?.length == 0 ?? true),
         builder: (context, data) {

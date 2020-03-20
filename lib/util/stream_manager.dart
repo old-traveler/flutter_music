@@ -84,6 +84,8 @@ Widget smartStreamBuilder2<T>(
     PageStateWidget loading,
     PageStateWidget error,
     PageStateWidget noNet,
+    // 用于Loading和no net页面展示
+    double height,
     IsNoData<T> isNoData}) {
   assert(builder != null);
   assert(streamManager != null || context != null);
@@ -93,7 +95,7 @@ Widget smartStreamBuilder2<T>(
     stream: streamManager.getStreamByKey(T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {
-        return getNonNullWidget(context, noData, () => NoDataWidget());
+        return getNonNullWidget(context, noData, () => NoDataWidget('暂无数据'));
       }
       if (!(snapshot.data is PageData)) {
         throw Exception("snapshot.data must is PageData");
@@ -101,18 +103,21 @@ Widget smartStreamBuilder2<T>(
       PageData pageData = snapshot.data;
       switch (pageData.state) {
         case PageState.loading:
-          return getNonNullWidget(context, loading, () => LoadingWidget());
+          return getNonNullWidget(
+              context, loading, () => LoadingWidget(height));
         case PageState.noData:
-          return getNonNullWidget(context, noData, () => NoDataWidget());
+          return getNonNullWidget(context, noData, () => NoDataWidget('暂无数据'));
         case PageState.noNet:
           return getNonNullWidget(
               context,
               noNet,
-              () => NoNetWidget(() => streamManager.addDataToSinkByKey(
-                  BaseBloc, PageMessage.refresh(T))));
+              () => NoNetWidget(
+                  () => streamManager.addDataToSinkByKey(
+                      BaseBloc, PageMessage.refresh(T)),
+                  height));
         case PageState.complete:
           if (isNoData != null && isNoData(pageData.data)) {
-            return NoDataWidget();
+            return NoDataWidget('暂无数据');
           } else {
             return builder(context, pageData.data);
           }

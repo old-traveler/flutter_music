@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NoNetWidget extends StatelessWidget {
   final VoidCallback _voidCallback;
+  final double _height;
 
-  NoNetWidget(this._voidCallback);
+  NoNetWidget(this._voidCallback, this._height);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.center,
+        height: _height,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SizedBox(
-              height: 50,
-            ),
             Image.asset(
               'images/no_net.png',
               width: 220,
@@ -46,13 +46,10 @@ class NoNetWidget extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class NoDataWidget extends StatelessWidget {
-  String _title;
+  final String _title;
 
-  NoDataWidget({title}) {
-    _title = title;
-  }
+  NoDataWidget(this._title);
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +81,14 @@ class NoDataWidget extends StatelessWidget {
 }
 
 class LoadingWidget extends StatelessWidget {
+  final double _height;
+
+  LoadingWidget(this._height);
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      height: _height,
+      alignment: Alignment.center,
       child: Container(
         width: 120,
         child: LinearProgressIndicator(),
