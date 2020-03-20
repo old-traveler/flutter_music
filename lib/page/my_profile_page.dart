@@ -3,18 +3,34 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
+import 'package:music/entity/song_list_entity.dart';
+import 'package:music/http/http_manager.dart';
+import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:music/api/api_url.dart' as api_url;
 
 class MyProfilePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MyProfileState();
 }
 
-class MyProfileBloc extends BaseBloc {}
+class MyProfileBloc extends BaseBloc {
+  void _fetchSongList() {
+    dealResponse<SongListEntity>(responseProvider: () {
+      return HttpManager.getInstance().get(api_url.singListUrl);
+    });
+  }
+}
 
 class MyProfileState extends State<MyProfilePage>
     with AutomaticKeepAliveClientMixin {
   MyProfileBloc _myProfileBloc = MyProfileBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _myProfileBloc._fetchSongList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +100,7 @@ class MyProfileState extends State<MyProfilePage>
                 ),
               ),
               PromoteWidget(),
+              SongListWidget(),
             ],
           ),
         ));
@@ -258,7 +275,7 @@ class PromoteState extends State<PromoteWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
-      height: 30,
+      height: 40,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -307,5 +324,37 @@ class PromoteState extends State<PromoteWidget> {
         style: TextStyle(color: Colors.black54),
       ),
     );
+  }
+}
+
+class SongListWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return smartStreamBuilder2<SongListEntity>(
+        context: context,
+        isNoData: (data) => (data?.data?.info?.length == 0 ?? true),
+        builder: (context, data) {
+          final widgets = <Widget>[];
+          widgets.add(Padding(
+            padding: EdgeInsets.only(left: 20, top: 10,bottom: 5),
+            child: Text('你可能感兴趣的歌单',style: TextStyle(color: Colors.black54,fontSize: 12),),
+          ));
+          for (var value in data.data.info) {
+            widgets.add(ListTile(
+              contentPadding: EdgeInsets.only(left: 20,right: 20),
+              leading: Image.network(value.imgurl),
+              title: Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: Text(
+                  value.filename,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              subtitle: Text(value.singername),
+            ));
+          }
+          return Column(children: widgets,crossAxisAlignment: CrossAxisAlignment.start,);
+        });
   }
 }
