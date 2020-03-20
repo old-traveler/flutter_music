@@ -9,21 +9,70 @@ class NoNetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      child: FlatButton(
-        child: Text("无网络,点击刷新"),
-        onPressed: _voidCallback,
-      ),
-    );
+        alignment: Alignment.center,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+            ),
+            Image.asset(
+              'images/no_net.png',
+              width: 220,
+              height: 220,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '网络出问题啦 ~',
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            FlatButton(
+              child: Text(
+                '点击刷新',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: _voidCallback,
+            )
+          ],
+        ));
   }
 }
 
 class NoDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("无数据"),
-    );
+    return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+            ),
+            Image.asset(
+              'images/no_data.png',
+              width: 220,
+              height: 220,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '暂无数据',
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          ],
+        ));
   }
 }
 
