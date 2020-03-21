@@ -86,8 +86,9 @@ mixin BaseBloc {
     }
   }
 
-  void dispose(key) {
+  void disposeByKey(key) {
     _streamManager.dispose(key);
+    _refreshProviderMap?.remove(key);
   }
 
   void disposeAll() {

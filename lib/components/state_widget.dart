@@ -12,6 +12,7 @@ class NoNetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: _height,
+        alignment: Alignment.topCenter,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
