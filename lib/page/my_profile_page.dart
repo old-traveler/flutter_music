@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
+import 'package:music/components/input_dialog.dart';
 import 'package:music/entity/song_list_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
+import 'package:music/util/toast_util.dart';
 import 'package:provider/provider.dart';
 import 'package:music/api/api_url.dart' as api_url;
 
@@ -20,6 +22,10 @@ class MyProfileBloc extends BaseBloc {
       return HttpManager.getInstance().get(api_url.singListUrl);
     });
   }
+
+  void _login() {
+    // 执行登录请求
+  }
 }
 
 class MyProfileState extends State<MyProfilePage>
@@ -30,6 +36,18 @@ class MyProfileState extends State<MyProfilePage>
   void initState() {
     super.initState();
     _myProfileBloc._fetchSongList();
+  }
+
+  Future _showLoginDialog() async {
+    String name = await showInputDialog(context, title: '登录', hint: '请输入用户名');
+    if (name == null) {
+      print('取消登录');
+    } else if (name.isEmpty) {
+      /// 点击确定未输入信息
+      ToastUtil.show(context: context, msg: '用户名不能为空');
+    } else {
+      _myProfileBloc._login();
+    }
   }
 
   @override
@@ -57,9 +75,14 @@ class MyProfileState extends State<MyProfilePage>
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    '点击登录，享精准歌曲推荐',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  GestureDetector(
+                    child: Text(
+                      '点击登录，享精准歌曲推荐',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                    onTap: () {
+                      _showLoginDialog();
+                    },
                   ),
                   Expanded(
                     child: Container(
