@@ -120,7 +120,7 @@ Widget smartStreamBuilder2<T>(
                   height));
         case PageState.complete:
           if (isNoData != null && isNoData(pageData.data)) {
-            return NoDataWidget('暂无数据');
+            return getNonNullWidget(context, noData, () => NoDataWidget('暂无数据'));
           } else {
             return builder(context, pageData.data);
           }

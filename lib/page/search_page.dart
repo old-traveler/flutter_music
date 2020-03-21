@@ -78,6 +78,11 @@ class SearchPageState extends State<SearchPage> {
               contentPadding: EdgeInsets.only(left: 5, top: 10, bottom: 10),
               border: InputBorder.none,
               hintText: '请输入歌名'),
+          onSubmitted: (keyword){
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    SearchResultPage(keyword)));
+          },
         ),
       ),
     );

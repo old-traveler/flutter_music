@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
+import 'package:music/components/state_widget.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
@@ -50,6 +51,7 @@ class SearchResultState extends State<SearchResultPage> with BaseBloc {
             ),
             body: smartStreamBuilder2<SearchSongEntity>(
                 streamManager: streamManager,
+                noData: (context) => NoDataWidget('未找到相关内容'),
                 isNoData: (data) => (data?.data?.info?.isEmpty ?? true),
                 builder: (context, data) {
                   return ListView.builder(
