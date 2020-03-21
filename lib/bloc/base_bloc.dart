@@ -12,20 +12,28 @@ typedef RefreshProvider = void Function();
 class BaseBloc {
   StreamManager _streamManager = StreamManager();
   Map<dynamic, RefreshProvider> _refreshProviderMap = {};
+  bool hasListen = false;
 
-  StreamManager get streamManager => _streamManager;
+  StreamManager get streamManager {
+    if (!hasListen) {
+      hasListen = true;
+      _streamManager.getStreamByKey(BaseBloc).listen((data) {
+        if (data is PageMessage &&
+            data.messageType == MessageType.refresh &&
+            _refreshProviderMap[data.key] != null) {
+          _refreshProviderMap[data.key]();
+        } else if (dispatchPageMessage(data)) {
+          print('message has deal');
+        } else {
+          throw Exception('unknow type is ${data.runtimeType}');
+        }
+      });
+    }
+    return _streamManager;
+  }
 
-  BaseBloc() {
-    _streamManager.getStreamByKey(BaseBloc).listen((data) {
-      if (!(data is PageMessage)) {
-        throw Exception('data must be a PageMessage');
-      }
-      PageMessage pageMessage = data;
-      if (pageMessage.messageType == MessageType.refresh &&
-          _refreshProviderMap[pageMessage.key] != null) {
-        _refreshProviderMap[pageMessage.key]();
-      }
-    });
+  bool dispatchPageMessage(dynamic data) {
+    return false;
   }
 
   void dealResponse<T>(
