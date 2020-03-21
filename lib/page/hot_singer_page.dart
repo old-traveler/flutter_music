@@ -13,7 +13,7 @@ class HotSingerPage extends StatefulWidget {
   State<StatefulWidget> createState() => HotSingerState();
 }
 
-class HotSingerBloc extends BaseBloc {
+class HotSingerBloc with BaseBloc {
   void _fetchHotSingerData() {
     dealResponse<HotSingerEntity>(
         responseProvider: () =>

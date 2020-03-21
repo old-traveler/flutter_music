@@ -9,7 +9,7 @@ typedef ResponseProvider = Future<dynamic> Function();
 typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 typedef RefreshProvider = void Function();
 
-class BaseBloc {
+mixin BaseBloc {
   StreamManager _streamManager = StreamManager();
   Map<dynamic, RefreshProvider> _refreshProviderMap = {};
   bool hasListen = false;

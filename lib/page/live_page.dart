@@ -14,7 +14,7 @@ class LivePage extends StatefulWidget {
   }
 }
 
-class LiveBloc extends BaseBloc {
+class LiveBloc with BaseBloc {
   final LivePageState _livePageState;
   int _page = 1;
 
