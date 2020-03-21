@@ -78,6 +78,7 @@ StreamBuilder smartStreamBuilder<T>(
 
 Widget smartStreamBuilder2<T>(
     {StreamManager streamManager,
+    T initialData,
     BuildContext context,
     @required WidgetBuilder<T> builder,
     PageStateWidget noData,
@@ -91,7 +92,9 @@ Widget smartStreamBuilder2<T>(
   assert(streamManager != null || context != null);
   streamManager ??= Provider.of<StreamManager>(context);
   return StreamBuilder(
-    initialData: streamManager.getLastElement(T),
+    initialData: initialData != null
+        ? PageData.complete(initialData)
+        : streamManager.getLastElement(T),
     stream: streamManager.getStreamByKey(T),
     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       if (snapshot == null || snapshot.data == null) {

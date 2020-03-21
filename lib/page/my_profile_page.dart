@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/components/input_dialog.dart';
 import 'package:music/entity/song_list_entity.dart';
+import 'package:music/entity/user_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:music/util/toast_util.dart';
@@ -23,8 +24,14 @@ class MyProfileBloc extends BaseBloc {
     });
   }
 
-  void _login() {
-    // 执行登录请求
+  void _login(String name) {
+    /// 执行登录请求
+    dealResponse<UserEntity>(responseProvider: () {
+      return HttpManager.getMockApi().get('login.json');
+    }, dataConvert: (data) {
+      data.name = name;
+      return data;
+    });
   }
 }
 
@@ -36,18 +43,6 @@ class MyProfileState extends State<MyProfilePage>
   void initState() {
     super.initState();
     _myProfileBloc._fetchSongList();
-  }
-
-  Future _showLoginDialog() async {
-    String name = await showInputDialog(context, title: '登录', hint: '请输入用户名');
-    if (name == null) {
-      print('取消登录');
-    } else if (name.isEmpty) {
-      /// 点击确定未输入信息
-      ToastUtil.show(context: context, msg: '用户名不能为空');
-    } else {
-      _myProfileBloc._login();
-    }
   }
 
   @override
@@ -62,37 +57,7 @@ class MyProfileState extends State<MyProfilePage>
               SizedBox(
                 height: 20,
               ),
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Image.asset(
-                    'images/default_image.png',
-                    width: 60,
-                    fit: BoxFit.fitWidth,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: Text(
-                      '点击登录，享精准歌曲推荐',
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ),
-                    onTap: () {
-                      _showLoginDialog();
-                    },
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 20),
-                      child: Icon(Icons.mic_none),
-                    ),
-                  )
-                ],
-              ),
+              UserInfoWidget(_myProfileBloc),
               RibbonWidget(),
               ListTile(
                 contentPadding: EdgeInsets.only(left: 20, right: 20),
@@ -131,6 +96,111 @@ class MyProfileState extends State<MyProfilePage>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class UserInfoWidget extends StatelessWidget {
+  final MyProfileBloc _myProfileBloc;
+
+  UserInfoWidget(this._myProfileBloc);
+
+  Future _showLoginDialog(BuildContext context) async {
+    String name = await showInputDialog(context, title: '登录', hint: '请输入用户名');
+    if (name == null) {
+      print('取消登录');
+    } else if (name.isEmpty) {
+      /// 点击确定未输入信息
+      ToastUtil.show(context: context, msg: '用户名不能为空');
+    } else {
+      _myProfileBloc._login(name);
+    }
+  }
+
+  Widget _buildInfo(BuildContext context, UserEntity data) {
+    if (data?.name?.isEmpty ?? true) {
+      return GestureDetector(
+        child: Text(
+          data?.name ?? '点击登录，享精准歌曲推荐',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+        onTap: () {
+          _showLoginDialog(context);
+        },
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(data.name,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 17,
+                fontWeight: FontWeight.bold)),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 2, right: 2, top: 1, bottom: 1),
+              decoration: BoxDecoration(
+                  color: Color(0xffD7AF77),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              child: Image.asset(
+                'images/svip.png',
+                height: 15,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Image.asset(
+              'images/king.png',
+              height: 18,
+              fit: BoxFit.fitHeight,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return smartStreamBuilder2<UserEntity>(
+        height: 100,
+        initialData: UserEntity(),
+        context: context,
+        builder: (context, data) {
+          return Row(
+            children: <Widget>[
+              SizedBox(
+                width: 20,
+              ),
+              Image.asset(
+                (data?.name?.isEmpty ?? true)
+                    ? 'images/default_image.png'
+                    : 'images/avtor.png',
+                width: 60,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              _buildInfo(context, data),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.mic_none),
+                ),
+              )
+            ],
+          );
+        });
+  }
 }
 
 class RibbonWidget extends StatelessWidget {

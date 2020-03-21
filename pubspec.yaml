@@ -69,6 +69,9 @@ flutter:
     - images/dv6.png
     - images/like.png
     - images/broadcast.png
+    - images/king.png
+    - images/svip.png
+    - images/avtor.png
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
