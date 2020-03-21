@@ -137,7 +137,7 @@ class UserInfoWidget extends StatelessWidget {
                 fontSize: 17,
                 fontWeight: FontWeight.bold)),
         SizedBox(
-          height: 5,
+          height: 6,
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
