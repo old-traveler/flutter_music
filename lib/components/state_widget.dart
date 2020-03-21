@@ -17,29 +17,36 @@ class NoNetWidget extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               'images/no_net.png',
-              width: 220,
-              height: 220,
+              width: _height == null
+                  ? 220
+                  : _height * (_height < 200 ? 0.60 : 0.5),
+              height: _height == null
+                  ? 220
+                  : _height * (_height < 200 ? 0.60 : 0.5),
             ),
             SizedBox(
-              height: 10,
+              height: _height == null ? 10 : _height * 0.05,
             ),
             Text(
               '网络出问题啦 ~',
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: _height == null || _height >= 200 ? 15 : 10,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-            FlatButton(
+            SizedBox(
+              height: _height == null ? 10 : _height * 0.03,
+            ),
+            GestureDetector(
               child: Text(
                 '点击刷新',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: _height == null || _height >= 200 ? 14 : 9,
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: _voidCallback,
+              onTap: _voidCallback,
             )
           ],
         ));
@@ -84,6 +91,7 @@ class LoadingWidget extends StatelessWidget {
   final double _height;
 
   LoadingWidget(this._height);
+
   @override
   Widget build(BuildContext context) {
     return Container(
