@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 
 typedef WidgetBuilder<T> = Widget Function(BuildContext context, T data);
 typedef PageStateWidget = Widget Function(BuildContext context);
+typedef NoNetPageStateWidget = Widget Function(
+    BuildContext context, VoidCallback callback);
 typedef IsNoData<T> = bool Function(T data);
 
 class StreamManager {
@@ -84,7 +86,7 @@ Widget smartStreamBuilder2<T>(
     PageStateWidget noData,
     PageStateWidget loading,
     PageStateWidget error,
-    PageStateWidget noNet,
+    NoNetPageStateWidget noNet,
     // 用于Loading和no net页面展示
     double height,
     IsNoData<T> isNoData}) {
@@ -109,15 +111,11 @@ Widget smartStreamBuilder2<T>(
           return getNonNullWidget(
               context, loading, () => LoadingWidget(height));
         case PageState.noData:
-          return getNonNullWidget(context, noData, () => NoDataWidget('暂无数据'));
-        case PageState.noNet:
-          return getNonNullWidget(
-              context,
-              noNet,
-              () => NoNetWidget(
-                  () => streamManager.addDataToSinkByKey(
-                      BaseBloc, PageMessage.refresh(T)),
-                  height));
+          if (isNoData == null || isNoData(null)) {
+            return getNonNullWidget(
+                context, noData, () => NoDataWidget('暂无数据'));
+          }
+          return builder(context, null);
         case PageState.complete:
           if (isNoData != null && isNoData(pageData.data)) {
             return getNonNullWidget(
@@ -127,8 +125,12 @@ Widget smartStreamBuilder2<T>(
           }
           break;
         case PageState.error:
-          return getNonNullWidget(
-              context, noNet, () => OnErrorWidget(pageData.data));
+        case PageState.noNet:
+          final callback = () => streamManager.addDataToSinkByKey(
+              BaseBloc, PageMessage.refresh(T));
+          return noNet != null
+              ? noNet(context, callback)
+              : NoNetWidget(callback, height);
       }
       throw Exception("not deal ${pageData.state}");
     },

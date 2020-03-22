@@ -4,8 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:music/entity/entity_factory.dart';
 import 'package:music/util/stream_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef ResponseProvider = Future<dynamic> Function();
+typedef ListResponseProvider = Future<dynamic> Function(int page, int offset);
 typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 typedef RefreshProvider = void Function();
 
@@ -131,4 +134,168 @@ class PageData<D> {
   PageData.noNet(D data) : this(PageState.noNet, data);
 
   PageData.error(D data) : this(PageState.error, data);
+}
+
+/// 列表页面基类
+abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
+  final BaseListBloc _baseListBloc;
+  RefreshController refreshController = RefreshController();
+  ListConfig listConfig = ListConfig();
+  List<dynamic> dataList = [];
+  List<Widget> headerView;
+
+  BaseListState(this._baseListBloc, {this.listConfig});
+
+  Widget itemBuilder(BuildContext context, int index) {
+    if (index < headerView.length) {
+      return headerView[index];
+    }
+    return buildItem(context, dataList[index - headerView.length]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (listConfig.firstLoading) {
+      _baseListBloc._fetchListData(true, listResponseProvider());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InheritedProvider.value(
+        value: _baseListBloc.streamManager,
+        updateShouldNotify: (o, n) => true,
+        child: smartStreamBuilder2<D>(
+            initialData: listConfig.initData,
+            noData: listConfig.noData,
+            noNet: listConfig.noNet,
+            loading: listConfig.loading,
+            error: listConfig.error,
+            height: listConfig.height,
+            streamManager: _baseListBloc.streamManager,
+            isNoData: (data) => (dataList.length +
+                    headerView.length +
+                    (getListData(data)?.length ?? 0) ==
+                0),
+            builder: (context, data) {
+              if (_baseListBloc._page == 2) {
+                /// refresh
+                dataList.clear();
+                headerView.clear();
+              }
+              dataList.addAll(getListData(data));
+              buildHeaderWidget(context, data, headerView);
+              return SmartRefresher(
+                enablePullDown: listConfig.enablePullDown,
+                enablePullUp: hasNextPage(data),
+                controller: refreshController,
+                onRefresh: onRefresh,
+                onLoading: onLoading,
+                header: listConfig.header ?? ClassicHeader(),
+                footer: listConfig.footer ?? ClassicFooter(),
+                child: buildListView(data),
+              );
+            }));
+  }
+
+  void onRefresh() {
+    _baseListBloc._fetchListData<D>(true, listResponseProvider());
+  }
+
+  void onLoading() {
+    _baseListBloc._fetchListData<D>(false, listResponseProvider());
+  }
+
+  void buildHeaderWidget(BuildContext context, D data, List<Widget> headers) {}
+
+  /// 获取是否有下一页数据，由子类覆盖实现
+  bool hasNextPage(D);
+
+  /// 构造中心列表控件，子类可覆盖此方法，定义其他列表控件
+  /// 注意定义时需要制定itemBuilder为父类的itemBuilder
+  Widget buildListView(D data) {
+    return ListView.builder(
+      itemBuilder: itemBuilder,
+      itemCount: (dataList.length + headerView.length),
+    );
+  }
+
+  /// 获取列表数据请求，子类实现
+  ListResponseProvider listResponseProvider();
+
+  /// 构造item，子类实现
+  Widget buildItem(BuildContext context, D data);
+
+  /// 定义从data中获取list的映射关系，由子类实现
+  List<dynamic> getListData(D data);
+
+  @override
+  void dispose() {
+    super.dispose();
+    refreshController.dispose();
+    _baseListBloc.disposeAll();
+    headerView.clear();
+    dataList.clear();
+  }
+}
+
+class ListConfig<D> {
+  bool firstLoading;
+  D initData;
+  PageStateWidget noData;
+  PageStateWidget loading;
+  PageStateWidget error;
+  NoNetPageStateWidget noNet;
+  double height;
+  bool enablePullDown;
+  Widget header;
+  Widget footer;
+
+  ListConfig(
+      {this.firstLoading = true,
+      this.initData,
+      this.noData,
+      this.loading,
+      this.error,
+      this.noNet,
+      this.height,
+      this.enablePullDown = true,
+      this.header,
+      this.footer});
+}
+
+class BaseListBloc with BaseBloc {
+  int _page = 1;
+  RefreshController _refreshController;
+  BaseListState _baseListState;
+
+  BaseListBloc(this._baseListState) {
+    assert(_baseListState != null);
+    _refreshController = _baseListState.refreshController;
+  }
+
+  _fetchListData<T>(
+    bool isRefresh,
+    ListResponseProvider listResponseProvider,
+  ) {
+    if (isRefresh) _page = 1;
+    dealResponse<T>(
+        responseProvider: () {
+          return listResponseProvider(
+              _page, _baseListState.dataList?.length ?? 0);
+        },
+        needLoading:
+            _refreshController.isRefresh && _refreshController.isLoading,
+        stopLoading: (isOk) {
+          if (_page == 1) {
+            _refreshController.refreshCompleted();
+          } else {
+            _refreshController.loadComplete();
+          }
+          if (isOk) {
+            _page++;
+          }
+        });
+  }
 }
