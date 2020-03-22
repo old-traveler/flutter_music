@@ -17,7 +17,7 @@ class StreamManager {
     return Provider.of<StreamManager>(context);
   }
 
-  //推荐使用type作为key
+  /// 推荐使用type作为key
   static Stream getStreamByContextAndKey(BuildContext context, dynamic key) {
     return Provider.of<StreamManager>(context).getStreamByKey(key);
   }

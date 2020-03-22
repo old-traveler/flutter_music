@@ -23,7 +23,7 @@ mixin BaseBloc {
             _refreshProviderMap[data.key] != null) {
           _refreshProviderMap[data.key]();
         } else if (dispatchPageMessage(data)) {
-          print('message has deal');
+          print('message has been deal');
         } else {
           throw Exception('unknow type is ${data.runtimeType}');
         }
