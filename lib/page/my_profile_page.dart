@@ -26,12 +26,11 @@ class MyProfileBloc with BaseBloc {
 
   void _login(String name) {
     /// 执行登录请求
-    dealResponse<UserEntity>(responseProvider: () {
-      return HttpManager.getMockApi().get('login.json');
-    }, dataConvert: (data) {
-      data.name = name;
-      return data;
-    });
+    dealResponse<UserEntity>(
+        responseProvider: () {
+          return HttpManager.getMockApi().get('login.json');
+        },
+        dataConvert: (data) => data..name = name);
   }
 }
 
