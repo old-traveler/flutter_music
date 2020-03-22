@@ -4,111 +4,22 @@ import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/live_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/util/color_util.dart';
-import 'package:music/util/stream_manager.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LivePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return LivePageState();
+    return LivePageState(LiveBloc());
   }
 }
 
-class LiveBloc with BaseBloc {
-  final LivePageState _livePageState;
-  int _page = 1;
-
-  LiveBloc(this._livePageState);
-
-  void fetchListData(bool isRefresh) {
-    if (isRefresh) _page = 1;
-    print("page:$_page");
-    dealResponse<LiveEntity>(
-        responseProvider: () {
-          return HttpManager.getInstanceByUrl(keGouBaseUrl)
-              .get(getLiveUrl(page: _page));
-        },
-        needLoading: !_livePageState._refreshController.isRefresh &&
-            !_livePageState._refreshController.isLoading,
-        stopLoading: (isOk) {
-          if (_page == 1) {
-            _livePageState._refreshController.refreshCompleted();
-          } else {
-            _livePageState._refreshController.loadComplete();
-          }
-          if (isOk) {
-            _page++;
-          }
-        },
-        dataConvert: (data) {
-          if (!isRefresh) {
-            PageData<LiveEntity> pageState =
-                streamManager.getLastElement(LiveEntity);
-            final list = pageState?.data?.data?.xList ?? List();
-            list.addAll(data?.data?.xList ?? List());
-            data?.data?.xList = list;
-          }
-          return data;
-        });
-  }
+class LiveBloc with BaseBloc, BaseListBloc {
+  @override
+  ListResponseProvider listResponseProvider() => (page, offset) =>
+      HttpManager.getInstanceByUrl(keGouBaseUrl).get(getLiveUrl(page: page));
 }
 
-class LivePageState extends State<LivePage> with AutomaticKeepAliveClientMixin {
-  LiveBloc _liveBloc;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
-  @override
-  void initState() {
-    super.initState();
-    this._liveBloc = LiveBloc(this);
-    _onRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _refreshController.dispose();
-    _liveBloc.disposeAll();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return smartStreamBuilder2<LiveEntity>(
-        streamManager: _liveBloc.streamManager,
-        isNoData: (data) => (data?.data?.xList?.isEmpty ?? true),
-        builder: (context, data) {
-          data.data.xList.removeWhere((item) =>
-              (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
-          return SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: data.data.hasNextPage == 1,
-              header: ClassicHeader(),
-              footer: ClassicFooter(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 6.0,
-                    crossAxisSpacing: 0.0,
-                    childAspectRatio: 1.18),
-                itemBuilder: (context, index) =>
-                    _buildItemWidget(data.data.xList[index]),
-                itemCount: data.data.xList.length ?? 0,
-              ));
-        });
-  }
-
-  void _onRefresh() {
-    _liveBloc.fetchListData(true);
-  }
-
-  void _onLoading() {
-    _liveBloc.fetchListData(false);
-  }
+class LivePageState extends BaseListState<LiveEntity, LivePage> {
+  LivePageState(BaseListBloc baseListBloc) : super(baseListBloc);
 
   Widget _buildItemWidget(LiveDataList itemData) {
     return Column(
@@ -194,4 +105,34 @@ class LivePageState extends State<LivePage> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  Widget buildItem(BuildContext context, dynamic data) {
+    return _buildItemWidget(data);
+  }
+
+  @override
+  List getListData(LiveEntity data) {
+    data.data.xList.removeWhere((item) =>
+        (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
+    return data?.data?.xList;
+  }
+
+  @override
+  bool hasNextPage(data) {
+    return data?.data?.hasNextPage == 1;
+  }
+
+  @override
+  Widget buildListView(LiveEntity data, int itemAndHeaderCount) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 6.0,
+          crossAxisSpacing: 0.0,
+          childAspectRatio: 1.18),
+      itemBuilder: (context, index) => itemBuilder(context, index),
+      itemCount: itemAndHeaderCount,
+    );
+  }
 }

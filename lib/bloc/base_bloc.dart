@@ -137,14 +137,15 @@ class PageData<D> {
 }
 
 /// 列表页面基类
-abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
-  final BaseListBloc _baseListBloc;
+abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
+    with AutomaticKeepAliveClientMixin {
+  final BaseListBloc baseListBloc;
   RefreshController refreshController = RefreshController();
-  ListConfig listConfig = ListConfig();
+  ListConfig listConfig;
   List<dynamic> dataList = [];
-  List<Widget> headerView;
+  List<Widget> headerView = [];
 
-  BaseListState(this._baseListBloc, {this.listConfig});
+  BaseListState(this.baseListBloc, {this.listConfig});
 
   Widget itemBuilder(BuildContext context, int index) {
     if (index < headerView.length) {
@@ -156,15 +157,18 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
   @override
   void initState() {
     super.initState();
+    baseListBloc.init(this);
+    listConfig ??= ListConfig();
     if (listConfig.firstLoading) {
-      _baseListBloc._fetchListData(true, listResponseProvider());
+      baseListBloc._fetchListData<D>(true, listResponseProvider());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return InheritedProvider.value(
-        value: _baseListBloc.streamManager,
+        value: baseListBloc.streamManager,
         updateShouldNotify: (o, n) => true,
         child: smartStreamBuilder2<D>(
             initialData: listConfig.initData,
@@ -173,18 +177,21 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
             loading: listConfig.loading,
             error: listConfig.error,
             height: listConfig.height,
-            streamManager: _baseListBloc.streamManager,
+            streamManager: baseListBloc.streamManager,
             isNoData: (data) => (dataList.length +
                     headerView.length +
                     (getListData(data)?.length ?? 0) ==
                 0),
             builder: (context, data) {
-              if (_baseListBloc._page == 2) {
+              if (baseListBloc._page == 2) {
                 /// refresh
                 dataList.clear();
                 headerView.clear();
               }
-              dataList.addAll(getListData(data));
+              final list = getListData(data);
+              if (list?.isNotEmpty ?? false) {
+                dataList.addAll(list);
+              }
               buildHeaderWidget(context, data, headerView);
               return SmartRefresher(
                 enablePullDown: listConfig.enablePullDown,
@@ -192,29 +199,29 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
                 controller: refreshController,
                 onRefresh: onRefresh,
                 onLoading: onLoading,
-                header: listConfig.header ?? ClassicHeader(),
-                footer: listConfig.footer ?? ClassicFooter(),
-                child: buildListView(data),
+                header: (listConfig.header ?? ClassicHeader()),
+                footer: (listConfig.footer ?? ClassicFooter()),
+                child: buildListView(data, itemAndHeaderCount),
               );
             }));
   }
 
   void onRefresh() {
-    _baseListBloc._fetchListData<D>(true, listResponseProvider());
+    baseListBloc._fetchListData<D>(true, listResponseProvider());
   }
 
   void onLoading() {
-    _baseListBloc._fetchListData<D>(false, listResponseProvider());
+    baseListBloc._fetchListData<D>(false, listResponseProvider());
   }
 
   void buildHeaderWidget(BuildContext context, D data, List<Widget> headers) {}
 
   /// 获取是否有下一页数据，由子类覆盖实现
-  bool hasNextPage(D);
+  bool hasNextPage(D data);
 
   /// 构造中心列表控件，子类可覆盖此方法，定义其他列表控件
   /// 注意定义时需要制定itemBuilder为父类的itemBuilder
-  Widget buildListView(D data) {
+  Widget buildListView(D data, int itemAndHeaderCount) {
     return ListView.builder(
       itemBuilder: itemBuilder,
       itemCount: (dataList.length + headerView.length),
@@ -222,22 +229,30 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W> {
   }
 
   /// 获取列表数据请求，子类实现
-  ListResponseProvider listResponseProvider();
+  ListResponseProvider listResponseProvider() =>
+      baseListBloc.listResponseProvider();
 
   /// 构造item，子类实现
-  Widget buildItem(BuildContext context, D data);
+  Widget buildItem(BuildContext context, dynamic data);
 
   /// 定义从data中获取list的映射关系，由子类实现
   List<dynamic> getListData(D data);
+
+  int get itemAndHeaderCount => (dataList.length + headerView.length);
+
+  int get itemCount => dataList.length;
 
   @override
   void dispose() {
     super.dispose();
     refreshController.dispose();
-    _baseListBloc.disposeAll();
+    baseListBloc.disposeAll();
     headerView.clear();
     dataList.clear();
   }
+
+  @override
+  bool get wantKeepAlive => false;
 }
 
 class ListConfig<D> {
@@ -265,14 +280,15 @@ class ListConfig<D> {
       this.footer});
 }
 
-class BaseListBloc with BaseBloc {
+mixin BaseListBloc on BaseBloc {
   int _page = 1;
   RefreshController _refreshController;
   BaseListState _baseListState;
 
-  BaseListBloc(this._baseListState) {
-    assert(_baseListState != null);
-    _refreshController = _baseListState.refreshController;
+  init(BaseListState baseListState) {
+    assert(baseListState != null);
+    _baseListState = baseListState;
+    _refreshController = baseListState.refreshController;
   }
 
   _fetchListData<T>(
@@ -297,5 +313,9 @@ class BaseListBloc with BaseBloc {
             _page++;
           }
         });
+  }
+
+  ListResponseProvider listResponseProvider() {
+    return null;
   }
 }
