@@ -12,6 +12,7 @@ typedef ListResponseProvider = Future<dynamic> Function(int page, int offset);
 typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 typedef RefreshProvider = void Function();
 
+/// 基础网络页面Bloc
 mixin BaseBloc {
   StreamManager _streamManager = StreamManager();
   Map<dynamic, RefreshProvider> _refreshProviderMap = {};
@@ -35,10 +36,14 @@ mixin BaseBloc {
     return _streamManager;
   }
 
+  /// 分发页面Message事件，业务可以自定义Message并且处理Message事件
+  /// 用于子节点Widget于Bloc通信，可参考无网络点击刷新功能实现
   bool dispatchPageMessage(dynamic data) {
     return false;
   }
 
+  /// 处理Response，用户统一网络加载、网络失败、等状态的管理
+  /// 使用时必须传入具体T用于json的解析，新增的Entity需要在[EntityFactory]中添加映射关系
   void dealResponse<T>(
       {@required ResponseProvider responseProvider,
       void Function(bool) stopLoading,
@@ -140,7 +145,7 @@ class PageData<D> {
   PageData.error(D data) : this(PageState.error, data);
 }
 
-/// 列表页面基类
+/// 列表页面基类，用于处理分页加载事件
 abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     with AutomaticKeepAliveClientMixin {
   final BaseListBloc baseListBloc;
@@ -219,6 +224,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     baseListBloc._fetchListData<D>(false, listResponseProvider());
   }
 
+  /// 构造Header widget，新增的widget可以添加到[headers]中
   void buildHeaderWidget(BuildContext context, D data, List<Widget> headers) {}
 
   /// 获取是否有下一页数据，由子类覆盖实现
@@ -238,13 +244,16 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
       baseListBloc.listResponseProvider();
 
   /// 构造item，子类实现
-  Widget buildItem(BuildContext context, dynamic data,int index);
+  /// [index]是item的相对下标，即去除了header的count
+  Widget buildItem(BuildContext context, dynamic data, int index);
 
   /// 定义从data中获取list的映射关系，由子类实现
   List<dynamic> getListData(D data);
 
+  /// 获取item和header的总数量
   int get itemAndHeaderCount => (dataList.length + headerView.length);
 
+  /// 获取item的总数量
   int get itemCount => dataList.length;
 
   @override
@@ -260,6 +269,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   bool get wantKeepAlive => false;
 }
 
+/// [BaseListState]使用的页面配置信息
 class ListConfig<D> {
   bool firstLoading;
   D initData;
@@ -285,6 +295,7 @@ class ListConfig<D> {
       this.footer});
 }
 
+/// 处理分页变化的Bloc，使用时需和[BaseBloc]搭配使用
 mixin BaseListBloc on BaseBloc {
   int _page = 1;
   RefreshController _refreshController;
@@ -328,6 +339,7 @@ mixin BaseListBloc on BaseBloc {
         });
   }
 
+  /// 返回列表加载接口信息
   ListResponseProvider listResponseProvider() {
     return null;
   }
