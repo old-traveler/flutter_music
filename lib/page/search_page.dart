@@ -7,6 +7,7 @@ import 'package:music/page/search_result_page.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
+/// 搜索页面
 class SearchPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SearchPageState();
@@ -110,6 +111,7 @@ class SearchPageState extends State<SearchPage> {
   }
 }
 
+/// 搜索提示列表
 class AssociationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -136,6 +138,7 @@ class AssociationWidget extends StatelessWidget {
   }
 }
 
+/// 热门搜索模块
 class HotSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
