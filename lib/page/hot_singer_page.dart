@@ -43,9 +43,7 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
   }
 
   @override
-  bool hasNextPage(HotSingerEntity data) {
-    return false;
-  }
+  bool hasNextPage(HotSingerEntity data) => false;
 
   Widget _buildHeaderView(HotSingerDataInfo firstData) {
     return Stack(
