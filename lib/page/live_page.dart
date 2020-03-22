@@ -31,14 +31,14 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
 
   @override
   List getListData(LiveEntity data) {
-    data.data.xList.removeWhere((item) =>
-    (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
+    data?.data?.xList?.removeWhere((item) =>
+        (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
     return data?.data?.xList;
   }
 
   @override
   bool hasNextPage(data) {
-    return data?.data?.hasNextPage == 1;
+    return !(data?.data?.hasNextPage == 0);
   }
 
   @override
@@ -53,7 +53,6 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
       itemCount: itemAndHeaderCount,
     );
   }
-
 
   Widget _buildItemWidget(LiveDataList itemData) {
     return Column(
@@ -136,5 +135,4 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
       ),
     );
   }
-
 }

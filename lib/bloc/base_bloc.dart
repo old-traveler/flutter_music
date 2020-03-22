@@ -57,6 +57,7 @@ mixin BaseBloc {
           dataConvert: dataConvert);
     };
     if (response == null) {
+      dealNonNullFunction(stopLoading, false);
       _streamManager.addDataToSinkByKey(T, PageData<T>.noNet(null));
       return;
     }
@@ -66,6 +67,7 @@ mixin BaseBloc {
     print("jsonString$jsonString");
     dynamic data = json.decode(jsonString);
     if (data == null) {
+      dealNonNullFunction(stopLoading, false);
       _streamManager.addDataToSinkByKey(T, PageData<T>.noData(null));
       return;
     }
@@ -75,18 +77,14 @@ mixin BaseBloc {
           T,
           PageData<T>.complete(
               dataConvert == null ? originData : dataConvert(originData)));
-      if (stopLoading != null) {
-        stopLoading(true);
-      }
+      dealNonNullFunction(stopLoading, true);
       return;
     } else if (data['error'] != null) {
       _streamManager.addDataToSinkByKey(T, PageData<T>.error(data['error']));
     } else {
       _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
     }
-    if (stopLoading != null) {
-      stopLoading(false);
-    }
+    dealNonNullFunction(stopLoading, false);
   }
 
   void disposeByKey(key) {
@@ -97,6 +95,12 @@ mixin BaseBloc {
   void disposeAll() {
     _streamManager.disposeAll();
     _refreshProviderMap.clear();
+  }
+}
+
+void dealNonNullFunction(Function(bool isOk) function, bool isOk) {
+  if (function != null) {
+    function(isOk);
   }
 }
 
@@ -167,6 +171,8 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final hideContentWhenEmptyData =
+        (data) => (itemAndHeaderCount + (getListData(data)?.length ?? 0) == 0);
     return InheritedProvider.value(
         value: baseListBloc.streamManager,
         updateShouldNotify: (o, n) => true,
@@ -178,18 +184,16 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
             error: listConfig.error,
             height: listConfig.height,
             streamManager: baseListBloc.streamManager,
-            isNoData: (data) => (dataList.length +
-                    headerView.length +
-                    (getListData(data)?.length ?? 0) ==
-                0),
+            isNoData: hideContentWhenEmptyData,
+            showContentWhenNoContent: (data) => !hideContentWhenEmptyData(data),
             builder: (context, data) {
-              if (baseListBloc._page == 2) {
-                /// refresh
-                dataList.clear();
-                headerView.clear();
-              }
               final list = getListData(data);
               if (list?.isNotEmpty ?? false) {
+                if (baseListBloc._page == 2) {
+                  /// refresh
+                  dataList.clear();
+                  headerView.clear();
+                }
                 dataList.addAll(list);
               }
               buildHeaderWidget(context, data, headerView);
@@ -305,9 +309,17 @@ mixin BaseListBloc on BaseBloc {
             _refreshController.isRefresh && _refreshController.isLoading,
         stopLoading: (isOk) {
           if (_page == 1) {
-            _refreshController.refreshCompleted();
+            if (isOk) {
+              _refreshController.refreshCompleted();
+            } else {
+              _refreshController.refreshFailed();
+            }
           } else {
-            _refreshController.loadComplete();
+            if (isOk) {
+              _refreshController.loadComplete();
+            } else {
+              _refreshController.loadFailed();
+            }
           }
           if (isOk) {
             _page++;

@@ -9,7 +9,7 @@ typedef WidgetBuilder<T> = Widget Function(BuildContext context, T data);
 typedef PageStateWidget = Widget Function(BuildContext context);
 typedef NoNetPageStateWidget = Widget Function(
     BuildContext context, VoidCallback callback);
-typedef IsNoData<T> = bool Function(T data);
+typedef IsShowContent<T> = bool Function(T data);
 
 class StreamManager {
   Map<dynamic, StreamController> _streamControllerMap = {};
@@ -78,18 +78,20 @@ StreamBuilder smartStreamBuilder<T>(
   );
 }
 
-Widget smartStreamBuilder2<T>(
-    {StreamManager streamManager,
-    T initialData,
-    BuildContext context,
-    @required WidgetBuilder<T> builder,
-    PageStateWidget noData,
-    PageStateWidget loading,
-    PageStateWidget error,
-    NoNetPageStateWidget noNet,
-    // 用于Loading和no net页面展示
-    double height,
-    IsNoData<T> isNoData}) {
+Widget smartStreamBuilder2<T>({
+  StreamManager streamManager,
+  T initialData,
+  BuildContext context,
+  @required WidgetBuilder<T> builder,
+  PageStateWidget noData,
+  PageStateWidget loading,
+  PageStateWidget error,
+  NoNetPageStateWidget noNet,
+  // 用于Loading和no net页面展示
+  double height,
+  IsShowContent<T> isNoData,
+  IsShowContent<T> showContentWhenNoContent,
+}) {
   assert(builder != null);
   assert(streamManager != null || context != null);
   streamManager ??= Provider.of<StreamManager>(context);
@@ -126,6 +128,9 @@ Widget smartStreamBuilder2<T>(
           break;
         case PageState.error:
         case PageState.noNet:
+          if(showContentWhenNoContent != null && showContentWhenNoContent(null)){
+            return builder(context, null);
+          }
           final callback = () => streamManager.addDataToSinkByKey(
               BaseBloc, PageMessage.refresh(T));
           return noNet != null
