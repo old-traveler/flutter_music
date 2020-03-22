@@ -21,6 +21,40 @@ class LiveBloc with BaseBloc, BaseListBloc {
 class LivePageState extends BaseListState<LiveEntity, LivePage> {
   LivePageState(BaseListBloc baseListBloc) : super(baseListBloc);
 
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget buildItem(BuildContext context, dynamic data) {
+    return _buildItemWidget(data);
+  }
+
+  @override
+  List getListData(LiveEntity data) {
+    data.data.xList.removeWhere((item) =>
+    (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
+    return data?.data?.xList;
+  }
+
+  @override
+  bool hasNextPage(data) {
+    return data?.data?.hasNextPage == 1;
+  }
+
+  @override
+  Widget buildListView(LiveEntity data, int itemAndHeaderCount) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 6.0,
+          crossAxisSpacing: 0.0,
+          childAspectRatio: 1.18),
+      itemBuilder: (context, index) => itemBuilder(context, index),
+      itemCount: itemAndHeaderCount,
+    );
+  }
+
+
   Widget _buildItemWidget(LiveDataList itemData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,36 +137,4 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget buildItem(BuildContext context, dynamic data) {
-    return _buildItemWidget(data);
-  }
-
-  @override
-  List getListData(LiveEntity data) {
-    data.data.xList.removeWhere((item) =>
-        (item.imgPath?.isEmpty ?? true) || (item.label?.isEmpty ?? true));
-    return data?.data?.xList;
-  }
-
-  @override
-  bool hasNextPage(data) {
-    return data?.data?.hasNextPage == 1;
-  }
-
-  @override
-  Widget buildListView(LiveEntity data, int itemAndHeaderCount) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 6.0,
-          crossAxisSpacing: 0.0,
-          childAspectRatio: 1.18),
-      itemBuilder: (context, index) => itemBuilder(context, index),
-      itemCount: itemAndHeaderCount,
-    );
-  }
 }
