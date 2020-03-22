@@ -171,7 +171,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final hideContentWhenEmptyData =
+    final emptyData =
         (data) => (itemAndHeaderCount + (getListData(data)?.length ?? 0) == 0);
     return InheritedProvider.value(
         value: baseListBloc.streamManager,
@@ -184,8 +184,8 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
             error: listConfig.error,
             height: listConfig.height,
             streamManager: baseListBloc.streamManager,
-            isNoData: hideContentWhenEmptyData,
-            showContentWhenNoContent: (data) => !hideContentWhenEmptyData(data),
+            isNoData: emptyData,
+            showContentWhenNoContent: (data) => !emptyData(data),
             builder: (context, data) {
               final list = getListData(data);
               if (list?.isNotEmpty ?? false) {
@@ -306,7 +306,7 @@ mixin BaseListBloc on BaseBloc {
               _page, _baseListState.dataList?.length ?? 0);
         },
         needLoading:
-            _refreshController.isRefresh && _refreshController.isLoading,
+            !(_refreshController.isRefresh || _refreshController.isLoading),
         stopLoading: (isOk) {
           if (_page == 1) {
             if (isOk) {

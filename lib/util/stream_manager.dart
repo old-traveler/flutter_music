@@ -108,6 +108,7 @@ Widget smartStreamBuilder2<T>({
         throw Exception("snapshot.data must is PageData");
       }
       PageData pageData = snapshot.data;
+      print('pageState ${pageData.state.toString()}');
       switch (pageData.state) {
         case PageState.loading:
           return getNonNullWidget(
