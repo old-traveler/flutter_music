@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/search_page_bloc.dart';
+import 'package:music/components/state_widget.dart';
 import 'package:music/entity/association_entity.dart';
 import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/page/search_result_page.dart';
@@ -118,6 +119,7 @@ class AssociationWidget extends StatelessWidget {
     return smartStreamBuilder2<AssociationEntity>(
         context: context,
         isNoData: (data) => data?.data?.isEmpty ?? true,
+      noData:  (context)=> NoDataWidget('暂无数据，换一个词试试～'),
         builder: (BuildContext context, AssociationEntity data) =>
             ListView.separated(
                 itemBuilder: (context, index) => ListTile(
