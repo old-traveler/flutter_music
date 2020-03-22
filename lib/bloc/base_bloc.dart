@@ -155,7 +155,8 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     if (index < headerView.length) {
       return headerView[index];
     }
-    return buildItem(context, dataList[index - headerView.length]);
+    int itemIndex = index - headerView.length;
+    return buildItem(context, dataList[itemIndex], itemIndex);
   }
 
   @override
@@ -237,7 +238,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
       baseListBloc.listResponseProvider();
 
   /// 构造item，子类实现
-  Widget buildItem(BuildContext context, dynamic data);
+  Widget buildItem(BuildContext context, dynamic data,int index);
 
   /// 定义从data中获取list的映射关系，由子类实现
   List<dynamic> getListData(D data);

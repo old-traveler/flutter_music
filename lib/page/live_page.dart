@@ -25,7 +25,7 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
   bool get wantKeepAlive => true;
 
   @override
-  Widget buildItem(BuildContext context, dynamic data) {
+  Widget buildItem(BuildContext context, dynamic data, int index) {
     return _buildItemWidget(data);
   }
 
