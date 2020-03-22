@@ -113,8 +113,9 @@ class SearchPageState extends State<SearchPage> {
 class AssociationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<AssociationEntity>(
+    return smartStreamBuilder2<AssociationEntity>(
         context: context,
+        isNoData: (data) => data?.data?.isEmpty ?? true,
         builder: (BuildContext context, AssociationEntity data) =>
             ListView.separated(
                 itemBuilder: (context, index) => ListTile(
@@ -138,7 +139,7 @@ class AssociationWidget extends StatelessWidget {
 class HotSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<HotSearchEntity>(
+    return smartStreamBuilder2<HotSearchEntity>(
         context: context,
         builder: (context, data) {
           List<Widget> widgets = List();

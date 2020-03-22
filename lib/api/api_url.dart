@@ -13,5 +13,10 @@ String get singListUrl =>
 
 String getSearchResultUrl(String keyWord) =>
     "search/song?showtype=14&highlight=em&pagesize=30&tag_aggr="
-    "1&tagtype=全部&plat=0&sver=5&keyword=$keyWord&correct=1&"
-    "api_ver=1&version=9108&page=1&area_code=1&tag=1&with_res_tag=1";
+        "1&tagtype=全部&plat=0&sver=5&keyword=$keyWord&correct=1&"
+        "api_ver=1&version=9108&page=1&area_code=1&tag=1&with_res_tag=1";
+
+String get hotSearchUrl => 'search/hot?count=20&plat=1';
+
+String getAssociation(String keyword) =>
+    'new/app/i/search.php?student=0&cmd=302&keyword=$keyword&with_res_tag=1';
