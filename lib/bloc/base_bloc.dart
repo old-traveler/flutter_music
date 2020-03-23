@@ -13,7 +13,7 @@ typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 typedef RefreshProvider = void Function();
 
 /// 基础网络页面Bloc
-mixin BaseBloc {
+mixin ResponseWorker {
   StreamManager _streamManager = StreamManager();
   Map<dynamic, RefreshProvider> _refreshProviderMap = {};
   bool hasListen = false;
@@ -21,7 +21,7 @@ mixin BaseBloc {
   StreamManager get streamManager {
     if (!hasListen) {
       hasListen = true;
-      _streamManager.getStreamByKey(BaseBloc).listen((data) {
+      _streamManager.getStreamByKey(ResponseWorker).listen((data) {
         if (data is PageMessage &&
             data.messageType == MessageType.refresh &&
             _refreshProviderMap[data.key] != null) {
@@ -148,7 +148,7 @@ class PageData<D> {
 /// 列表页面基类，用于处理分页加载事件
 abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     with AutomaticKeepAliveClientMixin {
-  final BaseListBloc baseListBloc;
+  final ListPageWorker baseListBloc;
   RefreshController refreshController = RefreshController();
   ListConfig listConfig;
   List<dynamic> dataList = [];
@@ -295,8 +295,8 @@ class ListConfig<D> {
       this.footer});
 }
 
-/// 处理分页变化的Bloc，使用时需和[BaseBloc]搭配使用
-mixin BaseListBloc on BaseBloc {
+/// 处理分页变化的Bloc，使用时需和[ResponseWorker]搭配使用
+mixin ListPageWorker on ResponseWorker {
   int _page = 1;
   RefreshController _refreshController;
   BaseListState _baseListState;

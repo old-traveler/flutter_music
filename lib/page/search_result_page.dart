@@ -17,7 +17,7 @@ class SearchResultPage extends StatefulWidget {
   State<StatefulWidget> createState() => SearchResultState(_keyWord);
 }
 
-class SearchResultState extends State<SearchResultPage> with BaseBloc {
+class SearchResultState extends State<SearchResultPage> with ResponseWorker {
   final String _keyWord;
 
   SearchResultState(this._keyWord);

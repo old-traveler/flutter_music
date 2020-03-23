@@ -133,7 +133,7 @@ Widget smartStreamBuilder2<T>({
             return builder(context, null);
           }
           final callback = () => streamManager.addDataToSinkByKey(
-              BaseBloc, PageMessage.refresh(T));
+              ResponseWorker, PageMessage.refresh(T));
           return noNet != null
               ? noNet(context, callback)
               : NoNetWidget(callback, height);

@@ -12,14 +12,14 @@ class LivePage extends StatefulWidget {
   }
 }
 
-class LiveBloc with BaseBloc, BaseListBloc {
+class LiveBloc with ResponseWorker, ListPageWorker {
   @override
   ListResponseProvider listResponseProvider() => (page, offset) =>
       HttpManager.getInstanceByUrl(keGouBaseUrl).get(getLiveUrl(page: page));
 }
 
 class LivePageState extends BaseListState<LiveEntity, LivePage> {
-  LivePageState(BaseListBloc baseListBloc) : super(baseListBloc);
+  LivePageState(ListPageWorker baseListBloc) : super(baseListBloc);
 
   @override
   bool get wantKeepAlive => true;

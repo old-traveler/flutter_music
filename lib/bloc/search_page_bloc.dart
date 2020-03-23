@@ -5,7 +5,7 @@ import 'package:music/http/http_manager.dart';
 import 'package:music/api/api_url.dart';
 
 /// 搜索页面Bloc
-class SearchPageBloc with BaseBloc {
+class SearchPageBloc with ResponseWorker {
   void fetchAssociationData(String keyword) {
     if (keyword?.isEmpty ?? true) {
       //发送一个空数据清空之前的联想词

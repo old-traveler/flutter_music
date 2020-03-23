@@ -17,7 +17,7 @@ class MyProfilePage extends StatefulWidget {
   State<StatefulWidget> createState() => MyProfileState();
 }
 
-class MyProfileBloc with BaseBloc {
+class MyProfileBloc with ResponseWorker {
   void _fetchSongList() {
     dealResponse<SongListEntity>(responseProvider: () {
       return HttpManager.getInstance().get(api_url.singListUrl);

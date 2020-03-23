@@ -7,7 +7,7 @@ import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
 import 'package:music/http/http_manager.dart';
 
-class HomePageBloc with BaseBloc {
+class HomePageBloc with ResponseWorker {
   void fetchBannerData() {
     dealResponse<BannerEntity>(
         responseProvider: () =>

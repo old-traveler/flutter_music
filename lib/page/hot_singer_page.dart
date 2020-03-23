@@ -11,7 +11,7 @@ class HotSingerPage extends StatefulWidget {
   State<StatefulWidget> createState() => HotSingerState(HotSingerBloc());
 }
 
-class HotSingerBloc with BaseBloc, BaseListBloc {
+class HotSingerBloc with ResponseWorker, ListPageWorker {
   @override
   listResponseProvider() => (page, offset) =>
       HttpManager.getInstanceByUrl('http://mobilecdnbj.kugou.com/')
@@ -19,7 +19,7 @@ class HotSingerBloc with BaseBloc, BaseListBloc {
 }
 
 class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
-  HotSingerState(BaseListBloc baseListBloc) : super(baseListBloc);
+  HotSingerState(ListPageWorker baseListBloc) : super(baseListBloc);
 
   @override
   void buildHeaderWidget(
