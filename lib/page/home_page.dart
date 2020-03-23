@@ -64,7 +64,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 class HomePageBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<BannerEntity>(
+    return smartStreamBuilder2<BannerEntity>(
         context: context,
         builder: (BuildContext context, BannerEntity bannerEntity) {
           return Container(
@@ -93,7 +93,7 @@ class HomePageBanner extends StatelessWidget {
 class StationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<StationEntity>(
+    return smartStreamBuilder2<StationEntity>(
         context: context,
         builder: (BuildContext context, StationEntity data) {
           return Container(
@@ -134,7 +134,7 @@ class StationCard extends StatelessWidget {
 class SongSheetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<SongSheetEntity>(
+    return smartStreamBuilder2<SongSheetEntity>(
         context: context,
         builder: (BuildContext context, SongSheetEntity data) {
           double leadingSize = (MediaQuery.of(context).size.width - 46) / 2;
@@ -244,7 +244,7 @@ class SongSheetCard extends StatelessWidget {
 class HotRecommendCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<HotRecommendEntity>(
+    return smartStreamBuilder2<HotRecommendEntity>(
         context: context,
         builder: (BuildContext context, HotRecommendEntity data) {
           data.data.info.removeWhere((e) => e.bannerurl?.isEmpty ?? true);
@@ -315,7 +315,7 @@ double getModularHeight(int length) {
 class ElaborateSelectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder<ElaborateSelectModelEntity>(
+    return smartStreamBuilder2<ElaborateSelectModelEntity>(
         context: context,
         builder: (BuildContext context, ElaborateSelectModelEntity data) {
           return Column(

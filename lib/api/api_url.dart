@@ -20,3 +20,13 @@ String get hotSearchUrl => 'search/hot?count=20&plat=1';
 
 String getAssociation(String keyword) =>
     'new/app/i/search.php?student=0&cmd=302&keyword=$keyword&with_res_tag=1';
+
+String get bannerUrl => 'banner.json';
+
+String get hotRecommendUrl => 'tag/recommend?showtype=3&apiver=2&plat=0';
+
+String get stationUrl => 'station.json';
+
+String get songSheetUrl => 'song_sheet.json';
+
+String get elaborateUrl => 'tag/list?pid=0&apiver=2&plat=0';
