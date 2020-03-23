@@ -145,6 +145,56 @@ class PageData<D> {
   PageData.error(D data) : this(PageState.error, data);
 }
 
+/// 处理分页逻辑的Worker，使用时需和[ResponseWorker]搭配使用
+mixin ListPageWorker on ResponseWorker {
+  int _page = 1;
+  RefreshController _refreshController;
+  BaseListState _baseListState;
+
+  init(BaseListState baseListState) {
+    assert(baseListState != null);
+    _baseListState = baseListState;
+    _refreshController = baseListState.refreshController;
+  }
+
+  _fetchListData<T>(
+    bool isRefresh,
+    ListResponseProvider listResponseProvider,
+  ) {
+    if (isRefresh) _page = 1;
+    dealResponse<T>(
+        responseProvider: () {
+          return listResponseProvider(
+              _page, _baseListState.dataList?.length ?? 0);
+        },
+        needLoading:
+            !(_refreshController.isRefresh || _refreshController.isLoading),
+        stopLoading: (isOk) {
+          if (_page == 1) {
+            if (isOk) {
+              _refreshController.refreshCompleted();
+            } else {
+              _refreshController.refreshFailed();
+            }
+          } else {
+            if (isOk) {
+              _refreshController.loadComplete();
+            } else {
+              _refreshController.loadFailed();
+            }
+          }
+          if (isOk) {
+            _page++;
+          }
+        });
+  }
+
+  /// 返回列表加载接口信息
+  ListResponseProvider listResponseProvider() {
+    return null;
+  }
+}
+
 /// 列表页面基类，用于处理分页加载事件
 abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     with AutomaticKeepAliveClientMixin {
@@ -293,54 +343,4 @@ class ListConfig<D> {
       this.enablePullDown = true,
       this.header,
       this.footer});
-}
-
-/// 处理分页逻辑的Worker，使用时需和[ResponseWorker]搭配使用
-mixin ListPageWorker on ResponseWorker {
-  int _page = 1;
-  RefreshController _refreshController;
-  BaseListState _baseListState;
-
-  init(BaseListState baseListState) {
-    assert(baseListState != null);
-    _baseListState = baseListState;
-    _refreshController = baseListState.refreshController;
-  }
-
-  _fetchListData<T>(
-    bool isRefresh,
-    ListResponseProvider listResponseProvider,
-  ) {
-    if (isRefresh) _page = 1;
-    dealResponse<T>(
-        responseProvider: () {
-          return listResponseProvider(
-              _page, _baseListState.dataList?.length ?? 0);
-        },
-        needLoading:
-            !(_refreshController.isRefresh || _refreshController.isLoading),
-        stopLoading: (isOk) {
-          if (_page == 1) {
-            if (isOk) {
-              _refreshController.refreshCompleted();
-            } else {
-              _refreshController.refreshFailed();
-            }
-          } else {
-            if (isOk) {
-              _refreshController.loadComplete();
-            } else {
-              _refreshController.loadFailed();
-            }
-          }
-          if (isOk) {
-            _page++;
-          }
-        });
-  }
-
-  /// 返回列表加载接口信息
-  ListResponseProvider listResponseProvider() {
-    return null;
-  }
 }
