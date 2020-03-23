@@ -66,6 +66,7 @@ class HomePageBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder2<BannerEntity>(
         context: context,
+        height: 210,
         builder: (BuildContext context, BannerEntity bannerEntity) {
           return Container(
               height: 120,
@@ -95,6 +96,7 @@ class StationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder2<StationEntity>(
         context: context,
+        height: 210,
         builder: (BuildContext context, StationEntity data) {
           return Container(
               height: 190.0,
@@ -136,6 +138,7 @@ class SongSheetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder2<SongSheetEntity>(
         context: context,
+        height: 210,
         builder: (BuildContext context, SongSheetEntity data) {
           double leadingSize = (MediaQuery.of(context).size.width - 46) / 2;
           return Column(
@@ -246,6 +249,7 @@ class HotRecommendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder2<HotRecommendEntity>(
         context: context,
+        height: 210,
         builder: (BuildContext context, HotRecommendEntity data) {
           data.data.info.removeWhere((e) => e.bannerurl?.isEmpty ?? true);
           return Column(
@@ -317,6 +321,7 @@ class ElaborateSelectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return smartStreamBuilder2<ElaborateSelectModelEntity>(
         context: context,
+        height: 210,
         builder: (BuildContext context, ElaborateSelectModelEntity data) {
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
