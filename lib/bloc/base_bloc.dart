@@ -12,7 +12,7 @@ typedef ListResponseProvider = Future<dynamic> Function(int page, int offset);
 typedef ContentProvider<D> = Widget Function(BuildContext context, D data);
 typedef RefreshProvider = void Function();
 
-/// 基础网络页面Bloc
+/// 基础网络逻辑处理者
 mixin ResponseWorker {
   StreamManager _streamManager = StreamManager();
   Map<dynamic, RefreshProvider> _refreshProviderMap = {};
@@ -295,7 +295,7 @@ class ListConfig<D> {
       this.footer});
 }
 
-/// 处理分页变化的Bloc，使用时需和[ResponseWorker]搭配使用
+/// 处理分页逻辑的Worker，使用时需和[ResponseWorker]搭配使用
 mixin ListPageWorker on ResponseWorker {
   int _page = 1;
   RefreshController _refreshController;
