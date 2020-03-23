@@ -63,6 +63,7 @@ class StreamManager {
   }
 }
 
+/// smartStreamBuilder 1.0版本已废弃
 StreamBuilder smartStreamBuilder<T>(
     {@required BuildContext context, @required WidgetBuilder<T> builder}) {
   StreamManager streamManager = Provider.of<StreamManager>(context);
@@ -78,6 +79,7 @@ StreamBuilder smartStreamBuilder<T>(
   );
 }
 
+/// 处理bloc状态管理，内容和提示页切换逻辑
 Widget smartStreamBuilder2<T>({
   StreamManager streamManager,
   T initialData,
@@ -129,7 +131,8 @@ Widget smartStreamBuilder2<T>({
           break;
         case PageState.error:
         case PageState.noNet:
-          if(showContentWhenNoContent != null && showContentWhenNoContent(null)){
+          if (showContentWhenNoContent != null &&
+              showContentWhenNoContent(null)) {
             return builder(context, null);
           }
           final callback = () => streamManager.addDataToSinkByKey(
