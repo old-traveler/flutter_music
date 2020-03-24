@@ -30,3 +30,6 @@ String get stationUrl => 'station.json';
 String get songSheetUrl => 'song_sheet.json';
 
 String get elaborateUrl => 'tag/list?pid=0&apiver=2&plat=0';
+
+/// 播放歌曲api
+String getSongUrl(String hash) => 'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=$hash';
