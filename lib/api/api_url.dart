@@ -13,8 +13,8 @@ String get singListUrl =>
 
 String getSearchResultUrl(String keyWord) =>
     "search/song?showtype=14&highlight=em&pagesize=30&tag_aggr="
-        "1&tagtype=全部&plat=0&sver=5&keyword=$keyWord&correct=1&"
-        "api_ver=1&version=9108&page=1&area_code=1&tag=1&with_res_tag=1";
+    "1&tagtype=全部&plat=0&sver=5&keyword=$keyWord&correct=1&"
+    "api_ver=1&version=9108&page=1&area_code=1&tag=1&with_res_tag=1";
 
 String get hotSearchUrl => 'search/hot?count=20&plat=1';
 
@@ -32,4 +32,10 @@ String get songSheetUrl => 'song_sheet.json';
 String get elaborateUrl => 'tag/list?pid=0&apiver=2&plat=0';
 
 /// 播放歌曲api
-String getSongUrl(String hash) => 'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=$hash';
+String getSongUrl(String hash) =>
+    'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=$hash';
+
+/// 获取歌手写真
+String getSingerPortrait(
+        String albumId, String hash, String filename, String albumAudioId) =>
+    'http://kmrcdn.service.kugou.com/container/v1/image?appid=1005&clientver=10042&author_image_type=4,5&album_image_type=-3&data=[{"album_id": $albumId,"hash":"$hash","filename":"$filename","album_audio_id": $albumAudioId}]';
