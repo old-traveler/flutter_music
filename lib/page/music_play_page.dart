@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music/api/api_url.dart';
+import 'package:music/components/music_background_widget.dart';
 import 'package:music/components/widget_play_bottom_menu.dart';
 import 'package:music/components/widget_song_progress.dart';
 import 'package:music/entity/search_song_entity.dart';
@@ -90,44 +91,37 @@ class MusicPlayState extends State<MusicPlayPage> {
         statusBarIconBrightness: Brightness.dark));
     return Consumer<PlaySongsModel>(builder: (context, value, child) {
       return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(value.curSongInfo?.songName ?? '暂无歌曲'),
-          brightness: Brightness.light,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: buildPlayBackground(value), fit: BoxFit.fitHeight)),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Text('内容'),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-                child: SongProgressWidget(value),
-              ),
-              PlayBottomMenuWidget(value),
-              SizedBox(
-                height: ScreenUtil().setWidth(20),
-              )
-            ],
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(value.curSongInfo?.songName ?? '暂无歌曲'),
+            brightness: Brightness.light,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
           ),
-        ),
-      );
+          body: Stack(
+            children: <Widget>[
+              MusicBackgroundWidget(),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text('内容'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(30)),
+                      child: SongProgressWidget(value),
+                    ),
+                    PlayBottomMenuWidget(value),
+                    SizedBox(
+                      height: ScreenUtil().setWidth(20),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ));
     });
-  }
-
-  ImageProvider buildPlayBackground(PlaySongsModel model) {
-    if (model?.curSongInfo?.portrait?.isNotEmpty == true) {
-      return NetworkImage(model.curSongInfo.portrait[0]);
-    } else {
-      return AssetImage('images/skin_player_bg.jpg');
-    }
   }
 }

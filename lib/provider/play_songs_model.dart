@@ -31,9 +31,11 @@ class PlaySongsModel with ChangeNotifier {
       /// 状态改变和进度变化时才会回调用
       bool needNotify = false;
       final songInfo = _songMap[data.songId];
+      print(songInfo);
       if (songInfo != null && songInfo.hash != _curSongInfo?.hash) {
         /// 切换歌曲
         _curSongInfo = songInfo;
+        print("切换歌曲" + _curSongInfo.songName);
         needNotify = true;
       }
       if (data.state != _curState) {
@@ -52,6 +54,10 @@ class PlaySongsModel with ChangeNotifier {
 
   void seekToProgress(int progress) {
     _progressController.sink.add(_musicState..position = progress);
+  }
+
+  void updatePortrait(String songId, List<String> list) {
+    _songMap[songId]?.portrait = list;
   }
 
   @override

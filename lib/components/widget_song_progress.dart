@@ -51,11 +51,13 @@ class SongProgressWidget extends StatelessWidget {
                   model.seekToProgress(data.toInt());
                 },
                 onChangeStart: (data) {
+                  print("onChangeStart");
                   model.sinkProgress = false;
                 },
                 onChangeEnd: (data) {
-                  MusicWrapper.singleton.seekTo(data.toInt());
                   model.sinkProgress = true;
+                  MusicWrapper.singleton.seekTo(data.toInt());
+                  print("onChangeEnd");
                 },
                 activeColor: Colors.white,
                 inactiveColor: Colors.white30,

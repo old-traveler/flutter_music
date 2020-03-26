@@ -121,6 +121,14 @@ Map<String, dynamic> singerPortraitDataAuthorToJson(SingerPortraitDataAuthor ent
 }
 
 singerPortraitDataAuthorImgsFromJson(SingerPortraitDataAuthorImgs data, Map<String, dynamic> json) {
+	List<dynamic> list = json['4'];
+	if(list?.isNotEmpty == true){
+		List<SingerPortraitDataAuthorImgs4> images =[];
+		for (var value in list) {
+		  images.add(singerPortraitDataAuthorImgs4FromJson(SingerPortraitDataAuthorImgs4(), value));
+		}
+		data.imageList = images;
+	}
 	return data;
 }
 

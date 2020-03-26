@@ -38,4 +38,4 @@ String getSongUrl(String hash) =>
 /// 获取歌手写真
 String getSingerPortrait(
         String albumId, String hash, String filename, String albumAudioId) =>
-    'http://kmrcdn.service.kugou.com/container/v1/image?appid=1005&clientver=10042&author_image_type=4,5&album_image_type=-3&data=[{"album_id": $albumId,"hash":"$hash","filename":"$filename","album_audio_id": $albumAudioId}]';
+    'container/v1/image?appid=1005&clientver=10042&author_image_type=4&album_image_type=-3&data=[{"album_id": $albumId,"hash":"$hash","filename":"$filename","album_audio_id": $albumAudioId}]';
