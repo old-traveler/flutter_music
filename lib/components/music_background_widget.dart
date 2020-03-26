@@ -88,11 +88,18 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         init(model);
-        List<CachedNetworkImageProvider> imageWidget = [];
-        var configuration = createLocalImageConfiguration(context);
+        List<CachedNetworkImage> imageWidget = [];
         images?.forEach((data) {
-          imageWidget
-              .add(CachedNetworkImageProvider(data)..resolve(configuration));
+          imageWidget.add(CachedNetworkImage(
+            imageUrl: data,
+            fit: BoxFit.fitHeight,
+            height: ScreenUtil.screenHeight,
+            placeholder: (context, url) => Image.asset(
+              'images/skin_player_bg.jpg',
+              fit: BoxFit.fitHeight,
+              height: ScreenUtil.screenHeight,
+            ),
+          ));
         });
         return images?.isNotEmpty == true
             ? PageView.builder(
@@ -100,11 +107,7 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: images?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return Image(
-                    image: imageWidget[index % imageWidget.length],
-                    fit: BoxFit.fitHeight,
-                    height: ScreenUtil.screenHeight,
-                  );
+                  return imageWidget[index % imageWidget.length];
                 },
               )
             : Image.asset(
