@@ -22,7 +22,7 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
   int _index = 0;
 
   void init(PlaySongsModel model) {
-    images = model.curSongInfo.portrait;
+    images = model?.curSongInfo?.portrait;
     if (images == null) {
       //无数据需要更新数据
       _fetchSongPortrait(model);
