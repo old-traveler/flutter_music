@@ -89,17 +89,22 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
       builder: (context, model, child) {
         init(model);
         List<CachedNetworkImage> imageWidget = [];
+        int position = 0;
         images?.forEach((data) {
           imageWidget.add(CachedNetworkImage(
-            imageUrl: data,
-            fit: BoxFit.fitHeight,
-            height: ScreenUtil.screenHeight,
-            placeholder: (context, url) => Image.asset(
-              'images/skin_player_bg.jpg',
+              imageUrl: data,
               fit: BoxFit.fitHeight,
               height: ScreenUtil.screenHeight,
-            ),
-          ));
+              placeholder: (context, url) {
+                return position == 0
+                    ? Image.asset(
+                        'images/skin_player_bg.jpg',
+                        fit: BoxFit.fitHeight,
+                        height: ScreenUtil.screenHeight,
+                      )
+                    : imageWidget[position - 1];
+              }));
+          position++;
         });
         return images?.isNotEmpty == true
             ? PageView.builder(
