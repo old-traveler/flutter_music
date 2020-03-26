@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:music/page/home_page.dart';
 import 'package:music/page/hot_singer_page.dart';
 import 'package:music/page/live_page.dart';
+import 'package:music/page/music_play_page.dart';
 import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/search_page.dart';
 import 'package:music/provider/navigation_index.dart';
@@ -17,7 +18,6 @@ class MusicApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -57,13 +57,19 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: window.physicalSize.width, height: window.physicalSize.height);
+    ScreenUtil.init(context,
+        width: window.physicalSize.width, height: window.physicalSize.height);
     _tabIndex = Provider.of<TabIndex>(context);
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
       appBar: AppBar(
         title: Text("Music"),
-        leading: Icon(Icons.music_note),
+        leading: GestureDetector(
+          child: Icon(Icons.music_note),
+          onTap: () {
+            openMusicPlayPage(context);
+          },
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
