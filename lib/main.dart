@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:music/page/home_page.dart';
 import 'package:music/page/hot_singer_page.dart';
@@ -5,6 +7,8 @@ import 'package:music/page/live_page.dart';
 import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/search_page.dart';
 import 'package:music/provider/navigation_index.dart';
+import 'package:music/provider/play_songs_model.dart';
+import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MusicApp());
@@ -13,11 +17,15 @@ class MusicApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) =>
-              TabIndex(0, [HomePage(), LivePage(), HotSingerPage(), MyProfilePage()]),
+          create: (_) => TabIndex(
+              0, [HomePage(), LivePage(), HotSingerPage(), MyProfilePage()]),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PlaySongsModel()..init(),
         )
       ],
       child: MaterialApp(
@@ -49,6 +57,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: window.physicalSize.width, height: window.physicalSize.height);
     _tabIndex = Provider.of<TabIndex>(context);
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),

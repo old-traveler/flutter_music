@@ -33,7 +33,7 @@ String get elaborateUrl => 'tag/list?pid=0&apiver=2&plat=0';
 
 /// 播放歌曲api
 String getSongUrl(String hash) =>
-    'https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=$hash';
+    'yy/index.php?r=play/getdata&hash=$hash';
 
 /// 获取歌手写真
 String getSingerPortrait(

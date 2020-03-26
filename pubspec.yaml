@@ -33,6 +33,8 @@ dependencies:
   flutter_swiper: ^1.1.6
   # https://github.com/PonnamKarthik/FlutterToast
   fluttertoast: ^3.1.3
+  flutter_music_plugin:
+    path: ../flutter_music_plugin
 
 dev_dependencies:
   flutter_test:
@@ -55,23 +57,7 @@ flutter:
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   assets:
-    - images/rank1.png
-    - images/rank2.png
-    - images/rank3.png
-    - images/no_data.png
-    - images/no_net.png
-    - images/default_image.png
-    - images/vip.png
-    - images/duv.png
-    - images/dux.png
-    - images/duz.png
-    - images/dv4.png
-    - images/dv6.png
-    - images/like.png
-    - images/broadcast.png
-    - images/king.png
-    - images/svip.png
-    - images/avtor.png
+    - images/
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages

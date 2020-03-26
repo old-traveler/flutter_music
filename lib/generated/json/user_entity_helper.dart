@@ -7,6 +7,9 @@ userEntityFromJson(UserEntity data, Map<String, dynamic> json) {
 	if (json['user'] != null) {
 		data.user = new UserUser().fromJson(json['user']);
 	}
+	if (json['name'] != null) {
+		data.name = json['name']?.toString();
+	}
 	return data;
 }
 
@@ -16,6 +19,7 @@ Map<String, dynamic> userEntityToJson(UserEntity entity) {
 	if (entity.user != null) {
 		data['user'] = entity.user.toJson();
 	}
+	data['name'] = entity.name;
 	return data;
 }
 

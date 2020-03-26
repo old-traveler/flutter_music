@@ -5,6 +5,7 @@ import 'package:music/bloc/base_bloc.dart';
 import 'package:music/components/state_widget.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/page/music_play_page.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -57,6 +58,9 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
                   return ListView.builder(
                     itemBuilder: (context, index) {
                       return ListTile(
+                          onTap: () {
+                            openMusicPlayPageByInfo(context, data.data.info[index]);
+                          },
                           contentPadding: EdgeInsets.only(left: 25),
                           title: Text(
                               data.data.info[index].songname

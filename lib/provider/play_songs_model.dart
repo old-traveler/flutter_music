@@ -1,0 +1,106 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_music_plugin/music.dart';
+
+class PlaySongsModel with ChangeNotifier {
+  int _curState = MusicStateType.STATE_NONE;
+  MusicSongInfo _curSongInfo;
+  MusicState _musicState;
+  bool sinkProgress = true;
+
+  /// 播放器当前状态信息
+  MusicState get musicStateInfo => _musicState;
+
+  /// 当前被播放的音乐数据信息
+  MusicSongInfo get curSongInfo => _curSongInfo;
+
+  /// 播放器当前状态
+  int get curState => _curState;
+
+  StreamController<MusicState> _progressController =
+      StreamController.broadcast();
+
+  Stream<MusicState> get progressChangeStream => _progressController.stream;
+
+  Map<String, MusicSongInfo> _songMap = {};
+
+  void init() {
+    MusicWrapper.singleton.initState();
+    MusicWrapper.singleton.getMusicStateStream().listen((data) {
+      /// 状态改变和进度变化时才会回调用
+      bool needNotify = false;
+      final songInfo = _songMap[data.songId];
+      if (songInfo != null && songInfo.hash != _curSongInfo?.hash) {
+        /// 切换歌曲
+        _curSongInfo = songInfo;
+        needNotify = true;
+      }
+      if (data.state != _curState) {
+        _curState = data.state;
+        needNotify = true;
+      }
+      _musicState = data;
+      if (sinkProgress) {
+        _progressController.sink.add(data);
+      }
+      if (needNotify) {
+        notifyListeners();
+      }
+    });
+  }
+
+  void seekToProgress(int progress) {
+    _progressController.sink.add(_musicState..position = progress);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _progressController.close();
+    MusicWrapper.singleton.dispose();
+  }
+
+  void playSong(MusicSongInfo info) {
+    assert(info != null && info.hash.isNotEmpty);
+    _songMap[info.hash] = info;
+    MusicWrapper.singleton.playSongByInfo(info.toSongInfo());
+  }
+
+  bool playSongById(String songId) {
+    if (_songMap.containsKey(songId)) {
+      MusicWrapper.singleton.playMusicById(songId);
+      return true;
+    }
+    return false;
+  }
+}
+
+extension MusicInfoConvert on MusicSongInfo {
+  SongInfo toSongInfo() => SongInfo(this.hash, this.playUrl);
+}
+
+class MusicSongInfo {
+  String hash;
+  String playUrl;
+  List<String> portrait;
+  String albumId;
+  String filename;
+  String albumAudioId;
+  String sizableCover;
+  String songName;
+  String singerName;
+  String lyrics;
+
+  MusicSongInfo(
+      {this.hash,
+      this.playUrl,
+      this.portrait,
+      this.albumId,
+      this.filename,
+      this.albumAudioId,
+      this.sizableCover,
+      this.songName,
+      this.singerName,
+      this.lyrics});
+}
