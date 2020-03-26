@@ -76,7 +76,6 @@ class MusicPlayPage extends StatefulWidget {
   State<StatefulWidget> createState() => MusicPlayState();
 }
 
-class MusicPlayBloc {}
 
 class MusicPlayState extends State<MusicPlayPage> {
   @override

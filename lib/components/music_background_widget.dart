@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
@@ -20,15 +21,28 @@ class MusicBackgroundWidget extends StatefulWidget {
 class MusicBackgroundState extends State<MusicBackgroundWidget> {
   List<String> images;
   int _index = 0;
+  Timer _timer;
+  PageController _pageController = PageController();
+  Duration period = const Duration(seconds: 15);
 
   void init(PlaySongsModel model) {
     images = model?.curSongInfo?.portrait;
+    _timer?.cancel();
+    _timer = null;
     if (images == null) {
       //无数据需要更新数据
       _fetchSongPortrait(model);
     } else {
       /// 开启计数器
+      startTime();
     }
+  }
+
+  startTime() {
+    _timer?.cancel();
+    _timer = Timer.periodic(period, (timer) {
+      _pageController.jumpToPage((_index++) % images.length);
+    });
   }
 
   Future _fetchSongPortrait(PlaySongsModel model) async {
@@ -54,8 +68,8 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
       if (images == null) {
         return;
       }
-      print("iamges : $images");
       model.updatePortrait(info.hash, images);
+      startTime();
       setState(() {});
     }
   }
@@ -63,6 +77,9 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
   @override
   void dispose() {
     super.dispose();
+    _timer?.cancel();
+    _timer = null;
+    _pageController.dispose();
   }
 
   @override
@@ -71,10 +88,17 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
       builder: (context, model, child) {
         init(model);
         return images?.isNotEmpty == true
-            ? Image.network(
-                images[_index % images.length],
-                fit: BoxFit.fitHeight,
-                height: ScreenUtil.screenHeight,
+            ? PageView.builder(
+                controller: _pageController,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: images?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return Image.network(
+                    images[index % images.length],
+                    fit: BoxFit.fitHeight,
+                    height: ScreenUtil.screenHeight,
+                  );
+                },
               )
             : Image.asset(
                 'images/skin_player_bg.jpg',
