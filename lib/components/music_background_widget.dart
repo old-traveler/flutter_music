@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:music/api/api_url.dart';
@@ -87,14 +88,20 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         init(model);
+        List<CachedNetworkImageProvider> imageWidget = [];
+        var configuration = createLocalImageConfiguration(context);
+        images?.forEach((data) {
+          imageWidget
+              .add(CachedNetworkImageProvider(data)..resolve(configuration));
+        });
         return images?.isNotEmpty == true
             ? PageView.builder(
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: images?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    images[index % images.length],
+                  return Image(
+                    image: imageWidget[index % imageWidget.length],
                     fit: BoxFit.fitHeight,
                     height: ScreenUtil.screenHeight,
                   );
