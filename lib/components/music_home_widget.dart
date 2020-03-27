@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/music.dart';
@@ -18,7 +20,7 @@ class MusicHomeState extends State<MusicHomeWidget>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: const Duration(seconds: 10), vsync: this);
+        AnimationController(duration: const Duration(seconds: 15), vsync: this);
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         controller.reset();
@@ -43,17 +45,43 @@ class MusicHomeState extends State<MusicHomeWidget>
         return GestureDetector(
           child: model.curSongInfo == null
               ? Icon(Icons.music_note)
-              : Container(
-                  padding: EdgeInsets.all(6),
-                  child: RotationTransition(
-                    alignment: Alignment.center,
-                    turns: controller,
-                    child: CircleAvatar(
-                      radius: 5,
-                      backgroundImage:
-                          NetworkImage(model.curSongInfo.sizableCover),
+              : Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 43,
+                      width: 43,
+                      child: StreamBuilder<MusicState>(
+                        stream: model.progressChangeStream,
+                        builder: (context, data) {
+                          final state = data.data;
+                          double value = state == null
+                              ? 0
+                              : state.position * 1.0 / state.duration;
+                          value = max(0.0, min(1.0, value));
+                          return CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            backgroundColor: Colors.white70,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                            value: value,
+                          );
+                        },
+                      ),
                     ),
-                  )),
+                    Positioned(
+                      child: Container(
+                          child: RotationTransition(
+                            alignment: Alignment.center,
+                            turns: controller,
+                            child: CircleAvatar(
+                              radius: 21,
+                              backgroundImage:
+                                  NetworkImage(model.curSongInfo.sizableCover),
+                            ),
+                          )),
+                    )
+                  ],
+                ),
           onTap: () {
             openMusicPlayPage(context);
           },

@@ -49,7 +49,8 @@ Future openMusicPlayPageByInfo(
         albumId: info.albumId,
         filename: info.filename.noTag(),
         albumAudioId: info.albumAudioId.toString(),
-        sizableCover: entity.data.img,
+        sizableCover:
+            entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100'),
         songName: info.songname.noTag(),
         singerName: info.singername,
         lyrics: entity.data.lyrics);
@@ -75,7 +76,6 @@ class MusicPlayPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MusicPlayState();
 }
-
 
 class MusicPlayState extends State<MusicPlayPage> {
   @override
