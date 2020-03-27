@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:music/page/home_page.dart';
 import 'package:music/page/hot_singer_page.dart';
 import 'package:music/page/live_page.dart';
-import 'package:music/page/music_play_page.dart';
 import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/search_page.dart';
 import 'package:music/page/splash_page.dart';
 import 'package:music/provider/navigation_index.dart';
 import 'package:music/provider/play_songs_model.dart';
-import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'components/music_home_widget.dart';

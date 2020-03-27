@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -31,11 +30,19 @@ class SplashState extends State<SplashPage> {
           SizedBox(
             height: 120,
           ),
-          Image.asset('images/splash_title.png',height: ScreenUtil().setHeight(250),fit: BoxFit.fitHeight,),
+          Image.asset(
+            'images/splash_title.png',
+            height: ScreenUtil().setHeight(250),
+            fit: BoxFit.fitHeight,
+          ),
           Expanded(
             child: Container(),
           ),
-          Image.asset('images/splash_icon.png',height: ScreenUtil().setHeight(100),fit: BoxFit.fitHeight,),
+          Image.asset(
+            'images/splash_icon.png',
+            height: ScreenUtil().setHeight(100),
+            fit: BoxFit.fitHeight,
+          ),
           SizedBox(
             height: 50,
           )

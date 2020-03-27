@@ -84,6 +84,7 @@ class PlaySongsModel with ChangeNotifier {
   }
 }
 
+// ignore: sdk_version_extension_methods
 extension MusicInfoConvert on MusicSongInfo {
   SongInfo toSongInfo() => SongInfo(this.hash, this.playUrl);
 }

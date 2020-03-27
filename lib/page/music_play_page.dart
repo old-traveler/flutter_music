@@ -17,6 +17,7 @@ import 'package:music/util/screenutil.dart';
 import 'package:music/util/toast_util.dart';
 import 'package:provider/provider.dart';
 
+// ignore: sdk_version_extension_methods
 extension SongName on String {
   String noTag() {
     return this.replaceAll("<em>", "").replaceAll("</em>", "");
