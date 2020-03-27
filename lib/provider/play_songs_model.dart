@@ -41,9 +41,9 @@ class PlaySongsModel with ChangeNotifier {
       if (data.state != _curState &&
           (data.state + _curState == 9 && data.state * _curState == 18)) {
         print("状态变化  ${data.state}  $_curState");
-        _curState = data.state;
         needNotify = true;
       }
+      _curState = data.state;
       _musicState = data;
       if (sinkProgress) {
         _progressController.sink.add(data);

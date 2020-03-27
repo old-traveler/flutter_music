@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_music_plugin/music.dart';
 import 'package:music/page/music_play_page.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,13 @@ class MusicHomeState extends State<MusicHomeWidget>
   Widget build(BuildContext context) {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
-        controller.forward();
+        if (model.curState == MusicStateType.STATE_PLAYING ||
+            model.curState == MusicStateType.STATE_BUFFERING) {
+          controller.forward();
+        } else if (model.curState == MusicStateType.STATE_PAUSED ||
+            model.curState == MusicStateType.STATE_STOPPED) {
+          controller.stop();
+        }
         return GestureDetector(
           child: model.curSongInfo == null
               ? Icon(Icons.music_note)
