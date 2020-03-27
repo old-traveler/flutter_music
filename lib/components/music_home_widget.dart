@@ -9,27 +9,55 @@ class MusicHomeWidget extends StatefulWidget {
   State<StatefulWidget> createState() => MusicHomeState();
 }
 
-class MusicHomeState extends State<MusicHomeWidget> {
+class MusicHomeState extends State<MusicHomeWidget>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 10), vsync: this);
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reset();
+        controller.forward();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
+        controller.forward();
         return GestureDetector(
           child: model.curSongInfo == null
               ? Icon(Icons.music_note)
               : Container(
                   padding: EdgeInsets.all(6),
-                  child: CircleAvatar(
-                    radius: 5,
-                    backgroundImage:
-                        NetworkImage(model.curSongInfo.sizableCover),
-                  ),
-                ),
+                  child: RotationTransition(
+                    alignment: Alignment.center,
+                    turns: controller,
+                    child: CircleAvatar(
+                      radius: 5,
+                      backgroundImage:
+                          NetworkImage(model.curSongInfo.sizableCover),
+                    ),
+                  )),
           onTap: () {
             openMusicPlayPage(context);
           },
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 }
