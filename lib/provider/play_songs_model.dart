@@ -31,14 +31,16 @@ class PlaySongsModel with ChangeNotifier {
       /// 状态改变和进度变化时才会回调用
       bool needNotify = false;
       final songInfo = _songMap[data.songId];
-      print(songInfo);
       if (songInfo != null && songInfo.hash != _curSongInfo?.hash) {
         /// 切换歌曲
         _curSongInfo = songInfo;
         print("切换歌曲" + _curSongInfo.songName);
         needNotify = true;
       }
-      if (data.state != _curState) {
+      /// 状态发生改变，切不是因为网络缓冲原因时通知更新
+      if (data.state != _curState &&
+          (data.state + _curState == 9 && data.state * _curState == 18)) {
+        print("状态变化  ${data.state}  $_curState");
         _curState = data.state;
         needNotify = true;
       }

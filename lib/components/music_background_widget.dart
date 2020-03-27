@@ -48,6 +48,9 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
 
   Future _fetchSongPortrait(PlaySongsModel model) async {
     final info = model.curSongInfo;
+    if(info == null){
+      return;
+    }
     Response response =
         await HttpManager.getInstanceByUrl('http://kmrcdn.service.kugou.com/')
             .get(getSingerPortrait(
@@ -104,7 +107,7 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
                       )
                     : imageWidget[position - 1];
               }));
-          position++;
+//          position++;
         });
         return images?.isNotEmpty == true
             ? PageView.builder(
