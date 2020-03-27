@@ -12,6 +12,8 @@ import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
 
+import 'components/music_home_widget.dart';
+
 void main() => runApp(MusicApp());
 
 class MusicApp extends StatelessWidget {
@@ -64,12 +66,7 @@ class MainPageState extends State<MainPage> {
       backgroundColor: Color(0xFFF8F8F8),
       appBar: AppBar(
         title: Text("Music"),
-        leading: GestureDetector(
-          child: Icon(Icons.music_note),
-          onTap: () {
-            openMusicPlayPage(context);
-          },
-        ),
+        leading: MusicHomeWidget(),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
