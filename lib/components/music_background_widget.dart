@@ -29,6 +29,7 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
   void init(PlaySongsModel model) {
     images = model?.curSongInfo?.portrait;
     _timer?.cancel();
+    _index = 0;
     _timer = null;
     if (images == null) {
       //无数据需要更新数据
@@ -48,7 +49,7 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
 
   Future _fetchSongPortrait(PlaySongsModel model) async {
     final info = model.curSongInfo;
-    if(info == null){
+    if (info == null) {
       return;
     }
     Response response =
@@ -91,31 +92,28 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         init(model);
-        List<CachedNetworkImage> imageWidget = [];
-        int position = 0;
-        images?.forEach((data) {
-          imageWidget.add(CachedNetworkImage(
-              imageUrl: data,
-              fit: BoxFit.fitHeight,
-              height: ScreenUtil.screenHeight,
-              placeholder: (context, url) {
-                return position == 0
-                    ? Image.asset(
-                        'images/skin_player_bg.jpg',
-                        fit: BoxFit.fitHeight,
-                        height: ScreenUtil.screenHeight,
-                      )
-                    : imageWidget[position - 1];
-              }));
-//          position++;
-        });
         return images?.isNotEmpty == true
             ? PageView.builder(
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: images?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return imageWidget[index % imageWidget.length];
+                  return CachedNetworkImage(
+                      imageUrl: images[index % images.length],
+                      fit: BoxFit.fitHeight,
+                      height: ScreenUtil.screenHeight,
+                      placeholder: (context, url) {
+                        return index % images.length == 0
+                            ? Image.asset(
+                                'images/skin_player_bg.jpg',
+                                fit: BoxFit.fitHeight,
+                                height: ScreenUtil.screenHeight,
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: images[(index - 1) % images.length],
+                                fit: BoxFit.fitHeight,
+                                height: ScreenUtil.screenHeight);
+                      });
                 },
               )
             : Image.asset(
