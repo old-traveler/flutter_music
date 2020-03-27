@@ -7,6 +7,7 @@ import 'package:music/page/live_page.dart';
 import 'package:music/page/music_play_page.dart';
 import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/search_page.dart';
+import 'package:music/page/splash_page.dart';
 import 'package:music/provider/navigation_index.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
@@ -35,7 +36,7 @@ class MusicApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: MainPage()),
+          home: SplashPage()),
     );
   }
 }
@@ -59,8 +60,6 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context,
-        width: window.physicalSize.width, height: window.physicalSize.height);
     _tabIndex = Provider.of<TabIndex>(context);
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
