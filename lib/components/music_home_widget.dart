@@ -71,14 +71,14 @@ class MusicHomeState extends State<MusicHomeWidget>
                     Positioned(
                       child: Container(
                           child: RotationTransition(
-                            alignment: Alignment.center,
-                            turns: controller,
-                            child: CircleAvatar(
-                              radius: 21,
-                              backgroundImage:
-                                  NetworkImage(model.curSongInfo.sizableCover),
-                            ),
-                          )),
+                        alignment: Alignment.center,
+                        turns: controller,
+                        child: CircleAvatar(
+                          radius: 21,
+                          backgroundImage:
+                              NetworkImage(model.curSongInfo.sizableCover),
+                        ),
+                      )),
                     )
                   ],
                 ),
