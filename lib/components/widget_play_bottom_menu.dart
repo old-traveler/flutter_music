@@ -20,7 +20,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
         children: <Widget>[
           ImageMenuWidget('images/icon_song_play_type_1.png', 90),
           SizedBox(
-            width: 30,
+            width: 25,
           ),
           BackgroundImageWidget(
             'images/icon_song_left.png',
@@ -46,7 +46,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
             },
           ),
           SizedBox(
-            width: 30,
+            width: 25,
           ),
           ImageMenuWidget('images/icon_play_songs.png', 90),
         ],
