@@ -115,7 +115,7 @@ class MusicPlayState extends State<MusicPlayPage> {
                     ),
                     PlayBottomMenuWidget(value),
                     SizedBox(
-                      height: ScreenUtil().setWidth(20),
+                      height: ScreenUtil().setWidth(40),
                     )
                   ],
                 ),

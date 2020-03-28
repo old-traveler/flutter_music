@@ -12,7 +12,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setWidth(150),
+      height: ScreenUtil().setWidth(200),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -20,11 +20,11 @@ class PlayBottomMenuWidget extends StatelessWidget {
         children: <Widget>[
           ImageMenuWidget('images/icon_song_play_type_1.png', 90),
           SizedBox(
-            width: 40,
+            width: 30,
           ),
           BackgroundImageWidget(
             'images/icon_song_left.png',
-            40,
+            58,
             onTap: () {
               MusicWrapper.singleton.playPreviousSong();
             },
@@ -33,20 +33,20 @@ class PlayBottomMenuWidget extends StatelessWidget {
             model.curState != MusicStateType.STATE_PLAYING
                 ? 'images/icon_song_play.png'
                 : 'images/icon_song_pause.png',
-            70,
+            75,
             onTap: () {
               MusicWrapper.singleton.playOrPauseMusic();
             },
           ),
           BackgroundImageWidget(
             'images/icon_song_right.png',
-            40,
+            58,
             onTap: () {
               MusicWrapper.singleton.playNextSong();
             },
           ),
           SizedBox(
-            width: 40,
+            width: 30,
           ),
           ImageMenuWidget('images/icon_play_songs.png', 90),
         ],

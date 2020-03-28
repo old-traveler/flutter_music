@@ -31,9 +31,9 @@ class BackgroundImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+      padding: EdgeInsets.all(size / 5),
       decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(30)),
+          color: Colors.white12, borderRadius: BorderRadius.circular(30)),
       child: Image.asset(
         img,
         width: ScreenUtil().setWidth(size),
