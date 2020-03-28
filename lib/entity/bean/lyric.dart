@@ -44,7 +44,7 @@ class Lyric {
   }
 
   /// 查找歌词
-  static int findLyricIndex(double curDuration, List<Lyric> lyrics) {
+  static int findLyricIndex(int curDuration, List<Lyric> lyrics) {
     for (int i = 0; i < lyrics.length; i++) {
       if (curDuration >= lyrics[i].startTime.inMilliseconds &&
           curDuration <= lyrics[i].endTime.inMilliseconds) {

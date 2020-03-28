@@ -106,10 +106,11 @@ class MusicPlayState extends State<MusicPlayPage> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: ScreenUtil().setHeight(200),),
                     Expanded(
-                      child: LyricWidget(),
+                      child: Container(),
                     ),
+                    LyricWidget(),
+                    SizedBox(height: 30,),
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),
