@@ -39,7 +39,7 @@ class PlaySongsModel with ChangeNotifier {
       }
       /// 状态发生改变，切不是因为网络缓冲原因时通知更新
       if (data.state != _curState &&
-          (data.state + _curState == 9 && data.state * _curState == 18)) {
+          !(data.state + _curState == 9 && data.state * _curState == 18)) {
         print("状态变化  ${data.state}  $_curState");
         needNotify = true;
       }

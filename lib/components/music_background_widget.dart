@@ -25,8 +25,14 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
   Timer _timer;
   PageController _pageController = PageController();
   Duration period = const Duration(seconds: 15);
+  String _songId;
 
   void init(PlaySongsModel model) {
+    final hash = model?.curSongInfo?.hash;
+    if (_songId != null && _songId == hash) {
+      return;
+    }
+    _songId = hash;
     images = model?.curSongInfo?.portrait;
     _timer?.cancel();
     _index = 0;

@@ -30,15 +30,18 @@ class BackgroundImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(size / 5),
-      decoration: BoxDecoration(
-          color: Colors.white12, borderRadius: BorderRadius.circular(30)),
-      child: Image.asset(
-        img,
-        width: ScreenUtil().setWidth(size),
-        height: ScreenUtil().setWidth(size),
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.all(size / 5),
+        decoration: BoxDecoration(
+            color: Colors.white12, borderRadius: BorderRadius.circular(30)),
+        child: Image.asset(
+          img,
+          width: ScreenUtil().setWidth(size),
+          height: ScreenUtil().setWidth(size),
+        ),
       ),
+      onTap: onTap,
     );
   }
 }
