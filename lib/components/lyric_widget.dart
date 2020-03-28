@@ -100,7 +100,7 @@ class LyricState extends State<LyricWidget> {
       child: Text(
         lyricList[realIndex].lyric,
         style: TextStyle(
-            color: realIndex == _position ? Colors.red : Colors.white,
+            color: realIndex == _position ? Color(0xFFEEE581) : Colors.white,
             fontSize: 20),
       ),
     );
