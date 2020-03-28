@@ -58,19 +58,7 @@ class LyricState extends State<LyricWidget> {
           stream: model.progressChangeStream,
           builder: (context, data) {
             if (data.hasData) {
-              final position =
-                  Lyric.findLyricIndex(data.data.position, lyricList);
-              if (_position != position) {
-                _position = position;
-                final offset = position * itemHeight;
-                if (controller?.hasClients == true) {
-                  controller.animateTo(offset,
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.easeInOut);
-                } else {
-                  controller = ScrollController(initialScrollOffset: offset);
-                }
-              }
+              computePosition(data.data.position);
             }
             return Container(
               height: itemHeight * widget.screenCount,
@@ -85,6 +73,21 @@ class LyricState extends State<LyricWidget> {
         );
       },
     );
+  }
+
+  /// 计算当前中心歌词位置
+  void computePosition(int curDuration) {
+    final position = Lyric.findLyricIndex(curDuration, lyricList);
+    if (_position != position) {
+      _position = position;
+      final offset = position * itemHeight;
+      if (controller?.hasClients == true) {
+        controller.animateTo(offset,
+            duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      } else {
+        controller = ScrollController(initialScrollOffset: offset);
+      }
+    }
   }
 
   Widget _buildLyricItem(context, index) {
