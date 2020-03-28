@@ -5,7 +5,6 @@ import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 
 class PlayBottomMenuWidget extends StatelessWidget {
-
   final PlaySongsModel model;
 
   PlayBottomMenuWidget(this.model);
@@ -14,38 +13,44 @@ class PlayBottomMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: ScreenUtil().setWidth(150),
-      alignment: Alignment.topCenter,
+      alignment: Alignment.center,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          ImageMenuWidget('images/icon_song_play_type_1.png', 80),
-          ImageMenuWidget(
+          ImageMenuWidget('images/icon_song_play_type_1.png', 90),
+          SizedBox(
+            width: 40,
+          ),
+          BackgroundImageWidget(
             'images/icon_song_left.png',
-            80,
+            40,
             onTap: () {
               MusicWrapper.singleton.playPreviousSong();
             },
           ),
-          ImageMenuWidget(
+          BackgroundImageWidget(
             model.curState != MusicStateType.STATE_PLAYING
                 ? 'images/icon_song_play.png'
                 : 'images/icon_song_pause.png',
-            150,
+            70,
             onTap: () {
               MusicWrapper.singleton.playOrPauseMusic();
             },
           ),
-          ImageMenuWidget(
+          BackgroundImageWidget(
             'images/icon_song_right.png',
-            80,
+            40,
             onTap: () {
               MusicWrapper.singleton.playNextSong();
             },
           ),
-          ImageMenuWidget('images/icon_play_songs.png', 80),
+          SizedBox(
+            width: 40,
+          ),
+          ImageMenuWidget('images/icon_play_songs.png', 90),
         ],
       ),
     );
   }
 }
-
-
