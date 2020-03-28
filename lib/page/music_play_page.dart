@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music/api/api_url.dart';
+import 'package:music/components/lyric_widget.dart';
 import 'package:music/components/music_background_widget.dart';
 import 'package:music/components/widget_play_bottom_menu.dart';
 import 'package:music/components/widget_song_progress.dart';
@@ -105,8 +106,9 @@ class MusicPlayState extends State<MusicPlayPage> {
               Container(
                 child: Column(
                   children: <Widget>[
+                    SizedBox(height: ScreenUtil().setHeight(200),),
                     Expanded(
-                      child: Text('内容'),
+                      child: LyricWidget(),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(

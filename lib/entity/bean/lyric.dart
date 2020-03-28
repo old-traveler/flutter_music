@@ -13,6 +13,7 @@ class Lyric {
 
   /// 格式化歌词
   static List<Lyric> formatLyric(String lyricStr) {
+    /// 匹配[后面接两个数字的字符
     RegExp reg = RegExp(r"^\[\d{2}");
 
     List<Lyric> result =
@@ -20,17 +21,17 @@ class Lyric {
       String time = s.substring(0, s.indexOf(']'));
       String lyric = s.substring(s.indexOf(']') + 1);
       time = s.substring(1, time.length - 1);
-      int hourSeparatorIndex = time.indexOf(":");
-      int minuteSeparatorIndex = time.indexOf(".");
+      int minutesSeparatorIndex = time.indexOf(":");
+      int secondsSeparatorIndex = time.indexOf(".");
       return Lyric(
         lyric,
         startTime: Duration(
           minutes: int.parse(
-            time.substring(0, hourSeparatorIndex),
+            time.substring(0, minutesSeparatorIndex),
           ),
           seconds: int.parse(
-              time.substring(hourSeparatorIndex + 1, minuteSeparatorIndex)),
-          milliseconds: int.parse(time.substring(minuteSeparatorIndex + 1)),
+              time.substring(minutesSeparatorIndex + 1, secondsSeparatorIndex)),
+          milliseconds: int.parse(time.substring(secondsSeparatorIndex + 1)),
         ),
       );
     }).toList();
