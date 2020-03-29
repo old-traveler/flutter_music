@@ -47,7 +47,7 @@ class Lyric {
   static int findLyricIndex(int curDuration, List<Lyric> lyrics) {
     for (int i = 0; i < lyrics.length; i++) {
       if (curDuration >= lyrics[i].startTime.inMilliseconds &&
-          curDuration <= lyrics[i].endTime.inMilliseconds) {
+          curDuration < lyrics[i].endTime.inMilliseconds) {
         return i;
       }
     }
