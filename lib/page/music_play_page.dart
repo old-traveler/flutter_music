@@ -55,7 +55,8 @@ Future openMusicPlayPageByInfo(
             entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100'),
         songName: info.songname.noTag(),
         singerName: info.singername,
-        lyrics: entity.data.lyrics);
+        lyrics: entity.data.lyrics,
+        duration: entity.data.isFreePart == 1 ? 60000 : -1);
     model.playSong(musicSongInfo);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
@@ -110,7 +111,9 @@ class MusicPlayState extends State<MusicPlayPage> {
                       child: Container(),
                     ),
                     LyricWidget(),
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),

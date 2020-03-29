@@ -37,6 +37,7 @@ class PlaySongsModel with ChangeNotifier {
         print("切换歌曲" + _curSongInfo.songName);
         needNotify = true;
       }
+
       /// 状态发生改变，切不是因为网络缓冲原因时通知更新
       if (data.state != _curState &&
           !(data.state + _curState == 9 && data.state * _curState == 18)) {
@@ -86,7 +87,8 @@ class PlaySongsModel with ChangeNotifier {
 
 // ignore: sdk_version_extension_methods
 extension MusicInfoConvert on MusicSongInfo {
-  SongInfo toSongInfo() => SongInfo(this.hash, this.playUrl);
+  SongInfo toSongInfo() =>
+      SongInfo(this.hash, this.playUrl, duration: this.duration);
 }
 
 class MusicSongInfo {
@@ -100,6 +102,7 @@ class MusicSongInfo {
   String songName;
   String singerName;
   String lyrics;
+  int duration;
 
   MusicSongInfo(
       {this.hash,
@@ -111,5 +114,6 @@ class MusicSongInfo {
       this.sizableCover,
       this.songName,
       this.singerName,
-      this.lyrics});
+      this.lyrics,
+      this.duration = -1});
 }
