@@ -54,7 +54,7 @@ class LyricState extends State<LyricWidget> {
         }
         assert(model.curSongInfo != null);
         if (_songId != model.curSongInfo.hash) {
-          print("lyric_widget 切换歌曲");
+          _songId = model.curSongInfo.hash;
           lyricList = Lyric.formatLyric(model.curSongInfo.lyrics);
           isMove = false;
           dragEndTimer?.cancel();
