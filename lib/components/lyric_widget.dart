@@ -19,7 +19,7 @@ class LyricWidget extends StatefulWidget {
 }
 
 class LyricState extends State<LyricWidget> {
-  static const double itemHeight = 40.0;
+  static const double itemHeight = 34.0;
   String _songId;
   List<Lyric> lyricList;
   ScrollController controller;
@@ -201,7 +201,7 @@ class LyricState extends State<LyricWidget> {
         lyricList[realIndex].lyric,
         style: TextStyle(
             color: realIndex == _position ? Color(0xFFEEE581) : Colors.white,
-            fontSize: 20),
+            fontSize: 18),
       ),
     );
   }
