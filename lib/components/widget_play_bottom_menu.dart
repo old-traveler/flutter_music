@@ -30,7 +30,8 @@ class PlayBottomMenuWidget extends StatelessWidget {
             },
           ),
           BackgroundImageWidget(
-            model.curState != MusicStateType.STATE_PLAYING
+            (model.curState != MusicStateType.STATE_PLAYING &&
+                    model.curState != MusicStateType.STATE_BUFFERING)
                 ? 'images/icon_song_play.png'
                 : 'images/icon_song_pause.png',
             75,
