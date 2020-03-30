@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_music_plugin/music.dart';
+import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 
 class PlaySongsModel with ChangeNotifier {
   int _curState = MusicStateType.STATE_NONE;

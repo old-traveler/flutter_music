@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_music_plugin/music.dart';
+import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/page/music_play_page.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:provider/provider.dart';
