@@ -93,9 +93,9 @@ packages:
   flutter_music_plugin:
     dependency: "direct main"
     description:
-      name: flutter_music_plugin
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../flutter_music_plugin"
+      relative: true
+    source: path
     version: "0.0.2"
   flutter_page_indicator:
     dependency: transitive

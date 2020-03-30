@@ -49,9 +49,39 @@ class PlayBottomMenuWidget extends StatelessWidget {
           SizedBox(
             width: 25,
           ),
-          ImageMenuWidget('images/icon_play_songs.png', 90),
+          ImageMenuWidget(
+            'images/icon_play_songs.png',
+            90,
+            onTap: () {
+              model.playListInfo
+                  .then((playList) => _showPlayList(context, playList));
+            },
+          ),
         ],
       ),
     );
+  }
+
+  void _showPlayList(BuildContext context, List<MusicSongInfo> playList) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return DraggableScrollableSheet(
+            initialChildSize: 1,
+            builder: (context, controller) {
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final itemData = playList[index];
+                  return ListTile(
+                    leading: Image.network(itemData.sizableCover),
+                    title: Text(itemData.songName),
+                    subtitle: Text(itemData.singerName),
+                  );
+                },
+                itemCount: playList?.length ?? 0,
+              );
+            },
+          );
+        });
   }
 }

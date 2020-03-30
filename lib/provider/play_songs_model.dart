@@ -18,6 +18,12 @@ class PlaySongsModel with ChangeNotifier {
   /// 播放器当前状态
   int get curState => _curState;
 
+  Future<dynamic> get playListInfo async {
+    final songIdList = await MusicWrapper.singleton.getPlayListSongId();
+    return songIdList.map((songId) => _songMap[songId]).where((
+        data) => data != null).toList();
+  }
+
   StreamController<MusicState> _progressController =
       StreamController.broadcast();
 
