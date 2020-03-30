@@ -63,12 +63,10 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
                           },
                           contentPadding: EdgeInsets.only(left: 25),
                           title: Text(
-                              data.data.info[index].songname
-                                  .replaceAll("<em>", "")
-                                  .replaceAll("</em>", ""),
+                              data.data.info[index].songname.noTag(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
-                          subtitle: Text(data.data.info[index].singername),
+                          subtitle: Text(data.data.info[index].singername.noTag()),
                           trailing: PopupMenuButton<String>(
                             padding: EdgeInsets.zero,
                             onSelected: (value) {},
