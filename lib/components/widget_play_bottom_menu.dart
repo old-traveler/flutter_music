@@ -63,6 +63,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
   }
 
   void _showPlayList(BuildContext context, List<MusicSongInfo> playList) {
+    playList = playList.reversed.toList();
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
@@ -109,12 +110,18 @@ class PlayBottomMenuWidget extends StatelessWidget {
               ),
               title: Text(itemData.songName),
               subtitle: Text(itemData.singerName),
-              trailing: Icon(Icons.more_horiz),
+              trailing: _buildTrailing(itemData),
             );
           },
           itemCount: playList?.length ?? 0,
         ),
       )
     ];
+  }
+
+  Widget _buildTrailing(MusicSongInfo info) {
+    return model.curSongInfo?.hash == info.hash
+        ? Icon(Icons.pause_circle_outline)
+        : Icon(Icons.play_circle_outline);
   }
 }
