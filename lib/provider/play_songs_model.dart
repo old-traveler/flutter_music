@@ -89,6 +89,11 @@ class PlaySongsModel with ChangeNotifier {
     }
     return false;
   }
+
+
+  static isPlaying(PlaySongsModel model){
+    return model.curState == MusicStateType.STATE_PLAYING || model.curState == MusicStateType.STATE_BUFFERING;
+  }
 }
 
 // ignore: sdk_version_extension_methods

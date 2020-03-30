@@ -3,6 +3,7 @@ import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/components/widget_img_menu.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
+import 'package:provider/provider.dart';
 
 class PlayBottomMenuWidget extends StatelessWidget {
   final PlaySongsModel model;
@@ -67,22 +68,25 @@ class PlayBottomMenuWidget extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        builder: (context) {
-          return DraggableScrollableSheet(
-            initialChildSize: 1,
-            minChildSize: 0.95,
-            builder: (context, controller) {
-              return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5))),
-                  child:
-                      Column(children: _buildPlayList(controller, playList)));
-            },
-          );
-        });
+        builder: (context) => _buildPlayListContent(playList));
+  }
+
+  Widget _buildPlayListContent(List<MusicSongInfo> playList) {
+    return Consumer<PlaySongsModel>(builder: (context, model, child) {
+      return DraggableScrollableSheet(
+        initialChildSize: 1,
+        minChildSize: 0.95,
+        builder: (context, controller) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5))),
+              child: Column(children: _buildPlayList(controller, playList)));
+        },
+      );
+    });
   }
 
   List<Widget> _buildPlayList(
@@ -108,9 +112,10 @@ class PlayBottomMenuWidget extends StatelessWidget {
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(itemData.sizableCover),
               ),
-              title: Text(itemData.songName),
+              title: _buildItemTitle(itemData),
               subtitle: Text(itemData.singerName),
               trailing: _buildTrailing(itemData),
+              onTap: () => _onItemTap(itemData),
             );
           },
           itemCount: playList?.length ?? 0,
@@ -119,9 +124,28 @@ class PlayBottomMenuWidget extends StatelessWidget {
     ];
   }
 
+  Widget _buildItemTitle(MusicSongInfo info) {
+    return Text(
+      info.songName,
+      style: TextStyle(
+          color: model.curSongInfo?.hash == info.hash
+              ? Colors.blue
+              : Colors.black),
+    );
+  }
+
   Widget _buildTrailing(MusicSongInfo info) {
-    return model.curSongInfo?.hash == info.hash
+    return model.curSongInfo?.hash == info.hash &&
+            PlaySongsModel.isPlaying(model)
         ? Icon(Icons.pause_circle_outline)
         : Icon(Icons.play_circle_outline);
+  }
+
+  void _onItemTap(MusicSongInfo info) {
+    if (model.curSongInfo?.hash == info.hash) {
+      MusicWrapper.singleton.playOrPauseMusic();
+    } else {
+      MusicWrapper.singleton.playMusicById(info.hash);
+    }
   }
 }
