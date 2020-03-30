@@ -65,46 +65,56 @@ class PlayBottomMenuWidget extends StatelessWidget {
   void _showPlayList(BuildContext context, List<MusicSongInfo> playList) {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+        backgroundColor: Colors.transparent,
         builder: (context) {
           return DraggableScrollableSheet(
             initialChildSize: 1,
+            minChildSize: 0.95,
             builder: (context, controller) {
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    // build header
-                    return Container(
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: Text(
-                        '播放列表',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  } else if (index == 1) {
-                    // build Divider
-                    return Divider(
-                      height: 1,
-                    );
-                  }
-                  final itemData = playList[index - 2];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(itemData.sizableCover),
-                    ),
-                    title: Text(itemData.songName),
-                    subtitle: Text(itemData.singerName),
-                    trailing: Icon(Icons.more_horiz),
-                  );
-                },
-                itemCount: (playList?.length ?? 0) + 2,
-              );
+              return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5))),
+                  child:
+                      Column(children: _buildPlayList(controller, playList)));
             },
           );
         });
+  }
+
+  List<Widget> _buildPlayList(
+      ScrollController scrollController, List<MusicSongInfo> playList) {
+    return <Widget>[
+      Container(
+        height: 40,
+        alignment: Alignment.center,
+        child: Text(
+          '播放列表',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+      Divider(
+        height: 1,
+      ),
+      Expanded(
+        child: ListView.builder(
+          controller: scrollController,
+          itemBuilder: (context, index) {
+            final itemData = playList[index];
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(itemData.sizableCover),
+              ),
+              title: Text(itemData.songName),
+              subtitle: Text(itemData.singerName),
+              trailing: Icon(Icons.more_horiz),
+            );
+          },
+          itemCount: playList?.length ?? 0,
+        ),
+      )
+    ];
   }
 }
