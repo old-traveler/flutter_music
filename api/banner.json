@@ -1,10 +1,10 @@
 {
   "status": 1,
   "banner": [
-    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/images/banner1.jpg",
-    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/images/banner2.jpg",
-    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/images/banner3.jpg",
-    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/images/banner4.jpg",
-    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/images/banner5.jpg"
+    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/banner/banner1.jpg",
+    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/banner/banner2.jpg",
+    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/banner/banner3.jpg",
+    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/banner/banner4.jpg",
+    "https://raw.githubusercontent.com/old-traveler/flutter_music/master/banner/banner5.jpg"
   ]
 }
