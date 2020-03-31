@@ -50,17 +50,27 @@ class PlayBottomMenuWidget extends StatelessWidget {
           SizedBox(
             width: 25,
           ),
-          ImageMenuWidget(
-            'images/icon_play_songs.png',
-            90,
-            onTap: () {
-              model.playListInfo
-                  .then((playList) => _showPlayList(context, playList));
-            },
-          ),
+          _buildPlayListButton(context)
         ],
       ),
     );
+  }
+
+  Widget _buildPlayListButton(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        width: ScreenUtil().setWidth(90),
+        height: ScreenUtil().setWidth(90),
+        child: GestureDetector(
+          child: Image.asset(
+            'images/icon_play_songs.png',
+            fit: BoxFit.fitWidth,
+          ),
+          onTap: () {
+            model.playListInfo
+                .then((playList) => _showPlayList(context, playList));
+          },
+        ));
   }
 
   void _showPlayList(BuildContext context, List<MusicSongInfo> playList) {
