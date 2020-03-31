@@ -99,6 +99,11 @@ class PlaySongsModel with ChangeNotifier {
     MusicWrapper.singleton.setPlayMusicMode(mode);
   }
 
+  void removeSongInfoById(String songId){
+    _songMap.remove(songId);
+    MusicWrapper.singleton.removeSongInfoById(songId);
+  }
+
 
   static isPlaying(PlaySongsModel model){
     return model.curState == MusicStateType.STATE_PLAYING || model.curState == MusicStateType.STATE_BUFFERING;

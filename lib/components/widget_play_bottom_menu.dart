@@ -104,10 +104,9 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
   Widget _buildPlayListContent() {
     return Consumer<PlaySongsModel>(builder: (context, model, child) {
       this.model = model;
-      if (widget.playList.isNotEmpty) {
-        widget.playList
-          ..remove(model.curSongInfo)
-          ..insert(0, model.curSongInfo);
+      if (widget.playList.isNotEmpty &&
+          widget.playList.remove(model.curSongInfo)) {
+        widget.playList.insert(0, model.curSongInfo);
       }
       return DraggableScrollableSheet(
         initialChildSize: 1,
@@ -172,6 +171,7 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
   }
 
   Widget _buildTrailing(MusicSongInfo info, List<MusicSongInfo> playList) {
+    bool canDelete = (info != model.curSongInfo || playList.length > 1);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -184,24 +184,20 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
                 Icons.play_circle_outline,
                 size: 20,
               ),
-        info != model.curSongInfo
+        canDelete
             ? SizedBox(
                 width: 5,
               )
             : Container(),
-        info != model.curSongInfo
+        canDelete
             ? GestureDetector(
                 child: Icon(
                   Icons.delete_outline,
                   size: 22,
                 ),
                 onTap: () {
-                  if (info != model.curSongInfo) {
-                    MusicWrapper.singleton.removeSongInfoById(info.hash);
-                    setState(() {
-                      playList.remove(info);
-                    });
-                  }
+                  setState(() => playList.remove(info));
+                  model.removeSongInfoById(info.hash);
                 },
               )
             : Container()
