@@ -17,6 +17,7 @@ import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:music/util/toast_util.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 // ignore: sdk_version_extension_methods
 extension SongName on String {
@@ -100,6 +101,15 @@ class MusicPlayState extends State<MusicPlayPage> {
             brightness: Brightness.light,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            actions: <Widget>[
+              GestureDetector(
+                child: Image.asset('images/share.png',width:37,fit: BoxFit.fitWidth,),
+                onTap: () {
+                  Share.share(
+                      '给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
+                },
+              )
+            ],
           ),
           body: Stack(
             children: <Widget>[
