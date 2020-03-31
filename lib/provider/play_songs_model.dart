@@ -8,6 +8,7 @@ class PlaySongsModel with ChangeNotifier {
   MusicSongInfo _curSongInfo;
   MusicState _musicState;
   bool sinkProgress = true;
+  int _curPlayMode = MusicPlayMode.REPEAT_MODE_NONE;
 
   /// 播放器当前状态信息
   MusicState get musicStateInfo => _musicState;
@@ -17,6 +18,8 @@ class PlaySongsModel with ChangeNotifier {
 
   /// 播放器当前状态
   int get curState => _curState;
+
+  int get curPlayMode => _curPlayMode;
 
   Future<dynamic> get playListInfo async {
     final songIdList = await MusicWrapper.singleton.getPlayListSongId();
@@ -88,6 +91,12 @@ class PlaySongsModel with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  void setPlayMode(int mode){
+    if(_curPlayMode == mode) return;
+    _curPlayMode = mode;
+    MusicWrapper.singleton.setPlayMusicMode(mode);
   }
 
 

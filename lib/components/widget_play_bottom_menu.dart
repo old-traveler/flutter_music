@@ -19,7 +19,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          ImageMenuWidget('images/icon_song_play_type_1.png', 90),
+          MusicModeButton(model),
           SizedBox(
             width: 25,
           ),
@@ -147,5 +147,99 @@ class PlayBottomMenuWidget extends StatelessWidget {
     } else {
       MusicWrapper.singleton.playMusicById(info.hash);
     }
+  }
+}
+
+class MusicModeButton extends StatefulWidget {
+  final PlaySongsModel model;
+  static const playModeAsset = [
+    'images/play_mode_order.png',
+    'images/play_mode_single.png',
+    'images/play_mode_randrom.png'
+  ];
+
+  const MusicModeButton(this.model);
+
+  @override
+  State<StatefulWidget> createState() => MusicModeState();
+}
+
+class MusicModeState extends State<MusicModeButton> {
+  int curPlayMode = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    curPlayMode = widget.model.curPlayMode;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('MusicModeState  ' + MusicModeButton.playModeAsset[curPlayMode]);
+    return PopupMenuButton<int>(
+      padding: EdgeInsets.zero,
+      initialValue: curPlayMode,
+      onSelected: (value) {
+        if (value != curPlayMode) {
+          widget.model.setPlayMode(value);
+          if (!mounted) return;
+          setState(() => (curPlayMode = value));
+        }
+      },
+      color: Colors.black45,
+      child: Container(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
+        width: ScreenUtil().setWidth(90),
+        height: ScreenUtil().setWidth(90),
+        child: Image.asset(
+          MusicModeButton.playModeAsset[curPlayMode],
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+      itemBuilder: (context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: MusicPlayMode.REPEAT_MODE_NONE,
+          child: ListTile(
+            leading: Image.asset(
+              MusicModeButton.playModeAsset[0],
+              width: ScreenUtil().setWidth(50),
+              fit: BoxFit.fitWidth,
+            ),
+            title: Text(
+              "顺序播放",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: MusicPlayMode.REPEAT_MODE_ONE,
+          child: ListTile(
+            leading: Image.asset(
+              MusicModeButton.playModeAsset[1],
+              width: ScreenUtil().setWidth(50),
+              fit: BoxFit.fitWidth,
+            ),
+            title: Text(
+              "单曲循环",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: MusicPlayMode.REPEAT_MODE_ALL,
+          child: ListTile(
+            leading: Image.asset(
+              MusicModeButton.playModeAsset[2],
+              width: ScreenUtil().setWidth(50),
+              fit: BoxFit.fitWidth,
+            ),
+            title: Text(
+              "列表循环",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
