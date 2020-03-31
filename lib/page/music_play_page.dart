@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/components/lyric_widget.dart';
 import 'package:music/components/music_background_widget.dart';
@@ -103,20 +104,33 @@ class MusicPlayState extends State<MusicPlayPage> {
             elevation: 0,
             actions: <Widget>[
               GestureDetector(
-                child: Image.asset('images/download.png',width:35,fit: BoxFit.fitWidth,),
+                child: Image.asset(
+                  'images/download.png',
+                  width: 35,
+                  fit: BoxFit.fitWidth,
+                ),
                 onTap: () {
-
+                  if (value.curSongInfo == null) return;
+                  MusicWrapper.singleton.downloadMusic(
+                      '${value.curSongInfo.songName}-${value.curSongInfo.singerName}');
                 },
               ),
-              SizedBox(width: 5,),
+              SizedBox(
+                width: 5,
+              ),
               GestureDetector(
-                child: Image.asset('images/share.png',width:35,fit: BoxFit.fitWidth,),
+                child: Image.asset(
+                  'images/share.png',
+                  width: 35,
+                  fit: BoxFit.fitWidth,
+                ),
                 onTap: () {
-                  Share.share(
-                      '给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
+                  Share.share('给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
                 },
               ),
-              SizedBox(width: 12,)
+              SizedBox(
+                width: 12,
+              )
             ],
           ),
           body: Stack(
