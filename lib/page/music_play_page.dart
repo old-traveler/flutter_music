@@ -103,12 +103,13 @@ class MusicPlayState extends State<MusicPlayPage> {
             elevation: 0,
             actions: <Widget>[
               GestureDetector(
-                child: Image.asset('images/share.png',width:37,fit: BoxFit.fitWidth,),
+                child: Image.asset('images/share.png',width:35,fit: BoxFit.fitWidth,),
                 onTap: () {
                   Share.share(
                       '给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
                 },
-              )
+              ),
+              SizedBox(width: 5,)
             ],
           ),
           body: Stack(
