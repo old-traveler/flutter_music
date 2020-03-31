@@ -91,17 +91,24 @@ class MusicPlayState extends State<MusicPlayPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark));
+        statusBarIconBrightness: Brightness.light));
     return Consumer<PlaySongsModel>(builder: (context, value, child) {
       return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             centerTitle: true,
             title: Text(value.curSongInfo?.songName ?? '暂无歌曲'),
-            brightness: Brightness.light,
+            brightness: Brightness.dark,
             backgroundColor: Colors.transparent,
             elevation: 0,
             actions: <Widget>[
+              GestureDetector(
+                child: Image.asset('images/download.png',width:35,fit: BoxFit.fitWidth,),
+                onTap: () {
+
+                },
+              ),
+              SizedBox(width: 5,),
               GestureDetector(
                 child: Image.asset('images/share.png',width:35,fit: BoxFit.fitWidth,),
                 onTap: () {
@@ -109,7 +116,7 @@ class MusicPlayState extends State<MusicPlayPage> {
                       '给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
                 },
               ),
-              SizedBox(width: 5,)
+              SizedBox(width: 12,)
             ],
           ),
           body: Stack(
