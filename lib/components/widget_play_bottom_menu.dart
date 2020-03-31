@@ -78,11 +78,37 @@ class PlayBottomMenuWidget extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        builder: (context) => _buildPlayListContent(playList));
+        builder: (context) => MusicPlayListWidget(
+              playList: playList,
+            ));
+  }
+}
+
+class MusicPlayListWidget extends StatefulWidget {
+  final List<MusicSongInfo> playList;
+
+  const MusicPlayListWidget({Key key, this.playList}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => MusicPlayListState();
+}
+
+class MusicPlayListState extends State<MusicPlayListWidget> {
+  PlaySongsModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildPlayListContent();
   }
 
-  Widget _buildPlayListContent(List<MusicSongInfo> playList) {
+  Widget _buildPlayListContent() {
     return Consumer<PlaySongsModel>(builder: (context, model, child) {
+      this.model = model;
+      if (widget.playList.isNotEmpty) {
+        widget.playList
+          ..remove(model.curSongInfo)
+          ..insert(0, model.curSongInfo);
+      }
       return DraggableScrollableSheet(
         initialChildSize: 1,
         minChildSize: 0.95,
@@ -93,7 +119,8 @@ class PlayBottomMenuWidget extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(5),
                       topRight: Radius.circular(5))),
-              child: Column(children: _buildPlayList(controller, playList)));
+              child: Column(
+                  children: _buildPlayList(controller, widget.playList)));
         },
       );
     });
@@ -124,7 +151,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
               ),
               title: _buildItemTitle(itemData),
               subtitle: Text(itemData.singerName),
-              trailing: _buildTrailing(itemData),
+              trailing: _buildTrailing(itemData, playList),
               onTap: () => _onItemTap(itemData),
             );
           },
@@ -144,11 +171,42 @@ class PlayBottomMenuWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTrailing(MusicSongInfo info) {
-    return model.curSongInfo?.hash == info.hash &&
-            PlaySongsModel.isPlaying(model)
-        ? Icon(Icons.pause_circle_outline)
-        : Icon(Icons.play_circle_outline);
+  Widget _buildTrailing(MusicSongInfo info, List<MusicSongInfo> playList) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        model.curSongInfo?.hash == info.hash && PlaySongsModel.isPlaying(model)
+            ? Icon(
+                Icons.pause_circle_outline,
+                size: 20,
+              )
+            : Icon(
+                Icons.play_circle_outline,
+                size: 20,
+              ),
+        info != model.curSongInfo
+            ? SizedBox(
+                width: 5,
+              )
+            : Container(),
+        info != model.curSongInfo
+            ? GestureDetector(
+                child: Icon(
+                  Icons.delete_outline,
+                  size: 22,
+                ),
+                onTap: () {
+                  if (info != model.curSongInfo) {
+                    MusicWrapper.singleton.removeSongInfoById(info.hash);
+                    setState(() {
+                      playList.remove(info);
+                    });
+                  }
+                },
+              )
+            : Container()
+      ],
+    );
   }
 
   void _onItemTap(MusicSongInfo info) {

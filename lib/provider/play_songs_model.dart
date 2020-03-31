@@ -136,4 +136,15 @@ class MusicSongInfo {
       this.singerName,
       this.lyrics,
       this.duration = -1});
+
+  @override
+  bool operator ==(other) {
+    if(other is MusicSongInfo){
+      return this.hash == other.hash;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => this.hash.hashCode;
 }
