@@ -126,7 +126,7 @@ class LyricState extends State<LyricWidget> {
                     child: Icon(
                       Icons.play_arrow,
                       color: Colors.white,
-                      size: 30,
+                      size: 28,
                     ),
                     onTap: () {
                       MusicWrapper.singleton
@@ -139,6 +139,7 @@ class LyricState extends State<LyricWidget> {
                   Expanded(
                     child: Divider(
                       height: 1,
+                      color: Colors.white,
                     ),
                   ),
                   SizedBox(
@@ -147,7 +148,7 @@ class LyricState extends State<LyricWidget> {
                   Text(
                     DateUtil.formatDateMs(curTimeBarDuration.inMilliseconds,
                         format: "mm:ss"),
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   SizedBox(
                     width: 10,
