@@ -3,6 +3,7 @@ import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/live_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/page/web_page.dart';
 import 'package:music/util/color_util.dart';
 
 class LivePage extends StatefulWidget {
@@ -26,7 +27,15 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
 
   @override
   Widget buildItem(BuildContext context, dynamic data, int index) {
-    return _buildItemWidget(data);
+    final LiveDataList itemData = data;
+    return GestureDetector(
+      child: _buildItemWidget(data),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                WebPage(url: 'https://fanxing.kugou.com/${itemData.roomId}')));
+      },
+    );
   }
 
   @override

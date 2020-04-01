@@ -36,8 +36,8 @@ dependencies:
   cached_network_image: ^2.0.0
   # https://github.com/flutter/plugins/tree/master/packages/share
   share: ^0.6.3+6
-  flutter_music_plugin: ^0.0.4
-#    path: ../flutter_music_plugin
+  flutter_music_plugin:
+    path: ../flutter_music_plugin
 
 dev_dependencies:
   flutter_test:
