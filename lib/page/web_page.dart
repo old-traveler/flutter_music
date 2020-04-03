@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 
 class WebPage extends StatefulWidget {
   final String url;
+  final String title;
 
-  const WebPage({Key key, @required this.url}) : super(key: key);
+  const WebPage({Key key, @required this.url, this.title = ''})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => WebState();
@@ -13,14 +15,14 @@ class WebPage extends StatefulWidget {
 
 class WebState extends State<WebPage> {
   MethodChannel _channel;
-  String _title = '';
+  String _title;
 
   @override
   Widget build(BuildContext context) {
     print("url  ${widget.url}");
     return Scaffold(
       appBar: AppBar(
-        title: Text(_title),
+        title: Text(_title ?? widget.title),
         leading: GestureDetector(
           child: Icon(
             Icons.arrow_back,
