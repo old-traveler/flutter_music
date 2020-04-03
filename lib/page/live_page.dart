@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
@@ -31,9 +33,12 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
     return GestureDetector(
       child: _buildItemWidget(data),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                WebPage(url: 'https://fanxing.kugou.com/${itemData.roomId}')));
+        // 目前只支持Android的浏览器
+        if (Platform.isAndroid) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => WebPage(
+                  url: 'https://fanxing.kugou.com/${itemData.roomId}')));
+        }
       },
     );
   }
