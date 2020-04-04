@@ -58,6 +58,9 @@ class MusicHomeState extends State<MusicHomeWidget>
                           double value = state == null
                               ? 0
                               : state.position * 1.0 / state.duration;
+                          if(value.isNaN){
+                            value = 1.0;
+                          }
                           value = max(0.0, min(1.0, value));
                           return CircularProgressIndicator(
                             strokeWidth: 2.0,
