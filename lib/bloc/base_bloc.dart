@@ -190,24 +190,26 @@ mixin ListPageWorker on ResponseWorker {
         },
         needLoading:
             !(_refreshController.isRefresh || _refreshController.isLoading),
-        stopLoading: (isOk) {
-          if (_page == 1) {
-            if (isOk) {
-              _refreshController.refreshCompleted();
-            } else {
-              _refreshController.refreshFailed();
-            }
-          } else {
-            if (isOk) {
-              _refreshController.loadComplete();
-            } else {
-              _refreshController.loadFailed();
-            }
-          }
-          if (isOk) {
-            _page++;
-          }
-        });
+        stopLoading: _onStopLoading);
+  }
+
+  void _onStopLoading(bool requestSuccess) {
+    if (_page == 1) {
+      if (requestSuccess) {
+        _refreshController.refreshCompleted();
+      } else {
+        _refreshController.refreshFailed();
+      }
+    } else {
+      if (requestSuccess) {
+        _refreshController.loadComplete();
+      } else {
+        _refreshController.loadFailed();
+      }
+    }
+    if (requestSuccess) {
+      _page++;
+    }
   }
 
   /// 返回列表加载接口信息
