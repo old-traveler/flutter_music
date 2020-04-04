@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
@@ -31,16 +29,9 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
   Widget buildItem(BuildContext context, dynamic data, int index) {
     final LiveDataList itemData = data;
     return GestureDetector(
-      child: _buildItemWidget(data),
-      onTap: () {
-        // 目前只支持Android的浏览器
-        if (Platform.isAndroid) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => WebPage(
-                  url: 'https://fanxing.kugou.com/${itemData.roomId}')));
-        }
-      },
-    );
+        child: _buildItemWidget(data),
+        onTap: () => openWebPage(
+            context, 'https://fanxing.kugou.com/${itemData.roomId}'));
   }
 
   @override
@@ -69,59 +60,64 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
   }
 
   Widget _buildItemWidget(LiveDataList itemData) {
+    final widgets = <Widget>[
+      ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: _buildLiveInfo(itemData)),
+      Expanded(
+        child: Center(
+          child: Text(
+            itemData.label ?? "null",
+            style: TextStyle(fontSize: 15),
+          ),
+        ),
+      )
+    ];
     return Column(
+      children: widgets,
       crossAxisAlignment: CrossAxisAlignment.center,
+    );
+  }
+
+  Widget _buildLiveInfo(LiveDataList itemData) {
+    return Stack(
       children: <Widget>[
-        ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Stack(
+        Image.network(
+          itemData.imgPath.contains("http")
+              ? itemData.imgPath
+              : itemData.userLogo,
+          width: MediaQuery.of(context).size.width / 2 - 10,
+          height: (MediaQuery.of(context).size.width / 2 - 10) * 0.75,
+          fit: BoxFit.fill,
+        ),
+        Positioned(
+          left: 10,
+          bottom: 3,
+          child: Text(
+            itemData.nickName,
+            style: TextStyle(color: Colors.white, fontSize: 12),
+          ),
+        ),
+        Positioned(
+            right: 10,
+            bottom: 3,
+            child: Row(
               children: <Widget>[
-                Image.network(
-                  itemData.imgPath.contains("http")
-                      ? itemData.imgPath
-                      : itemData.userLogo,
-                  width: MediaQuery.of(context).size.width / 2 - 10,
-                  height: (MediaQuery.of(context).size.width / 2 - 10) * 0.75,
-                  fit: BoxFit.fill,
+                Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 14,
                 ),
-                Positioned(
-                  left: 10,
-                  bottom: 3,
-                  child: Text(
-                    itemData.nickName,
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
+                SizedBox(
+                  width: 2,
                 ),
-                Positioned(
-                    right: 10,
-                    bottom: 3,
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 14,
-                        ),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          '${itemData?.viewerNum ?? 1}万',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ],
-                    )),
-                _buildTagWidget(itemData.tags)
+                Text(
+                  '${itemData?.viewerNum ?? 1}万',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
               ],
             )),
-        Expanded(
-          child: Center(
-            child: Text(
-              itemData.label ?? "null",
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-        )
+        _buildTagWidget(itemData.tags)
       ],
     );
   }

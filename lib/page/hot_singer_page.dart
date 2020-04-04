@@ -80,38 +80,40 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _buildRanking(itemData, index + 1),
-          Expanded(
-            child: ListTile(
-                contentPadding: EdgeInsets.only(left: 5, right: 15),
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    itemData.imgurl.replaceFirst('{size}', '100'),
-                  ),
-                ),
-                title: Text(
-                  itemData.singername,
-                  style: TextStyle(fontSize: 15),
-                ),
-                subtitle: Text('${itemData.heat}热度'),
-                trailing: SizedBox(
-                  height: 25,
-                  width: 60,
-                  child: FlatButton(
-                    padding: EdgeInsets.zero,
-                    color: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    child: Text(
-                      '关注',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {},
-                  ),
-                )),
-          )
+          Expanded(child: _buildSingerInfo(itemData))
         ],
       ),
     );
+  }
+
+  Widget _buildSingerInfo(HotSingerDataInfo itemData) {
+    return ListTile(
+        contentPadding: EdgeInsets.only(left: 5, right: 15),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(
+            itemData.imgurl.replaceFirst('{size}', '100'),
+          ),
+        ),
+        title: Text(
+          itemData.singername,
+          style: TextStyle(fontSize: 15),
+        ),
+        subtitle: Text('${itemData.heat}热度'),
+        trailing: SizedBox(
+          height: 25,
+          width: 60,
+          child: FlatButton(
+            padding: EdgeInsets.zero,
+            color: Colors.blue,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            child: Text(
+              '关注',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {},
+          ),
+        ));
   }
 
   Widget _buildRanking(HotSingerDataInfo itemData, int index) {
