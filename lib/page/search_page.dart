@@ -116,8 +116,7 @@ class SearchPageState extends State<SearchPage> {
 class AssociationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<AssociationEntity>(
-        context: context,
+    return SmartStatePage<AssociationEntity>(
         isNoData: (data) => data?.data?.isEmpty ?? true,
       noData:  (context)=> NoDataWidget('暂无数据，换一个词试试～'),
         builder: (BuildContext context, AssociationEntity data) =>
@@ -144,8 +143,7 @@ class AssociationWidget extends StatelessWidget {
 class HotSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<HotSearchEntity>(
-        context: context,
+    return SmartStatePage<HotSearchEntity>(
         builder: (context, data) {
           List<Widget> widgets = List();
           data.data.info?.forEach((item) {

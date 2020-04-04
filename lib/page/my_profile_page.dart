@@ -168,10 +168,9 @@ class UserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<UserEntity>(
+    return SmartStatePage<UserEntity>(
         height: 100,
         initialData: UserEntity(),
-        context: context,
         builder: (context, data) {
           return Row(
             children: <Widget>[
@@ -438,9 +437,8 @@ class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
 class SongListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<SongListEntity>(
+    return SmartStatePage<SongListEntity>(
         height: 400,
-        context: context,
         isNoData: (data) => (data?.data?.info?.length == 0 ?? true),
         builder: (context, data) {
           final widgets = <Widget>[];

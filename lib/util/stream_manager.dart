@@ -63,89 +63,6 @@ class StreamManager {
   }
 }
 
-/// smartStreamBuilder 1.0版本已废弃
-StreamBuilder smartStreamBuilder<T>(
-    {@required BuildContext context, @required WidgetBuilder<T> builder}) {
-  StreamManager streamManager = Provider.of<StreamManager>(context);
-  return StreamBuilder(
-    initialData: streamManager.getLastElement(T),
-    stream: StreamManager.getStreamByContextAndKey(context, T),
-    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      if (snapshot == null || snapshot.data == null) {
-        return Container();
-      }
-      return builder(context, snapshot.data);
-    },
-  );
-}
-
-/// 处理bloc状态管理，内容和提示页切换逻辑
-Widget smartStreamBuilder2<T>({
-  StreamManager streamManager,
-  T initialData,
-  BuildContext context,
-  @required WidgetBuilder<T> builder,
-  PageStateWidget noData,
-  PageStateWidget loading,
-  PageStateWidget error,
-  NoNetPageStateWidget noNet,
-  // 用于Loading和no net页面展示
-  double height,
-  IsShowContent<T> isNoData,
-  IsShowContent<T> showContentWhenNoContent,
-}) {
-  assert(builder != null);
-  assert(streamManager != null || context != null);
-  streamManager ??= Provider.of<StreamManager>(context);
-  return StreamBuilder(
-    initialData: initialData != null
-        ? PageData.complete(initialData)
-        : streamManager.getLastElement(T),
-    stream: streamManager.getStreamByKey(T),
-    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      if (snapshot == null || snapshot.data == null) {
-        return getNonNullWidget(context, noData, () => NoDataWidget('暂无数据'));
-      }
-      if (!(snapshot.data is PageData)) {
-        throw Exception("snapshot.data must is PageData");
-      }
-      PageData pageData = snapshot.data;
-      print('pageState ${pageData.state.toString()}');
-      switch (pageData.state) {
-        case PageState.loading:
-          return getNonNullWidget(
-              context, loading, () => LoadingWidget(height));
-        case PageState.noData:
-          if (isNoData == null || isNoData(null)) {
-            return getNonNullWidget(
-                context, noData, () => NoDataWidget('暂无数据'));
-          }
-          return builder(context, null);
-        case PageState.complete:
-          if (isNoData != null && isNoData(pageData.data)) {
-            return getNonNullWidget(
-                context, noData, () => NoDataWidget('暂无数据'));
-          } else {
-            return builder(context, pageData.data);
-          }
-          break;
-        case PageState.error:
-        case PageState.noNet:
-          if (showContentWhenNoContent != null &&
-              showContentWhenNoContent(null)) {
-            return builder(context, null);
-          }
-          final callback = () => streamManager.addDataToSinkByKey(
-              ResponseWorker, PageMessage.refresh(T));
-          return noNet != null
-              ? noNet(context, callback)
-              : NoNetWidget(callback, height);
-      }
-      throw Exception("not deal ${pageData.state}");
-    },
-  );
-}
-
 Widget getNonNullWidget(BuildContext context, PageStateWidget widgetProvider,
     Widget Function() defaultWidget) {
   assert(defaultWidget != null);
@@ -154,3 +71,84 @@ Widget getNonNullWidget(BuildContext context, PageStateWidget widgetProvider,
   }
   return defaultWidget();
 }
+
+class SmartStatePage<T> extends StatelessWidget {
+  final T initialData;
+  final WidgetBuilder<T> builder;
+  final PageStateWidget noData;
+  final PageStateWidget loading;
+  final PageStateWidget error;
+  final NoNetPageStateWidget noNet;
+  final double height;
+  final IsShowContent<T> isNoData;
+  final IsShowContent<T> showContentWhenNoContent;
+
+  SmartStatePage(
+      {Key key,
+        this.builder,
+        this.initialData,
+        this.noData,
+        this.loading,
+        this.error,
+        this.noNet,
+        this.height,
+        this.isNoData,
+        this.showContentWhenNoContent})
+      : assert(builder != null),
+        assert(height == null || height >= 0.0),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final streamManager = Provider.of<StreamManager>(context);
+    return StreamBuilder(
+      initialData: initialData != null
+          ? PageData.complete(initialData)
+          : streamManager.getLastElement(T),
+      stream: streamManager.getStreamByKey(T),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot == null || snapshot.data == null) {
+          return getNonNullWidget(
+              context, noData, () => NoDataWidget('暂无数据'));
+        }
+        if (!(snapshot.data is PageData)) {
+          throw Exception("snapshot.data must is PageData");
+        }
+        PageData pageData = snapshot.data;
+        print('pageState ${pageData.state.toString()}');
+        switch (pageData.state) {
+          case PageState.loading:
+            return getNonNullWidget(
+                context, loading, () => LoadingWidget(height));
+          case PageState.noData:
+            if (isNoData == null || isNoData(null)) {
+              return getNonNullWidget(
+                  context, noData, () => NoDataWidget('暂无数据'));
+            }
+            return builder(context, null);
+          case PageState.complete:
+            if (isNoData != null && isNoData(pageData.data)) {
+              return getNonNullWidget(
+                  context, noData, () => NoDataWidget('暂无数据'));
+            } else {
+              return builder(context, pageData.data);
+            }
+            break;
+          case PageState.error:
+          case PageState.noNet:
+            if (showContentWhenNoContent != null &&
+                showContentWhenNoContent(null)) {
+              return builder(context, null);
+            }
+            final callback = () => streamManager.addDataToSinkByKey(
+                ResponseWorker, PageMessage.refresh(T));
+            return noNet != null
+                ? noNet(context, callback)
+                : NoNetWidget(callback, height);
+        }
+        throw Exception("not deal ${pageData.state}");
+      },
+    );
+  }
+}
+

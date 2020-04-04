@@ -255,14 +255,13 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     return InheritedProvider.value(
         value: baseListBloc.streamManager,
         updateShouldNotify: (o, n) => true,
-        child: smartStreamBuilder2<D>(
+        child: SmartStatePage<D>(
             initialData: listConfig.initData,
             noData: listConfig.noData,
             noNet: listConfig.noNet,
             loading: listConfig.loading,
             error: listConfig.error,
             height: listConfig.height,
-            streamManager: baseListBloc.streamManager,
             isNoData: emptyData,
             showContentWhenNoContent: (data) => !emptyData(data),
             builder: (context, data) {

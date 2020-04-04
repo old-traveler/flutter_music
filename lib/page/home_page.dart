@@ -64,8 +64,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 class HomePageBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<BannerEntity>(
-        context: context,
+    return SmartStatePage<BannerEntity>(
         height: 210,
         builder: (BuildContext context, BannerEntity bannerEntity) {
           return Container(
@@ -94,8 +93,7 @@ class HomePageBanner extends StatelessWidget {
 class StationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<StationEntity>(
-        context: context,
+    return SmartStatePage<StationEntity>(
         height: 210,
         builder: (BuildContext context, StationEntity data) {
           return Container(
@@ -136,8 +134,7 @@ class StationCard extends StatelessWidget {
 class SongSheetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<SongSheetEntity>(
-        context: context,
+    return SmartStatePage<SongSheetEntity>(
         height: 210,
         builder: (BuildContext context, SongSheetEntity data) {
           double leadingSize = (MediaQuery.of(context).size.width - 46) / 2;
@@ -247,8 +244,7 @@ class SongSheetCard extends StatelessWidget {
 class HotRecommendCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<HotRecommendEntity>(
-        context: context,
+    return SmartStatePage<HotRecommendEntity>(
         height: 210,
         builder: (BuildContext context, HotRecommendEntity data) {
           data.data.info.removeWhere((e) => e.bannerurl?.isEmpty ?? true);
@@ -319,8 +315,7 @@ double getModularHeight(int length) {
 class ElaborateSelectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return smartStreamBuilder2<ElaborateSelectModelEntity>(
-        context: context,
+    return SmartStatePage<ElaborateSelectModelEntity>(
         height: 210,
         builder: (BuildContext context, ElaborateSelectModelEntity data) {
           return Column(

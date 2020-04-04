@@ -50,8 +50,7 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
             appBar: AppBar(
               title: Text(_keyWord),
             ),
-            body: smartStreamBuilder2<SearchSongEntity>(
-                streamManager: streamManager,
+            body: SmartStatePage<SearchSongEntity>(
                 noData: (context) => NoDataWidget('未找到相关内容'),
                 isNoData: (data) => (data?.data?.info?.isEmpty ?? true),
                 builder: (context, data) {
