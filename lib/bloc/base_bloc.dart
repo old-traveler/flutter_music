@@ -70,7 +70,13 @@ mixin ResponseWorker {
     jsonString = jsonString.substring(jsonString.indexOf("{"));
     jsonString = jsonString.substring(0, jsonString.lastIndexOf("}") + 1);
     print("jsonString$jsonString");
-    dynamic data = json.decode(jsonString);
+    dynamic data;
+    try {
+      data = json.decode(jsonString);
+    } on FormatException catch (e) {
+      print('e');
+      data = null;
+    }
     if (data == null) {
       dealNonNullFunction(stopLoading, false);
       _streamManager.addDataToSinkByKey(T, PageData<T>.noData(null));
