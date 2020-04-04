@@ -8,9 +8,7 @@ import 'package:music/util/color_util.dart';
 
 class LivePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return LivePageState(LiveBloc());
-  }
+  State<StatefulWidget> createState() => LivePageState(LiveBloc());
 }
 
 class LiveBloc with ResponseWorker, ListPageWorker {

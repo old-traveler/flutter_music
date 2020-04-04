@@ -115,49 +115,49 @@ class LyricState extends State<LyricWidget> {
   }
 
   Widget _buildLyricTimeBar() {
+    if (!isMove) {
+      return Container();
+    }
     return Container(
-      alignment: Alignment.center,
-      child: isMove
-          ? SizedBox(
-              height: itemHeight,
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                    onTap: () {
-                      MusicWrapper.singleton
-                          .seekTo(curTimeBarDuration.inMilliseconds);
-                    },
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Divider(
-                      height: 1,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    DateUtil.formatDateMs(curTimeBarDuration.inMilliseconds,
-                        format: "mm:ss"),
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  )
-                ],
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: itemHeight,
+          child: Row(
+            children: <Widget>[
+              GestureDetector(
+                child: Icon(
+                  Icons.play_arrow,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                onTap: () {
+                  MusicWrapper.singleton
+                      .seekTo(curTimeBarDuration.inMilliseconds);
+                },
               ),
-            )
-          : null,
-    );
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Divider(
+                  height: 1,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                DateUtil.formatDateMs(curTimeBarDuration.inMilliseconds,
+                    format: "mm:ss"),
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              SizedBox(
+                width: 10,
+              )
+            ],
+          ),
+        ));
   }
 
   void recoverMoveState() {

@@ -10,22 +10,18 @@ import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
 class SearchResultPage extends StatefulWidget {
-  final String _keyWord;
+  final String keyWord;
 
-  SearchResultPage(this._keyWord);
+  const SearchResultPage({Key key, this.keyWord}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => SearchResultState(_keyWord);
+  State<StatefulWidget> createState() => SearchResultState();
 }
 
 class SearchResultState extends State<SearchResultPage> with ResponseWorker {
-  final String _keyWord;
-
-  SearchResultState(this._keyWord);
-
   void _fetchSongInfoByKeyWord() {
     dealResponse<SearchSongEntity>(responseProvider: () {
-      return HttpManager.getInstance().get(getSearchResultUrl(_keyWord));
+      return HttpManager.getInstance().get(getSearchResultUrl(widget.keyWord));
     });
   }
 
@@ -48,62 +44,69 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
         updateShouldNotify: (old, news) => false,
         child: Scaffold(
             appBar: AppBar(
-              title: Text(_keyWord),
+              title: Text(widget.keyWord),
             ),
-            body: SmartStatePage<SearchSongEntity>(
-                noData: (context,height) => NoDataWidget('未找到相关内容'),
-                isNoData: (data) => (data?.data?.info?.isEmpty ?? true),
-                builder: (context, data) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            openMusicPlayPageByInfo(context, data.data.info[index]);
-                          },
-                          contentPadding: EdgeInsets.only(left: 25),
-                          title: Text(
-                              data.data.info[index].songname.noTag(),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis),
-                          subtitle: Text(data.data.info[index].singername.noTag()),
-                          trailing: PopupMenuButton<String>(
-                            padding: EdgeInsets.zero,
-                            onSelected: (value) {},
-                            itemBuilder: (context) => <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
-                                value: "star",
-                                child: ListTile(
-                                  leading: Icon(Icons.star),
-                                  title: Text("收藏"),
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: "play",
-                                child: ListTile(
-                                  leading: Icon(Icons.play_circle_outline),
-                                  title: Text("播放"),
-                                ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: "share",
-                                child: ListTile(
-                                  leading: Icon(Icons.share),
-                                  title: Text("分享"),
-                                ),
-                              ),
-                              PopupMenuDivider(),
-                              PopupMenuItem<String>(
-                                value: "remove",
-                                child: ListTile(
-                                  leading: Icon(Icons.delete),
-                                  title: Text("删除"),
-                                ),
-                              ),
-                            ],
-                          ));
-                    },
-                    itemCount: data?.data?.info?.length ?? 0,
-                  );
-                })));
+            body: _buildBody()));
+  }
+
+  Widget _buildBody() {
+    return SmartStatePage<SearchSongEntity>(
+        noData: (context, height) => NoDataWidget('未找到相关内容'),
+        isNoData: (data) => (data?.data?.info?.isEmpty ?? true),
+        builder: (context, data) => ListView.builder(
+              itemBuilder: (context, index) =>
+                  _buildItemWidget(data.data.info[index]),
+              itemCount: data?.data?.info?.length ?? 0,
+            ));
+  }
+
+  Widget _buildItemWidget(SearchSongDataInfo itemData) {
+    return ListTile(
+        onTap: () {
+          openMusicPlayPageByInfo(context, itemData);
+        },
+        contentPadding: EdgeInsets.only(left: 25),
+        title: Text(itemData.songname.noTag(),
+            maxLines: 2, overflow: TextOverflow.ellipsis),
+        subtitle: Text(itemData.singername.noTag()),
+        trailing: _buildTrailing());
+  }
+
+  Widget _buildTrailing() {
+    return PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      onSelected: (value) {},
+      itemBuilder: (context) => <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: "star",
+          child: ListTile(
+            leading: Icon(Icons.star),
+            title: Text("收藏"),
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: "play",
+          child: ListTile(
+            leading: Icon(Icons.play_circle_outline),
+            title: Text("播放"),
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: "share",
+          child: ListTile(
+            leading: Icon(Icons.share),
+            title: Text("分享"),
+          ),
+        ),
+        PopupMenuDivider(),
+        PopupMenuItem<String>(
+          value: "remove",
+          child: ListTile(
+            leading: Icon(Icons.delete),
+            title: Text("删除"),
+          ),
+        ),
+      ],
+    );
   }
 }

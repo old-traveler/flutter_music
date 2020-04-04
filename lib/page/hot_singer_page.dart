@@ -75,6 +75,7 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
 
   Widget _buildItemView(HotSingerDataInfo itemData, int index) {
     return Container(
+      color: Colors.white,
       height: 70,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -83,7 +83,9 @@ class SearchPageState extends State<SearchPage> {
           onSubmitted: (keyword) {
             /// 点击回车进入搜索结果页
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SearchResultPage(keyword)));
+                builder: (context) => SearchResultPage(
+                      keyWord: keyword,
+                    )));
           },
         ),
       ),
@@ -118,7 +120,7 @@ class AssociationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartStatePage<AssociationEntity>(
         isNoData: (data) => data?.data?.isEmpty ?? true,
-      noData:  (context,height)=> NoDataWidget('暂无数据，换一个词试试～'),
+        noData: (context, height) => NoDataWidget('暂无数据，换一个词试试～'),
         builder: (BuildContext context, AssociationEntity data) =>
             ListView.separated(
                 itemBuilder: (context, index) => ListTile(
@@ -127,8 +129,8 @@ class AssociationWidget extends StatelessWidget {
                       title: Text(data.data[index].keyword),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                SearchResultPage(data.data[index].keyword)));
+                            builder: (context) => SearchResultPage(
+                                keyWord: data.data[index].keyword)));
                       },
                     ),
                 separatorBuilder: (context, index) => Divider(
@@ -143,49 +145,46 @@ class AssociationWidget extends StatelessWidget {
 class HotSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SmartStatePage<HotSearchEntity>(
-        builder: (context, data) {
-          List<Widget> widgets = List();
-          data.data.info?.forEach((item) {
-            widgets.add(Chip(
-              backgroundColor: Theme.of(context).accentColor,
-              avatar: CircleAvatar(
-                backgroundColor: Colors.redAccent,
-                child: Icon(
-                  Icons.whatshot,
-                  color: Colors.white,
+    return SmartStatePage<HotSearchEntity>(builder: (context, data) {
+      List<Widget> widgets = List();
+      data.data.info?.forEach((item) {
+        widgets.add(Chip(
+          backgroundColor: Theme.of(context).accentColor,
+          avatar: CircleAvatar(
+            backgroundColor: Colors.redAccent,
+            child: Icon(
+              Icons.whatshot,
+              color: Colors.white,
+            ),
+          ),
+          label: Text(
+            item.keyword,
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          labelPadding: EdgeInsets.only(left: 5, right: 10, top: 1, bottom: 1),
+        ));
+      });
+      return Padding(
+          padding: EdgeInsets.only(left: 15, top: 15, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 2),
+                child: Text(
+                  "热门搜索",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              label: Text(
-                item.keyword,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+              SizedBox(
+                height: 5,
               ),
-              labelPadding:
-                  EdgeInsets.only(left: 5, right: 10, top: 1, bottom: 1),
-            ));
-          });
-          return Padding(
-              padding: EdgeInsets.only(left: 15, top: 15, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 2),
-                    child: Text(
-                      "热门搜索",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Wrap(
-                    spacing: 8.0,
-                    children: widgets,
-                  ),
-                ],
-              ));
-        });
+              Wrap(
+                spacing: 8.0,
+                children: widgets,
+              ),
+            ],
+          ));
+    });
   }
 }
