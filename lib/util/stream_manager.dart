@@ -6,10 +6,12 @@ import 'package:music/components/state_widget.dart';
 import 'package:provider/provider.dart';
 
 typedef WidgetBuilder<T> = Widget Function(BuildContext context, T data);
-typedef PageStateWidget = Widget Function(BuildContext context);
+typedef PageStateWidgetBuilder = Widget Function(BuildContext context, double height);
+typedef PageErrorWidgetBuilder = Widget Function(
+    BuildContext context, Object errorMessage);
 typedef NoNetPageStateWidget = Widget Function(
     BuildContext context, VoidCallback callback);
-typedef IsShowContent<T> = bool Function(T data);
+typedef CanShowContent<T> = bool Function(T data);
 
 class StreamManager {
   Map<dynamic, StreamController> _streamControllerMap = {};
@@ -26,6 +28,10 @@ class StreamManager {
 
   Stream getStreamByKey(dynamic key) {
     return (_streamControllerMap[key] ??= StreamController.broadcast()).stream;
+  }
+
+  StreamController getStreamControllerByKey(dynamic key) {
+    return (_streamControllerMap[key] ??= StreamController.broadcast());
   }
 
   static void addDataToSinkByContext(BuildContext context, dynamic data) {
@@ -63,37 +69,29 @@ class StreamManager {
   }
 }
 
-Widget getNonNullWidget(BuildContext context, PageStateWidget widgetProvider,
-    Widget Function() defaultWidget) {
-  assert(defaultWidget != null);
-  if (widgetProvider != null) {
-    return widgetProvider(context);
-  }
-  return defaultWidget();
-}
 
 class SmartStatePage<T> extends StatelessWidget {
   final T initialData;
   final WidgetBuilder<T> builder;
-  final PageStateWidget noData;
-  final PageStateWidget loading;
-  final PageStateWidget error;
+  final PageStateWidgetBuilder noData;
+  final PageStateWidgetBuilder loading;
+  final PageErrorWidgetBuilder error;
   final NoNetPageStateWidget noNet;
   final double height;
-  final IsShowContent<T> isNoData;
-  final IsShowContent<T> showContentWhenNoContent;
+  final CanShowContent<T> isNoData;
+  final CanShowContent<T> showContentWhenNoNet;
 
   SmartStatePage(
       {Key key,
-        this.builder,
-        this.initialData,
-        this.noData,
-        this.loading,
-        this.error,
-        this.noNet,
-        this.height,
-        this.isNoData,
-        this.showContentWhenNoContent})
+      this.builder,
+      this.initialData,
+      this.noData,
+      this.loading,
+      this.error,
+      this.noNet,
+      this.height,
+      this.isNoData,
+      this.showContentWhenNoNet})
       : assert(builder != null),
         assert(height == null || height >= 0.0),
         super(key: key);
@@ -107,48 +105,78 @@ class SmartStatePage<T> extends StatelessWidget {
           : streamManager.getLastElement(T),
       stream: streamManager.getStreamByKey(T),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot == null || snapshot.data == null) {
-          return getNonNullWidget(
-              context, noData, () => NoDataWidget('暂无数据'));
+        if (snapshot.hasError) {
+          return _buildErrorWidget(context, snapshot.error);
+        }
+        if (!snapshot.hasData) {
+          return _buildNoDataWidget(context);
         }
         if (!(snapshot.data is PageData)) {
           throw Exception("snapshot.data must is PageData");
         }
-        PageData pageData = snapshot.data;
-        print('pageState ${pageData.state.toString()}');
-        switch (pageData.state) {
-          case PageState.loading:
-            return getNonNullWidget(
-                context, loading, () => LoadingWidget(height));
-          case PageState.noData:
-            if (isNoData == null || isNoData(null)) {
-              return getNonNullWidget(
-                  context, noData, () => NoDataWidget('暂无数据'));
-            }
-            return builder(context, null);
-          case PageState.complete:
-            if (isNoData != null && isNoData(pageData.data)) {
-              return getNonNullWidget(
-                  context, noData, () => NoDataWidget('暂无数据'));
-            } else {
-              return builder(context, pageData.data);
-            }
-            break;
-          case PageState.error:
-          case PageState.noNet:
-            if (showContentWhenNoContent != null &&
-                showContentWhenNoContent(null)) {
-              return builder(context, null);
-            }
-            final callback = () => streamManager.addDataToSinkByKey(
-                ResponseWorker, PageMessage.refresh(T));
-            return noNet != null
-                ? noNet(context, callback)
-                : NoNetWidget(callback, height);
-        }
-        throw Exception("not deal ${pageData.state}");
+        return _buildWidgetByState(context, snapshot.data, streamManager);
       },
     );
   }
-}
 
+  _buildWidgetByState(
+      BuildContext context, PageData pageData, StreamManager streamManager) {
+    print('pageState ${pageData.state.toString()}');
+    switch (pageData.state) {
+      case PageState.loading:
+        return _buildLoadingWidget(context);
+      case PageState.noData:
+        return _buildNoDataWidget(context);
+      case PageState.complete:
+        return _buildContentWidget(context, pageData.data);
+      case PageState.error:// 网络请求错误
+      case PageState.noNet:
+       return _buildNoNetWidget(context, streamManager);
+    }
+    throw Exception("not deal ${pageData.state}");
+  }
+
+  Widget _buildNoDataWidget(BuildContext context) {
+    // 处理分页加载某一次数据无数据时，是否展示内容
+    if (isNoData == null || isNoData(null)) {
+      if (noData != null) {
+        return noData(context, height);
+      }
+      return NoDataWidget('暂无数据');
+    }
+    return builder(context, null);
+  }
+
+  Widget _buildErrorWidget(BuildContext context, Object msg) {
+    if (error != null) {
+      return error(context, msg);
+    }
+    return OnErrorWidget(msg);
+  }
+
+  Widget _buildLoadingWidget(BuildContext context) {
+    if (loading != null) {
+      return loading(context, height);
+    }
+    return LoadingWidget(height);
+  }
+
+  Widget _buildContentWidget(BuildContext context, dynamic data) {
+    if (isNoData != null && isNoData(data)) {
+      return _buildNoDataWidget(context);
+    }
+    return builder(context, data);
+  }
+  
+  Widget _buildNoNetWidget(BuildContext context,StreamManager streamManager){
+    if (showContentWhenNoNet != null &&
+        showContentWhenNoNet(null)) {
+      return builder(context, null);
+    }
+    final callback = () => streamManager.addDataToSinkByKey(
+        ResponseWorker, PageMessage.refresh(T));
+    return noNet != null
+        ? noNet(context, callback)
+        : NoNetWidget(callback, height);
+  }
+}

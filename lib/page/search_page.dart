@@ -118,7 +118,7 @@ class AssociationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartStatePage<AssociationEntity>(
         isNoData: (data) => data?.data?.isEmpty ?? true,
-      noData:  (context)=> NoDataWidget('暂无数据，换一个词试试～'),
+      noData:  (context,height)=> NoDataWidget('暂无数据，换一个词试试～'),
         builder: (BuildContext context, AssociationEntity data) =>
             ListView.separated(
                 itemBuilder: (context, index) => ListTile(

@@ -68,7 +68,9 @@ mixin ResponseWorker {
     }
     final dataMap = _decodeJson(response);
     bool requestSuccess = false;
-    if (dataMap == null) {
+    if (dataMap is FormatException) {
+      _streamManager.getStreamControllerByKey(T).addError(dataMap.message);
+    } else if (dataMap == null) {
       _sendNoDataState<T>();
     } else if (dataMap['status'] == 1 || dataMap['code'] == 0) {
       T originData = EntityFactory.generateOBJ<T>(dataMap);
@@ -92,6 +94,7 @@ mixin ResponseWorker {
       data = json.decode(jsonString);
     } on FormatException catch (e) {
       print(e.message);
+      data = e;
     }
     return data;
   }
@@ -263,7 +266,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
             error: listConfig.error,
             height: listConfig.height,
             isNoData: emptyData,
-            showContentWhenNoContent: (data) => !emptyData(data),
+            showContentWhenNoNet: (data) => !emptyData(data),
             builder: (context, data) {
               final list = getListData(data);
               if (list?.isNotEmpty ?? false) {
@@ -345,9 +348,9 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
 class ListConfig<D> {
   bool firstLoading;
   D initData;
-  PageStateWidget noData;
-  PageStateWidget loading;
-  PageStateWidget error;
+  PageStateWidgetBuilder noData;
+  PageStateWidgetBuilder loading;
+  PageErrorWidgetBuilder error;
   NoNetPageStateWidget noNet;
   double height;
   bool enablePullDown;

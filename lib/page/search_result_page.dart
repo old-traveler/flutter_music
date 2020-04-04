@@ -51,7 +51,7 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
               title: Text(_keyWord),
             ),
             body: SmartStatePage<SearchSongEntity>(
-                noData: (context) => NoDataWidget('未找到相关内容'),
+                noData: (context,height) => NoDataWidget('未找到相关内容'),
                 isNoData: (data) => (data?.data?.info?.isEmpty ?? true),
                 builder: (context, data) {
                   return ListView.builder(
