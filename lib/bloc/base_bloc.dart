@@ -51,7 +51,7 @@ mixin ResponseWorker {
       T Function(T) dataConvert}) async {
     assert(responseProvider != null);
     if (needLoading) {
-      _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
+      _sendLoadingState<T>();
     }
     Response response = await responseProvider();
     _refreshProviderMap[T] = () {
@@ -66,36 +66,51 @@ mixin ResponseWorker {
       _streamManager.addDataToSinkByKey(T, PageData<T>.noNet(null));
       return;
     }
+    final dataMap = _decodeJson(response);
+    bool requestSuccess = false;
+    if (dataMap == null) {
+      _sendNoDataState<T>();
+    } else if (dataMap['status'] == 1 || dataMap['code'] == 0) {
+      T originData = EntityFactory.generateOBJ<T>(dataMap);
+      final resultData =
+          dataConvert == null ? originData : dataConvert(originData);
+      _sendContentState<T>(resultData);
+      requestSuccess = true;
+    } else {
+      _sendErrorState<T>(dataMap['error']);
+    }
+    dealNonNullFunction(stopLoading, requestSuccess);
+  }
+
+  dynamic _decodeJson(Response response) {
     String jsonString = response.toString();
-    jsonString = jsonString.substring(jsonString.indexOf("{"));
-    jsonString = jsonString.substring(0, jsonString.lastIndexOf("}") + 1);
-    print("jsonString$jsonString");
+    jsonString = jsonString.substring(
+        jsonString.indexOf("{"), jsonString.lastIndexOf("}") + 1);
+    print("jsonString $jsonString");
     dynamic data;
     try {
       data = json.decode(jsonString);
     } on FormatException catch (e) {
-      print('e');
-      data = null;
+      print(e.message);
     }
-    if (data == null) {
-      dealNonNullFunction(stopLoading, false);
-      _streamManager.addDataToSinkByKey(T, PageData<T>.noData(null));
-      return;
-    }
-    if (data['status'] == 1 || data['code'] == 0) {
-      T originData = EntityFactory.generateOBJ<T>(data);
-      _streamManager.addDataToSinkByKey(
-          T,
-          PageData<T>.complete(
-              dataConvert == null ? originData : dataConvert(originData)));
-      dealNonNullFunction(stopLoading, true);
-      return;
-    } else if (data['error'] != null) {
-      _streamManager.addDataToSinkByKey(T, PageData<T>.error(data['error']));
-    } else {
-      _streamManager.addDataToSinkByKey(T, PageData<String>.error("未知错误"));
-    }
-    dealNonNullFunction(stopLoading, false);
+    return data;
+  }
+
+  void _sendLoadingState<T>() {
+    _streamManager.addDataToSinkByKey(T, PageData<T>.loading(null));
+  }
+
+  void _sendNoDataState<T>() {
+    _streamManager.addDataToSinkByKey(T, PageData<T>.noData(null));
+  }
+
+  void _sendContentState<T>(T data) {
+    _streamManager.addDataToSinkByKey(T, PageData<T>.complete(data));
+  }
+
+  void _sendErrorState<T>(String errorMsg) {
+    _streamManager.addDataToSinkByKey(
+        T, PageData<String>.error(errorMsg ?? '未知错误'));
   }
 
   void disposeByKey(key) {
