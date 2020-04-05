@@ -50,47 +50,52 @@ class MyProfileState extends State<MyProfilePage>
     return InheritedProvider.value(
         value: _myProfileBloc.streamManager,
         updateShouldNotify: (o, n) => false,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              UserInfoWidget(_myProfileBloc),
-              RibbonWidget(),
-              ListTile(
-                contentPadding: EdgeInsets.only(left: 20, right: 20),
-                leading: Container(
-                  alignment: Alignment.center,
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Color(0xFFF4899D),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Image.asset(
-                    'images/like.png',
-                    width: 25,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-                title: Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    '我喜欢',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-                subtitle: Text('189首', style: TextStyle(fontSize: 12)),
-                trailing: Icon(
-                  Icons.more_horiz,
-                  size: 15,
-                ),
-              ),
-              PromoteWidget(),
-              SongListWidget(),
-            ],
-          ),
-        ));
+        child: SingleChildScrollView(child: _buildContent()));
+  }
+
+  Widget _buildContent() {
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 20,
+        ),
+        UserInfoWidget(_myProfileBloc),
+        RibbonWidget(),
+        _buildMyLikeWidget(),
+        PromoteWidget(),
+        SongListWidget(),
+      ],
+    );
+  }
+
+  Widget _buildMyLikeWidget() {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      leading: Container(
+        alignment: Alignment.center,
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+            color: Color(0xFFF4899D), borderRadius: BorderRadius.circular(5.0)),
+        child: Image.asset(
+          'images/like.png',
+          width: 25,
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+      title: Padding(
+        padding: EdgeInsets.only(bottom: 10),
+        child: Text(
+          '我喜欢',
+          style: TextStyle(fontSize: 14),
+        ),
+      ),
+      subtitle: Text('189首', style: TextStyle(fontSize: 12)),
+      trailing: Icon(
+        Icons.more_horiz,
+        size: 15,
+      ),
+    );
   }
 
   @override
@@ -126,6 +131,10 @@ class UserInfoWidget extends StatelessWidget {
         },
       );
     }
+    return _buildUserInfoWidget(data);
+  }
+
+  Widget _buildUserInfoWidget(UserEntity data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -135,33 +144,33 @@ class UserInfoWidget extends StatelessWidget {
                 color: Colors.black,
                 fontSize: 17,
                 fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 6,
+        SizedBox(height: 6),
+        _buildVipTipWidget()
+      ],
+    );
+  }
+
+  Widget _buildVipTipWidget() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+          decoration: BoxDecoration(
+              color: Color(0xffD7AF77),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          child: Image.asset(
+            'images/svip.png',
+            height: 15,
+            fit: BoxFit.fitHeight,
+          ),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 2, right: 2, top: 1, bottom: 1),
-              decoration: BoxDecoration(
-                  color: Color(0xffD7AF77),
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              child: Image.asset(
-                'images/svip.png',
-                height: 15,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Image.asset(
-              'images/king.png',
-              height: 18,
-              fit: BoxFit.fitHeight,
-            ),
-          ],
-        )
+        SizedBox(width: 5),
+        Image.asset(
+          'images/king.png',
+          height: 18,
+          fit: BoxFit.fitHeight,
+        ),
       ],
     );
   }
@@ -202,6 +211,14 @@ class UserInfoWidget extends StatelessWidget {
 }
 
 class RibbonWidget extends StatelessWidget {
+  final list = <ProfileItem>[
+    ProfileItem('images/duv.png', '本地', '0'),
+    ProfileItem('images/dux.png', '收藏', '0'),
+    ProfileItem('images/duz.png', '下载', '0'),
+    ProfileItem('images/dv4.png', '云盘', '0'),
+    ProfileItem('images/dv6.png', '最近', '0'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -211,57 +228,12 @@ class RibbonWidget extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular((10.0))),
       child: Column(
         children: <Widget>[
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: 20,
-              ),
-              Image.asset(
-                'images/vip.png',
-                width: 21,
-              ),
-              SizedBox(width: 5),
-              Text(
-                '会员中心',
-                style: TextStyle(
-                    color: Color(0xffD7AF77), fontWeight: FontWeight.bold),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(right: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        '会员享受付费库下载特权',
-                        style: TextStyle(color: Colors.black54, fontSize: 12),
-                      ),
-                      SizedBox(
-                        width: 1,
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        size: 15,
-                        color: Colors.black54,
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
+          SizedBox(height: 15),
+          _buildVipCenter(),
+          SizedBox(height: 15),
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-            child: Divider(
-              height: 1,
-            ),
+            child: Divider(height: 1),
           ),
           Expanded(
             child: Row(
@@ -269,23 +241,50 @@ class RibbonWidget extends StatelessWidget {
               children: _buildItem(),
             ),
           ),
-          SizedBox(
-            height: 15,
-          )
+          SizedBox(height: 15)
         ],
       ),
     );
   }
 
+  Widget _buildVipCenter() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(width: 20),
+        Image.asset('images/vip.png', width: 21),
+        SizedBox(width: 5),
+        Text('会员中心',
+            style: TextStyle(
+                color: Color(0xffD7AF77), fontWeight: FontWeight.bold)),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  '会员享受付费库下载特权',
+                  style: TextStyle(color: Colors.black54, fontSize: 12),
+                ),
+                SizedBox(
+                  width: 1,
+                ),
+                Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 15,
+                  color: Colors.black54,
+                )
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   List<Widget> _buildItem() {
     List<Widget> widgets = [];
-    final list = <ProfileItem>[
-      ProfileItem('images/duv.png', '本地', '0'),
-      ProfileItem('images/dux.png', '收藏', '0'),
-      ProfileItem('images/duz.png', '下载', '0'),
-      ProfileItem('images/dv4.png', '云盘', '0'),
-      ProfileItem('images/dv6.png', '最近', '0'),
-    ];
     for (var value in list) {
       widgets.add(Expanded(
         flex: 1,
@@ -325,6 +324,13 @@ class ProfileItem {
 }
 
 class PromoteWidget extends StatefulWidget {
+  final textList = [
+    '看得见的铃声，解锁来电新玩法',
+    '都2020年了，不许你不知道这个识曲神器',
+    '【乐舞雅集】二次元直播专场',
+    '30个小时长续航，运动必备'
+  ];
+
   @override
   State<StatefulWidget> createState() {
     return PromoteState();
@@ -417,17 +423,10 @@ class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
   }
 
   Widget _buildPromoteItem(int index) {
-    final textList = [
-      '看得见的铃声，解锁来电新玩法',
-      '都2020年了，不许你不知道这个识曲神器',
-      '【乐舞雅集】二次元直播专场',
-      '30个小时长续航，运动必备'
-    ];
-
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        textList[index % textList.length],
+        widget.textList[index % widget.textList.length],
         style: TextStyle(color: Colors.black54),
       ),
     );

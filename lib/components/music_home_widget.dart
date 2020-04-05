@@ -42,54 +42,64 @@ class MusicHomeState extends State<MusicHomeWidget>
             model.curState == MusicStateType.STATE_STOPPED) {
           controller.stop();
         }
-        return GestureDetector(
-          child: model.curSongInfo == null
-              ? Icon(Icons.music_note)
-              : Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 43,
-                      width: 43,
-                      child: StreamBuilder<MusicState>(
-                        stream: model.progressChangeStream,
-                        builder: (context, data) {
-                          final state = data.data;
-                          double value = state == null
-                              ? 0
-                              : state.position * 1.0 / state.duration;
-                          if(value.isNaN){
-                            value = 1.0;
-                          }
-                          value = max(0.0, min(1.0, value));
-                          return CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            backgroundColor: Colors.white70,
-                            valueColor: AlwaysStoppedAnimation(Colors.white),
-                            value: value,
-                          );
-                        },
-                      ),
-                    ),
-                    Positioned(
-                      child: Container(
-                          child: RotationTransition(
-                        alignment: Alignment.center,
-                        turns: controller,
-                        child: CircleAvatar(
-                          radius: 21,
-                          backgroundImage:
-                              NetworkImage(model.curSongInfo.sizableCover),
-                        ),
-                      )),
-                    )
-                  ],
-                ),
-          onTap: () {
-            openMusicPlayPage(context);
-          },
-        );
+        return _buildContent(model);
       },
+    );
+  }
+
+  Widget _buildContent(PlaySongsModel model) {
+    return GestureDetector(
+      onTap: () {
+        openMusicPlayPage(context);
+      },
+      child: model.curSongInfo == null
+          ? Icon(Icons.music_note)
+          : Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                _buildProgress(model),
+                _buildAvatar(model),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildProgress(PlaySongsModel model) {
+    return Container(
+      height: 43,
+      width: 43,
+      child: StreamBuilder<MusicState>(
+        stream: model.progressChangeStream,
+        builder: (context, data) {
+          final state = data.data;
+          double value =
+              state == null ? 0 : state.position * 1.0 / state.duration;
+          if (value.isNaN) {
+            value = 1.0;
+          }
+          value = max(0.0, min(1.0, value));
+          return CircularProgressIndicator(
+            strokeWidth: 2.0,
+            backgroundColor: Colors.white70,
+            valueColor: AlwaysStoppedAnimation(Colors.white),
+            value: value,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAvatar(PlaySongsModel model) {
+    return Positioned(
+      child: Container(
+          child: RotationTransition(
+        alignment: Alignment.center,
+        turns: controller,
+        child: CircleAvatar(
+          radius: 21,
+          backgroundImage: NetworkImage(model.curSongInfo.sizableCover),
+        ),
+      )),
     );
   }
 

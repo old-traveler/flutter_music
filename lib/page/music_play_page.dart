@@ -96,70 +96,78 @@ class MusicPlayState extends State<MusicPlayPage> {
     return Consumer<PlaySongsModel>(builder: (context, value, child) {
       return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(value.curSongInfo?.songName ?? '暂无歌曲'),
-            brightness: Brightness.dark,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: <Widget>[
-              GestureDetector(
-                child: Image.asset(
-                  'images/download.png',
-                  width: 35,
-                  fit: BoxFit.fitWidth,
-                ),
-                onTap: () {
-                  if (value.curSongInfo == null) return;
-                  MusicWrapper.singleton.downloadMusic(
-                      '${value.curSongInfo.songName}-${value.curSongInfo.singerName}');
-                },
+          appBar: _buildAppBar(value),
+          body: _buildBody(value));
+    });
+  }
+
+  Widget _buildAppBar(PlaySongsModel value) {
+    return AppBar(
+      centerTitle: true,
+      title: Text(value.curSongInfo?.songName ?? '暂无歌曲'),
+      brightness: Brightness.dark,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      actions: <Widget>[
+        GestureDetector(
+          child: Image.asset(
+            'images/download.png',
+            width: 35,
+            fit: BoxFit.fitWidth,
+          ),
+          onTap: () {
+            if (value.curSongInfo == null) return;
+            MusicWrapper.singleton.downloadMusic(
+                '${value.curSongInfo.songName}-${value.curSongInfo.singerName}');
+          },
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        GestureDetector(
+          child: Image.asset(
+            'images/share.png',
+            width: 35,
+            fit: BoxFit.fitWidth,
+          ),
+          onTap: () {
+            Share.share('给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
+          },
+        ),
+        SizedBox(
+          width: 12,
+        )
+      ],
+    );
+  }
+
+  Widget _buildBody(PlaySongsModel value) {
+    return Stack(
+      children: <Widget>[
+        MusicBackgroundWidget(),
+        Container(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(),
               ),
+              LyricWidget(),
               SizedBox(
-                width: 5,
+                height: 30,
               ),
-              GestureDetector(
-                child: Image.asset(
-                  'images/share.png',
-                  width: 35,
-                  fit: BoxFit.fitWidth,
-                ),
-                onTap: () {
-                  Share.share('给你分享了一首歌曲：${value.curSongInfo?.playUrl ?? ""}');
-                },
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                child: SongProgressWidget(value),
               ),
+              PlayBottomMenuWidget(value),
               SizedBox(
-                width: 12,
+                height: ScreenUtil().setWidth(40),
               )
             ],
           ),
-          body: Stack(
-            children: <Widget>[
-              MusicBackgroundWidget(),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(),
-                    ),
-                    LyricWidget(),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
-                      child: SongProgressWidget(value),
-                    ),
-                    PlayBottomMenuWidget(value),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(40),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ));
-    });
+        ),
+      ],
+    );
   }
 }

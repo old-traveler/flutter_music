@@ -27,25 +27,19 @@ class SplashState extends State<SplashPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            height: 120,
-          ),
+          SizedBox(height: 120),
           Image.asset(
             'images/splash_title.png',
             height: ScreenUtil().setHeight(250),
             fit: BoxFit.fitHeight,
           ),
-          Expanded(
-            child: Container(),
-          ),
+          Expanded(child: Container()),
           Image.asset(
             'images/splash_icon.png',
             height: ScreenUtil().setHeight(100),
             fit: BoxFit.fitHeight,
           ),
-          SizedBox(
-            height: 50,
-          )
+          SizedBox(height: 50)
         ],
       ),
     );

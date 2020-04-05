@@ -4,13 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-void openWebPage(BuildContext context,url){
+void openWebPage(BuildContext context, url) {
   // 目前只支持Android的浏览器
   if (Platform.isAndroid) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => WebPage(
-            url: url)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => WebPage(url: url)));
   }
 }
 
@@ -50,9 +48,7 @@ class WebState extends State<WebPage> {
             ),
             onTap: reloadUrl,
           ),
-          SizedBox(
-            width: 10,
-          ),
+          SizedBox(width: 10),
           GestureDetector(
             child: Icon(
               Icons.close,
@@ -60,9 +56,7 @@ class WebState extends State<WebPage> {
             ),
             onTap: () => Navigator.of(context).pop(),
           ),
-          SizedBox(
-            width: 14,
-          ),
+          SizedBox(width: 14),
         ],
       ),
       body: AndroidView(
