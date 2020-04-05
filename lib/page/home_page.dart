@@ -103,6 +103,7 @@ class StationCard extends StatelessWidget {
 
   Widget _buildGirdView(StationEntity data) {
     return GridView.builder(
+        itemCount: data?.links?.length ?? 0,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 5,
