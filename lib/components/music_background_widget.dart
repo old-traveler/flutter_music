@@ -73,6 +73,9 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
     SingerPortraitEntity entity = singerPortraitEntityFromJson(
         SingerPortraitEntity(), json.decode(response.toString()));
     if (mounted) {
+      if(entity?.data == null){
+        return;
+      }
       images = entity?.data[0]?.author[0]?.imgs?.imageList?.map<String>((data) {
         return data.sizablePortrait;
       })?.toList();

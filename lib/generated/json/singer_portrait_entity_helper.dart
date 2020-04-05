@@ -7,7 +7,7 @@ singerPortraitEntityFromJson(SingerPortraitEntity data, Map<String, dynamic> jso
 	if (json['error_code'] != null) {
 		data.errorCode = json['error_code']?.toInt();
 	}
-	if (json['data'] != null) {
+	if (json['data'] != null && json['data'] is List) {
 		data.data = new List<SingerPortraitData>();
 		(json['data'] as List).forEach((v) {
 			data.data.add(new SingerPortraitData().fromJson(v));
