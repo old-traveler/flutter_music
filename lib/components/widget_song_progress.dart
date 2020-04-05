@@ -37,40 +37,44 @@ class SongProgressWidget extends StatelessWidget {
             curTimeStr,
             style: TextStyle(fontSize: 12, color: Colors.white),
           ),
-          Expanded(
-            child: SliderTheme(
-              data: SliderThemeData(
-                trackHeight: ScreenUtil().setWidth(2),
-                thumbShape: RoundSliderThumbShape(
-                  enabledThumbRadius: ScreenUtil().setWidth(10),
-                ),
-              ),
-              child: Slider(
-                value: curTime,
-                onChanged: (data) {
-                  model.seekToProgress(data.toInt());
-                },
-                onChangeStart: (data) {
-                  print("onChangeStart");
-                  model.sinkProgress = false;
-                },
-                onChangeEnd: (data) {
-                  model.sinkProgress = true;
-                  MusicWrapper.singleton.seekTo(data.toInt());
-                  print("onChangeEnd");
-                },
-                activeColor: Colors.white,
-                inactiveColor: Colors.white30,
-                min: 0,
-                max: totalTime,
-              ),
-            ),
-          ),
+          _buildSlider(curTime, totalTime),
           Text(
             DateUtil.formatDateMs(totalTime.toInt(), format: "mm:ss"),
             style: TextStyle(fontSize: 12, color: Colors.white30),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSlider(double curTime, double totalTime) {
+    return Expanded(
+      child: SliderTheme(
+        data: SliderThemeData(
+          trackHeight: ScreenUtil().setWidth(2),
+          thumbShape: RoundSliderThumbShape(
+            enabledThumbRadius: ScreenUtil().setWidth(10),
+          ),
+        ),
+        child: Slider(
+          value: curTime,
+          onChanged: (data) {
+            model.seekToProgress(data.toInt());
+          },
+          onChangeStart: (data) {
+            print("onChangeStart");
+            model.sinkProgress = false;
+          },
+          onChangeEnd: (data) {
+            model.sinkProgress = true;
+            MusicWrapper.singleton.seekTo(data.toInt());
+            print("onChangeEnd");
+          },
+          activeColor: Colors.white,
+          inactiveColor: Colors.white30,
+          min: 0,
+          max: totalTime,
+        ),
       ),
     );
   }

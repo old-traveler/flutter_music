@@ -45,12 +45,7 @@ class LyricState extends State<LyricWidget> {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         if (model.curSongInfo?.lyrics?.isEmpty != false) {
-          return Center(
-            child: Text(
-              '暂无歌词',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          );
+          return _buildNoLyricWidget();
         }
         assert(model.curSongInfo != null);
         if (_songId != model.curSongInfo.hash) {
@@ -75,89 +70,83 @@ class LyricState extends State<LyricWidget> {
     );
   }
 
+  Widget _buildNoLyricWidget() {
+    return Center(
+      child: Text(
+        '暂无歌词',
+        style: TextStyle(color: Colors.white, fontSize: 16),
+      ),
+    );
+  }
+
   Widget _buildLyricList() {
-    return Container(
-        height: itemHeight * widget.screenCount,
-        child: Listener(
-            onPointerUp: (event) {
-              recoverMoveState();
-            },
-            onPointerCancel: (event) {
-              recoverMoveState();
-            },
-            onPointerDown: (event) {
-              preSelectPosition = -1;
-              dragEndTimer?.cancel();
-            },
-            onPointerMove: (event) {
-              isMove = true;
-              int curPosition =
-                  (controller.offset + itemHeight ~/ 2) ~/ itemHeight;
-              if (curPosition != preSelectPosition) {
-                curTimeBarDuration = lyricList[curPosition].startTime;
-                preSelectPosition = curPosition;
-                if (mounted) {
-                  setState(() {});
-                }
-              }
-            },
-            child: Stack(
-              children: <Widget>[
-                ListView.builder(
-                  controller: controller,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: _buildLyricItem,
-                  itemCount: lyricList.length + widget.screenCount - 1,
-                ),
-                _buildLyricTimeBar()
-              ],
-            )));
+    final child = Listener(
+        onPointerUp: (event) => recoverMoveState(),
+        onPointerCancel: (event) => recoverMoveState(),
+        onPointerDown: (event) {
+          preSelectPosition = -1;
+          dragEndTimer?.cancel();
+        },
+        onPointerMove: (event) => _onSliverLyric(),
+        child: Stack(
+          children: <Widget>[
+            ListView.builder(
+              controller: controller,
+              padding: EdgeInsets.zero,
+              itemBuilder: _buildLyricItem,
+              itemCount: lyricList.length + widget.screenCount - 1,
+            ),
+            _buildLyricTimeBar()
+          ],
+        ));
+    return Container(height: itemHeight * widget.screenCount, child: child);
+  }
+
+  void _onSliverLyric() {
+    isMove = true;
+    int curPosition = (controller.offset + itemHeight ~/ 2) ~/ itemHeight;
+    if (curPosition != preSelectPosition) {
+      curTimeBarDuration = lyricList[curPosition].startTime;
+      preSelectPosition = curPosition;
+      if (mounted) {
+        setState(() {});
+      }
+    }
   }
 
   Widget _buildLyricTimeBar() {
-    if (!isMove) {
-      return Container();
-    }
-    return Container(
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: itemHeight,
-          child: Row(
-            children: <Widget>[
-              GestureDetector(
-                child: Icon(
-                  Icons.play_arrow,
-                  color: Colors.white,
-                  size: 28,
-                ),
-                onTap: () {
-                  MusicWrapper.singleton
-                      .seekTo(curTimeBarDuration.inMilliseconds);
-                },
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Divider(
-                  height: 1,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                DateUtil.formatDateMs(curTimeBarDuration.inMilliseconds,
-                    format: "mm:ss"),
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              SizedBox(
-                width: 10,
-              )
-            ],
+    Widget child;
+    if (isMove) {
+      child = Row(
+        children: <Widget>[
+          GestureDetector(
+            child: Icon(
+              Icons.play_arrow,
+              color: Colors.white,
+              size: 28,
+            ),
+            onTap: () {
+              MusicWrapper.singleton.seekTo(curTimeBarDuration.inMilliseconds);
+            },
           ),
-        ));
+          SizedBox(width: 10),
+          Expanded(
+            child: Divider(
+              height: 1,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(width: 10),
+          Text(
+            DateUtil.formatDateMs(curTimeBarDuration.inMilliseconds,
+                format: "mm:ss"),
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          SizedBox(width: 10)
+        ],
+      );
+    }
+    return Container(alignment: Alignment.center, child: child);
   }
 
   void recoverMoveState() {
@@ -165,9 +154,7 @@ class LyricState extends State<LyricWidget> {
     dragEndTimer = null;
     dragEndTimer = Timer(const Duration(milliseconds: 2000), () {
       if (isMove && mounted) {
-        setState(() {
-          isMove = false;
-        });
+        setState(() => isMove = false);
       }
     });
   }

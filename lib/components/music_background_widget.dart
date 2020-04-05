@@ -99,35 +99,45 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
       builder: (context, model, child) {
         init(model);
         return images?.isNotEmpty == true
-            ? PageView.builder(
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: images?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return CachedNetworkImage(
-                      imageUrl: images[index % images.length],
-                      fit: BoxFit.fitHeight,
-                      height: ScreenUtil.screenHeight,
-                      placeholder: (context, url) {
-                        return index % images.length == 0
-                            ? Image.asset(
-                                'images/skin_player_bg.jpg',
-                                fit: BoxFit.fitHeight,
-                                height: ScreenUtil.screenHeight,
-                              )
-                            : CachedNetworkImage(
-                                imageUrl: images[(index - 1) % images.length],
-                                fit: BoxFit.fitHeight,
-                                height: ScreenUtil.screenHeight);
-                      });
-                },
-              )
-            : Image.asset(
-                'images/skin_player_bg.jpg',
-                fit: BoxFit.fitHeight,
-                height: ScreenUtil.screenHeight,
-              );
+            ? _buildPortrait()
+            : _buildDefaultPortrait();
       },
+    );
+  }
+
+  Widget _buildPortrait() {
+    return PageView.builder(
+      controller: _pageController,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: images?.length ?? 0,
+      itemBuilder: (context, index) {
+        return CachedNetworkImage(
+            imageUrl: images[index % images.length],
+            fit: BoxFit.fitHeight,
+            height: ScreenUtil.screenHeight,
+            placeholder: (context, url) => _buildPlaceholder(index));
+      },
+    );
+  }
+
+  Widget _buildPlaceholder(int index) {
+    return index % images.length == 0
+        ? Image.asset(
+            'images/skin_player_bg.jpg',
+            fit: BoxFit.fitHeight,
+            height: ScreenUtil.screenHeight,
+          )
+        : CachedNetworkImage(
+            imageUrl: images[(index - 1) % images.length],
+            fit: BoxFit.fitHeight,
+            height: ScreenUtil.screenHeight);
+  }
+
+  Widget _buildDefaultPortrait() {
+    return Image.asset(
+      'images/skin_player_bg.jpg',
+      fit: BoxFit.fitHeight,
+      height: ScreenUtil.screenHeight,
     );
   }
 }

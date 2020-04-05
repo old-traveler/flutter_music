@@ -20,9 +20,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           MusicModeButton(model),
-          SizedBox(
-            width: 25,
-          ),
+          SizedBox(width: 25),
           BackgroundImageWidget(
             'images/icon_song_left.png',
             58,
@@ -47,9 +45,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
               MusicWrapper.singleton.playNextSong();
             },
           ),
-          SizedBox(
-            width: 25,
-          ),
+          SizedBox(width: 25),
           _buildPlayListButton(context)
         ],
       ),
@@ -136,9 +132,7 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
-      Divider(
-        height: 1,
-      ),
+      Divider(height: 1),
       Expanded(
         child: ListView.builder(
           controller: scrollController,
@@ -176,25 +170,12 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         model.curSongInfo?.hash == info.hash && PlaySongsModel.isPlaying(model)
-            ? Icon(
-                Icons.pause_circle_outline,
-                size: 20,
-              )
-            : Icon(
-                Icons.play_circle_outline,
-                size: 20,
-              ),
-        canDelete
-            ? SizedBox(
-                width: 5,
-              )
-            : Container(),
+            ? Icon(Icons.pause_circle_outline, size: 20)
+            : Icon(Icons.play_circle_outline, size: 20),
+        canDelete ? SizedBox(width: 5) : Container(),
         canDelete
             ? GestureDetector(
-                child: Icon(
-                  Icons.delete_outline,
-                  size: 22,
-                ),
+                child: Icon(Icons.delete_outline, size: 22),
                 onTap: () {
                   setState(() => playList.remove(info));
                   model.removeSongInfoById(info.hash);
