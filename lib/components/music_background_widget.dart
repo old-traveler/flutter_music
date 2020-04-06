@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/entity/singer_portrait_entity.dart';
 import 'package:music/http/http_manager.dart';
@@ -101,9 +102,12 @@ class MusicBackgroundState extends State<MusicBackgroundWidget> {
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         init(model);
-        return images?.isNotEmpty == true
-            ? _buildPortrait()
-            : _buildDefaultPortrait();
+        return Container(
+          child: images?.isNotEmpty == true
+              ? _buildPortrait()
+              : _buildDefaultPortrait(),
+          foregroundDecoration: BoxDecoration(color: Colors.black26),
+        );
       },
     );
   }
