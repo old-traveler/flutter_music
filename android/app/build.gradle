@@ -53,6 +53,7 @@ android {
             storeFile file('/Users/heyucheng/sign.jks')
             storePassword '123456'
         }
+
     }
 
 
@@ -66,6 +67,10 @@ android {
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            ndk{
+                abiFilters "armeabi-v7a"
+            }
         }
     }
 }
