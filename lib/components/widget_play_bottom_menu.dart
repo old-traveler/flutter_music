@@ -36,7 +36,7 @@ class PlayBottomMenuWidget extends StatelessWidget {
                 : 'images/icon_song_pause.png',
             75,
             onTap: () {
-              MusicWrapper.singleton.playOrPauseMusic();
+              model.playOrPauseMusic();
             },
           ),
           BackgroundImageWidget(

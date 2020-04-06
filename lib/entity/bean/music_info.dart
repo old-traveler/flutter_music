@@ -58,7 +58,7 @@ class MusicSongInfo {
     this.hash = data['hash'];
     this.playUrl = data['playUrl'];
     List<dynamic> list = data['portrait'];
-    this.portrait = list.map((data) => data.toString()).toList();
+    this.portrait = list?.map((data) => data.toString())?.toList();
     this.albumId = data['albumId'];
     this.filename = data['filename'];
     this.albumAudioId = data['albumAudioId'];
