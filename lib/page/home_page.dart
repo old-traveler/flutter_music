@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:music/bloc/home_page_bloc.dart';
+import 'package:music/bloc/smart_state_widget.dart';
 import 'package:music/entity/banner_entity.dart';
 import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';

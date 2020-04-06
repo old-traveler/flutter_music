@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart' show ResponseWorker;
+import 'package:music/bloc/smart_state_widget.dart';
 import 'package:music/components/state_widget.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/page/music_play_page.dart';
-import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
 class SearchResultPage extends StatefulWidget {

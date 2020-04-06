@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:music/bloc/smart_state_widget.dart';
 import 'package:music/entity/entity_factory.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';

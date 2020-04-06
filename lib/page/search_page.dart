@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/search_page_bloc.dart';
+import 'package:music/bloc/smart_state_widget.dart';
 import 'package:music/components/state_widget.dart';
 import 'package:music/entity/association_entity.dart';
 import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/page/search_result_page.dart';
-import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
 /// 搜索页面
