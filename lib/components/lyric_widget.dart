@@ -37,7 +37,7 @@ class LyricState extends State<LyricWidget> {
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    controller?.dispose();
   }
 
   @override

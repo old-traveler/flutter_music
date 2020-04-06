@@ -127,7 +127,9 @@ class PlaySongsModel with ChangeNotifier {
   void saveCurPlayingList() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     final List<MusicSongInfo> list = await playListInfo;
-    Map<String, dynamic> data = {'data': list.map((info) => info.toJson()).toList()};
+    Map<String, dynamic> data = {
+      'data': list.map((info) => info.toJson()).toList()
+    };
     String jsonString = json.encode(data);
     sp.setString('playList', jsonString);
   }
@@ -161,8 +163,10 @@ class PlaySongsModel with ChangeNotifier {
     }
     MusicWrapper.singleton.loadMusicList(
         list: playList.map((data) => data.toSongInfo()).toList(),
-        index: max(0, playList.indexOf(_curSongInfo)));
+        index: max(0, playList.indexOf(_curSongInfo)),
+        pause: true);
     int mode = sp.getInt('curPlayMode') ?? MusicPlayMode.REPEAT_MODE_NONE;
+    _curPlayMode = mode;
     MusicWrapper.singleton.setPlayMusicMode(mode);
   }
 }
