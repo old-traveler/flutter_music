@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/components/widget_img_menu.dart';
+import 'package:music/entity/bean/music_info.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';

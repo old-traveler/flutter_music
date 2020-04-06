@@ -10,6 +10,7 @@ import 'package:music/components/lyric_widget.dart';
 import 'package:music/components/music_background_widget.dart';
 import 'package:music/components/widget_play_bottom_menu.dart';
 import 'package:music/components/widget_song_progress.dart';
+import 'package:music/entity/bean/music_info.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/entity/song_play_entity.dart';
 import 'package:music/generated/json/song_play_entity_helper.dart';

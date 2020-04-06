@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 
@@ -46,11 +48,15 @@ class SplashState extends State<SplashPage> {
   }
 
   void _goToHomePage() {
-    Future.delayed(Duration(seconds: 1)).then((value) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) {
-        return MainPage();
-      }), (router) => router == null);
+    Provider.of<PlaySongsModel>(context, listen: false)
+        .initPlayList()
+        .then((value) {
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) {
+          return MainPage();
+        }), (router) => router == null);
+      });
     });
   }
 }
