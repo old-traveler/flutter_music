@@ -116,7 +116,9 @@ class PlaySongsModel with ChangeNotifier {
 
   void removeSongInfoById(String songId) {
     _songMap.remove(songId);
-    MusicWrapper.singleton.removeSongInfoById(songId);
+    MusicWrapper.singleton.removeSongInfoById(songId).whenComplete(() {
+      saveCurPlayingList();
+    });
   }
 
   void playOrPauseMusic() {
