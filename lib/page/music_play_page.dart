@@ -1,20 +1,14 @@
-import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
-import 'package:music/api/api_url.dart';
 import 'package:music/components/lyric_widget.dart';
 import 'package:music/components/music_background_widget.dart';
 import 'package:music/components/widget_play_bottom_menu.dart';
 import 'package:music/components/widget_song_progress.dart';
 import 'package:music/entity/bean/music_info.dart';
 import 'package:music/entity/search_song_entity.dart';
-import 'package:music/entity/song_play_entity.dart';
-import 'package:music/generated/json/song_play_entity_helper.dart';
-import 'package:music/http/http_manager.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:music/util/toast_util.dart';
@@ -36,36 +30,19 @@ Future openMusicPlayPageByInfo(
         .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
     return;
   }
-  Response response =
-      await HttpManager.getInstanceByUrl('https://wwwapi.kugou.com/')
-          .get(getSongUrl(info.hash));
-  print("https://wwwapi.kugou.com/" + getSongUrl(info.hash));
-  print(response.toString());
-  if (response == null) {
-    ToastUtil.show(context: context, msg: '网络不给力');
-    return;
-  }
-  SongPlayEntity entity = songPlayEntityFromJson(
-      SongPlayEntity(), json.decode(response.toString()));
-  if (entity.status == 1 && (entity?.data?.playUrl?.isNotEmpty == true)) {
-    final MusicSongInfo musicSongInfo = MusicSongInfo(
-        hash: info.hash,
-        playUrl: entity.data.playUrl,
-        albumId: info.albumId,
-        filename: info.filename.noTag(),
-        albumAudioId: info.albumAudioId.toString(),
-        sizableCover:
-            entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100'),
-        songName: info.songname.noTag(),
-        singerName: info.singername,
-        lyrics: entity.data.lyrics,
-        duration: entity.data.isFreePart == 1 ? 60000 : -1);
-    model.playSong(musicSongInfo);
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
-  } else {
-    ToastUtil.show(context: context, msg: '加载失败');
-  }
+  final MusicSongInfo musicSongInfo = MusicSongInfo(
+      hash: info.hash,
+      albumId: info.albumId,
+      filename: info.filename.noTag(),
+      albumAudioId: info.albumAudioId.toString(),
+      sizableCover: "",
+      songName: info.songname.noTag(),
+      singerName: info.singername,
+      lyrics: "",
+      duration: -1);
+  model.playSong(musicSongInfo);
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
 }
 
 openMusicPlayPage(BuildContext context, {PlaySongsModel model}) {

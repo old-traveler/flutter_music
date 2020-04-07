@@ -2,9 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
+import 'package:music/api/api_url.dart';
 import 'package:music/entity/bean/music_info.dart';
+import 'package:music/entity/song_play_entity.dart';
+import 'package:music/generated/json/song_play_entity_helper.dart';
+import 'package:music/http/http_manager.dart';
+import 'package:music/util/toast_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlaySongsModel with ChangeNotifier {
@@ -13,6 +19,9 @@ class PlaySongsModel with ChangeNotifier {
   MusicState _musicState;
   bool sinkProgress = true;
   int _curPlayMode = MusicPlayMode.REPEAT_MODE_NONE;
+  BuildContext _context;
+
+  PlaySongsModel(this._context);
 
   /// 播放器当前状态信息
   MusicState get musicStateInfo => _musicState;
@@ -42,6 +51,7 @@ class PlaySongsModel with ChangeNotifier {
 
   void init() {
     MusicWrapper.singleton.initState();
+    initPlayUrlProvider();
     MusicWrapper.singleton.getMusicStateStream().listen((data) {
       /// 状态改变和进度变化时才会回调用
       bool needNotify = false;
@@ -174,6 +184,35 @@ class PlaySongsModel with ChangeNotifier {
     int mode = sp.getInt('curPlayMode') ?? MusicPlayMode.REPEAT_MODE_NONE;
     _curPlayMode = mode;
     MusicWrapper.singleton.setPlayMusicMode(mode);
+  }
+
+  void initPlayUrlProvider() {
+    MusicWrapper.singleton.playUrlProvider = playUrlProviderImp;
+  }
+
+  Future<String> playUrlProviderImp(String songId) async {
+    Response response =
+        await HttpManager.getInstanceByUrl('https://wwwapi.kugou.com/')
+            .get(getSongUrl(songId));
+    print("https://wwwapi.kugou.com/" + getSongUrl(songId));
+    print(response.toString());
+    if (response == null) {
+      ToastUtil.show(context: _context, msg: '网络不给力');
+      return null;
+    }
+    SongPlayEntity entity = songPlayEntityFromJson(
+        SongPlayEntity(), json.decode(response.toString()));
+    if (entity.status == 1 && (entity?.data?.playUrl?.isNotEmpty == true)) {
+      _songMap[songId]
+        ..playUrl = entity.data.playUrl
+        ..sizableCover =
+            entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100')
+        ..lyrics = entity.data.lyrics
+        ..duration = entity.data.isFreePart == 1 ? 60000 : -1;
+      return entity.data.playUrl;
+    }
+    ToastUtil.show(context: _context, msg: '加载失败');
+    return null;
   }
 }
 

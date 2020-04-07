@@ -21,7 +21,7 @@ class MusicApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => PlaySongsModel()..init(),
+          create: (_) => PlaySongsModel(context)..init(),
         )
       ],
       child: MaterialApp(
