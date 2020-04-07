@@ -203,13 +203,14 @@ class PlaySongsModel with ChangeNotifier {
     SongPlayEntity entity = songPlayEntityFromJson(
         SongPlayEntity(), json.decode(response.toString()));
     if (entity.status == 1 && (entity?.data?.playUrl?.isNotEmpty == true)) {
+      final duration = entity.data.isFreePart == 1 ? 60000 : entity.data.timelength;
       _songMap[songId]
         ..playUrl = entity.data.playUrl
         ..sizableCover =
             entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100')
         ..lyrics = entity.data.lyrics
-        ..duration = entity.data.isFreePart == 1 ? 60000 : -1;
-      return entity.data.playUrl;
+        ..duration = duration;
+      return '${entity.data.playUrl}@$duration';
     }
     ToastUtil.show(context: _context, msg: '加载失败');
     return null;
