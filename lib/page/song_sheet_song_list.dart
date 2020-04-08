@@ -44,22 +44,26 @@ class SongSheetSongListState
   void buildHeaderWidget(BuildContext context, KgSongSheetListEntity data) {
     addHeaderView('play_all_header', () {
       return Container(
-        height: 50,
+        height: 40,
         color: Colors.white,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            SizedBox(width: 15),
-            Icon(Icons.play_circle_outline, color: Colors.black),
-            SizedBox(width: 10),
-            Text(
-              '播放全部',
-              style: TextStyle(color: Colors.black),
-            )
-          ],
-        ),
+        child: _buildPlayAllHeader()
       );
     });
+  }
+
+  Widget _buildPlayAllHeader(){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        SizedBox(width: 15),
+        Icon(Icons.play_circle_outline, color: Colors.black),
+        SizedBox(width: 10),
+        Text(
+          '播放全部',
+          style: TextStyle(color: Colors.black),
+        )
+      ],
+    );
   }
 
   @override
