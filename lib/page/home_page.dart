@@ -7,6 +7,7 @@ import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
+import 'package:music/page/song_sheet_page.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -151,18 +152,41 @@ class SongSheetCard extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context, SongSheetEntity data) {
     double leadingSize = (MediaQuery.of(context).size.width - 46) / 2;
     return <Widget>[
-      Padding(
-        padding: EdgeInsets.only(left: 18, top: 14),
-        child: Text(
-          data.name,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
+      _buildTitle(data.name, context),
       Container(
           height: leadingSize + 30,
           padding: EdgeInsets.only(left: 18, right: 18, top: 13, bottom: 10),
           child: _buildSongSheetContent(data, leadingSize))
     ];
+  }
+
+  Widget _buildTitle(String title, BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(18, 14, 18, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              child: Container(),
+            ),
+            GestureDetector(
+              child: Text(
+                '歌单广场',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SongSheetPage()));
+              },
+            ),
+            Icon(Icons.keyboard_arrow_right, size: 16, color: Colors.grey)
+          ],
+        ));
   }
 
   Widget _buildSongSheetContent(SongSheetEntity data, double leadingSize) {

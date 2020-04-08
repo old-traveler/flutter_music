@@ -73,7 +73,9 @@ mixin ResponseWorker {
       _streamManager.getStreamControllerByKey(T).addError(dataMap.message);
     } else if (dataMap == null) {
       _sendNoDataState<T>();
-    } else if (dataMap['status'] == 1 || dataMap['code'] == 0) {
+    } else if (dataMap['status'] == 1 ||
+        dataMap['code'] == 0 ||
+        dataMap['plist'] != null) {
       T originData = EntityFactory.generateOBJ<T>(dataMap);
       final resultData =
           dataConvert == null ? originData : dataConvert(originData);
@@ -256,7 +258,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     super.build(context);
     final emptyData =
         (data) => (itemAndHeaderCount + (getListData(data)?.length ?? 0) == 0);
-    return InheritedProvider.value(
+    final contextWidget = InheritedProvider.value(
         value: baseListBloc.streamManager,
         updateShouldNotify: (o, n) => true,
         child: SmartStatePage<D>(
@@ -290,6 +292,12 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
                 child: buildListView(data, itemAndHeaderCount),
               );
             }));
+    return wrapContent(contextWidget);
+  }
+
+  @protected
+  Widget wrapContent(Widget widget) {
+    return widget;
   }
 
   void onRefresh() {

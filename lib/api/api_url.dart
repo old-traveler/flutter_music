@@ -32,10 +32,13 @@ String get songSheetUrl => 'song_sheet.json';
 String get elaborateUrl => 'tag/list?pid=0&apiver=2&plat=0';
 
 /// 播放歌曲api
-String getSongUrl(String hash) =>
-    'yy/index.php?r=play/getdata&hash=$hash';
+String getSongUrl(String hash) => 'yy/index.php?r=play/getdata&hash=$hash';
 
 /// 获取歌手写真
 String getSingerPortrait(
         String albumId, String hash, String filename, String albumAudioId) =>
     'container/v1/image?appid=1005&clientver=10042&author_image_type=4&album_image_type=-3&data=[{"album_id": $albumId,"hash":"$hash","filename":"$filename","album_audio_id": $albumAudioId}]';
+
+String getKgSongSheet(int page) =>
+    'plist/index&json=true&page=$page&pagesize=30';
+
