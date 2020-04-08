@@ -96,6 +96,6 @@ class SongSheetSongListState
   @override
   bool hasNextPage(KgSongSheetListEntity data) {
     final total = data?.xList?.xList?.total ?? 0;
-    return total > max(0, (page - 1) * 30);
+    return total > itemCount;
   }
 }
