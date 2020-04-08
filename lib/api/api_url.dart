@@ -39,6 +39,6 @@ String getSingerPortrait(
         String albumId, String hash, String filename, String albumAudioId) =>
     'container/v1/image?appid=1005&clientver=10042&author_image_type=4&album_image_type=-3&data=[{"album_id": $albumId,"hash":"$hash","filename":"$filename","album_audio_id": $albumAudioId}]';
 
+/// 获取歌单推荐
 String getKgSongSheet(int page) =>
     'plist/index&json=true&page=$page&pagesize=30';
-
