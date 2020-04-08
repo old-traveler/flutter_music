@@ -75,7 +75,8 @@ mixin ResponseWorker {
       _sendNoDataState<T>();
     } else if (dataMap['status'] == 1 ||
         dataMap['code'] == 0 ||
-        dataMap['plist'] != null) {
+        dataMap['plist'] != null ||
+        dataMap['list'] != null) {
       T originData = EntityFactory.generateOBJ<T>(dataMap);
       final resultData =
           dataConvert == null ? originData : dataConvert(originData);
@@ -218,6 +219,8 @@ mixin ListPageWorker on ResponseWorker {
     }
   }
 
+  dynamic get widget => _baseListState.widget;
+
   /// 返回列表加载接口信息
   ListResponseProvider listResponseProvider() {
     return null;
@@ -232,6 +235,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   ListConfig listConfig;
   List<dynamic> dataList = [];
   List<Widget> headerView = [];
+  Map<String, Widget> headerMap = {};
 
   BaseListState(this.baseListBloc, {this.listConfig});
 
@@ -277,10 +281,11 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
                   /// refresh
                   dataList.clear();
                   headerView.clear();
+                  headerMap.clear();
                 }
                 dataList.addAll(list);
               }
-              buildHeaderWidget(context, data, headerView);
+              buildHeaderWidget(context, data);
               return SmartRefresher(
                 enablePullDown: listConfig.enablePullDown,
                 enablePullUp: hasNextPage(data),
@@ -296,7 +301,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   }
 
   @protected
-  Widget wrapContent(Widget widget) {
+  Widget wrapContent(Widget contentWidget) {
     return widget;
   }
 
@@ -309,10 +314,28 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   }
 
   /// 构造Header widget，新增的widget可以添加到[headers]中
-  void buildHeaderWidget(BuildContext context, D data, List<Widget> headers) {}
+  void buildHeaderWidget(BuildContext context, D data) {}
+
+  /// 添加非重复key的header，如果[key]对应的header已经存在则不回调[headerWidgetProvider]
+  /// 注意：此方法应该在[buildHeaderWidget]中调用，否则将不会立即生效
+  void addHeaderView(String key, Widget Function() headerWidgetProvider) {
+    assert(headerWidgetProvider != null);
+    if (containsHeader(key)) {
+      return;
+    }
+    final header = headerWidgetProvider();
+    headerMap[key] = header;
+    headerView.add(header);
+  }
+
+  bool containsHeader(String key) {
+    return headerMap.containsKey(key);
+  }
 
   /// 获取是否有下一页数据，由子类覆盖实现
   bool hasNextPage(D data);
+
+  int get page => baseListBloc._page;
 
   /// 构造中心列表控件，子类可覆盖此方法，定义其他列表控件
   /// 注意定义时需要制定itemBuilder为父类的itemBuilder
@@ -347,6 +370,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     baseListBloc.disposeAll();
     headerView.clear();
     dataList.clear();
+    headerMap.clear();
   }
 
   @override

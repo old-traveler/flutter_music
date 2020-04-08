@@ -4,6 +4,7 @@ import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/kg_song_sheet_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/page/song_sheet_song_list.dart';
 
 class SongSheetPage extends StatefulWidget {
   @override
@@ -21,12 +22,12 @@ class SongSheetState extends BaseListState<KgSongSheetEntity, SongSheetPage> {
   SongSheetState(ListPageWorker baseListBloc) : super(baseListBloc);
 
   @override
-  Widget wrapContent(Widget widget) {
+  Widget wrapContent(Widget contentWidget) {
     return Scaffold(
       appBar: AppBar(
         title: Text('歌单广场'),
       ),
-      body: widget,
+      body: contentWidget,
     );
   }
 
@@ -34,7 +35,17 @@ class SongSheetState extends BaseListState<KgSongSheetEntity, SongSheetPage> {
   Widget buildItem(BuildContext context, data, int index) {
     final KgSongSheetPlistListInfo itemData = data;
     return GestureDetector(
-        child: _buildItemWidget(itemData), onTap: () => () {});
+        child: _buildItemWidget(itemData), onTap: () => _onItemTap(itemData));
+  }
+
+  void _onItemTap(KgSongSheetPlistListInfo itemData) {
+    final router = MaterialPageRoute(builder: (context) {
+      return SongSheetSongListPage(
+        specialId: itemData.specialid.toString(),
+        title: itemData.specialname,
+      );
+    });
+    Navigator.of(context).push(router);
   }
 
   Widget _buildItemWidget(KgSongSheetPlistListInfo itemData) {

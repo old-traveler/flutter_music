@@ -22,10 +22,9 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
   HotSingerState(ListPageWorker baseListBloc) : super(baseListBloc);
 
   @override
-  void buildHeaderWidget(
-      BuildContext context, HotSingerEntity data, List<Widget> headers) {
-    if ((data?.data?.info?.isNotEmpty ?? false) && headers.length == 0) {
-      headers.add(_buildHeaderView(data.data.info[0]));
+  void buildHeaderWidget(BuildContext context, HotSingerEntity data) {
+    if ((data?.data?.info?.isNotEmpty ?? false)) {
+      addHeaderView('rank_header', () => _buildHeaderView(data.data.info[0]));
     }
   }
 

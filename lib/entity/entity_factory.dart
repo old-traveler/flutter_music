@@ -1,5 +1,6 @@
 import 'package:music/entity/hot_singer_entity.dart';
 import 'package:music/entity/kg_song_sheet_entity.dart';
+import 'package:music/entity/kg_song_sheet_list_entity.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/entity/song_list_entity.dart';
 import 'package:music/entity/song_sheet_entity.dart';
@@ -7,6 +8,7 @@ import 'package:music/entity/station_entity.dart';
 import 'package:music/entity/user_entity.dart';
 import 'package:music/generated/json/hot_singer_entity_helper.dart';
 import 'package:music/generated/json/kg_song_sheet_entity_helper.dart';
+import 'package:music/generated/json/kg_song_sheet_list_entity_helper.dart';
 import 'package:music/generated/json/song_list_entity_helper.dart';
 import 'package:music/generated/json/user_entity_helper.dart';
 import 'association_entity.dart';
@@ -46,6 +48,8 @@ class EntityFactory {
       return userEntityFromJson(UserEntity(), json);
     } else if (T.toString() == 'KgSongSheetEntity') {
       return kgSongSheetEntityFromJson(KgSongSheetEntity(), json);
+    } else if (T.toString() == 'KgSongSheetListEntity') {
+      return kgSongSheetListEntityFromJson(KgSongSheetListEntity(), json);
     } else {
       return null;
     }

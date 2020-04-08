@@ -42,3 +42,6 @@ String getSingerPortrait(
 /// 获取歌单推荐
 String getKgSongSheet(int page) =>
     'plist/index&json=true&page=$page&pagesize=30';
+
+String getKgSongSheetList(String id, int page) =>
+    'plist/list/$id?json=true&page=$page';
