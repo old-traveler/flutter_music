@@ -4,6 +4,7 @@ import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/kg_song_sheet_list_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/page/music_play_page.dart';
 
 class SongSheetSongListPage extends StatefulWidget {
   final String specialId;
@@ -79,8 +80,21 @@ class SongSheetSongListState
       child: ListTile(
         title: Text(songName),
         subtitle: Text(singerName),
+        onTap: () => openMusicPlayPage(itemData, singerName, songName),
       ),
     );
+  }
+
+  void openMusicPlayPage(KgSongSheetListListListInfo itemData,
+      String singerName, String songName) {
+    openMusicPlayPageByInfo(
+        context: context,
+        songId: itemData.hash,
+        albumId: itemData.albumId,
+        filename: itemData.filename,
+        albumAudioId: itemData.albumAudioId.toString(),
+        songName: songName,
+        singerName: singerName);
   }
 
   @override
