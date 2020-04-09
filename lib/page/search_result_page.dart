@@ -63,13 +63,24 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
   Widget _buildItemWidget(SearchSongDataInfo itemData) {
     return ListTile(
         onTap: () {
-          openMusicPlayPageByInfo(context, itemData);
+          openMusicPlayPage(context, itemData);
         },
         contentPadding: EdgeInsets.only(left: 25),
         title: Text(itemData.songname.noTag(),
             maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Text(itemData.singername.noTag()),
         trailing: _buildTrailing());
+  }
+
+  void openMusicPlayPage(BuildContext context, SearchSongDataInfo itemData) {
+    openMusicPlayPageByInfo(
+        context: context,
+        songId: itemData.hash,
+        albumId: itemData.albumId,
+        filename: itemData.filename,
+        albumAudioId: itemData.albumAudioId.toString(),
+        songName: itemData.songname,
+        singerName: itemData.singername);
   }
 
   Widget _buildTrailing() {

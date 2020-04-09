@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
@@ -44,14 +42,11 @@ class SongSheetSongListState
   void buildHeaderWidget(BuildContext context, KgSongSheetListEntity data) {
     addHeaderView('play_all_header', () {
       return Container(
-        height: 40,
-        color: Colors.white,
-        child: _buildPlayAllHeader()
-      );
+          height: 40, color: Colors.white, child: _buildPlayAllHeader());
     });
   }
 
-  Widget _buildPlayAllHeader(){
+  Widget _buildPlayAllHeader() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[

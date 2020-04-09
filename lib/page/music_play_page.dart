@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:music/components/music_background_widget.dart';
 import 'package:music/components/widget_play_bottom_menu.dart';
 import 'package:music/components/widget_song_progress.dart';
 import 'package:music/entity/bean/music_info.dart';
-import 'package:music/entity/search_song_entity.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:music/util/toast_util.dart';
@@ -22,22 +20,28 @@ extension SongName on String {
   }
 }
 
-Future openMusicPlayPageByInfo(
-    BuildContext context, SearchSongDataInfo info) async {
+void openMusicPlayPageByInfo(
+    {BuildContext context,
+    String songId,
+    String albumId,
+    String filename,
+    String albumAudioId,
+    String songName,
+    String singerName}) {
   final model = Provider.of<PlaySongsModel>(context, listen: false);
-  if (model.playSongById(info.hash)) {
+  if (model.playSongById(songId)) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
     return;
   }
   final MusicSongInfo musicSongInfo = MusicSongInfo(
-      hash: info.hash,
-      albumId: info.albumId,
-      filename: info.filename.noTag(),
-      albumAudioId: info.albumAudioId.toString(),
+      hash: songId,
+      albumId: albumId,
+      filename: filename.noTag(),
+      albumAudioId: albumAudioId,
       sizableCover: "",
-      songName: info.songname.noTag(),
-      singerName: info.singername,
+      songName: songName.noTag(),
+      singerName: singerName,
       lyrics: "",
       duration: -1);
   model.playSong(musicSongInfo);
