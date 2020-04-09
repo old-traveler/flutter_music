@@ -28,12 +28,6 @@ void openMusicPlayPageByInfo(
     String albumAudioId,
     String songName,
     String singerName}) {
-  final model = Provider.of<PlaySongsModel>(context, listen: false);
-  if (model.playSongById(songId)) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
-    return;
-  }
   final MusicSongInfo musicSongInfo = MusicSongInfo(
       hash: songId,
       albumId: albumId,
@@ -44,7 +38,14 @@ void openMusicPlayPageByInfo(
       singerName: singerName,
       lyrics: "",
       duration: -1);
-  model.playSong(musicSongInfo);
+  openMusicByMusicSongInfo(context: context, musicSongInfo: musicSongInfo);
+}
+
+openMusicByMusicSongInfo({BuildContext context, MusicSongInfo musicSongInfo}) {
+  final model = Provider.of<PlaySongsModel>(context, listen: false);
+  if (!model.playSongById(musicSongInfo.hash)) {
+    model.playSong(musicSongInfo);
+  }
   Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
 }

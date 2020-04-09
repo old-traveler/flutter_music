@@ -166,6 +166,16 @@ class PlaySongsModel with ChangeNotifier {
     sp.setInt('curPlayMode', mode);
   }
 
+  void playSongList({List<MusicSongInfo> info, int index = 0}) {
+    List<SongInfo> songInfoList = [];
+    for (var value in info) {
+      songInfoList.add(value.toSongInfo());
+      _songMap[value.hash] = value;
+    }
+    MusicWrapper.singleton.appendMusicList(list: songInfoList, index: index);
+    _needUpdatePlayList = true;
+  }
+
   Future<void> initPlayList() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String playListJson = sp.getString('playList');

@@ -193,7 +193,7 @@ mixin ListPageWorker on ResponseWorker {
     dealResponse<T>(
         responseProvider: () {
           return listResponseProvider(
-              _page, _baseListState.dataList?.length ?? 0);
+              _page, _baseListState._dataList?.length ?? 0);
         },
         needLoading:
             !(_refreshController.isRefresh || _refreshController.isLoading),
@@ -233,7 +233,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   final ListPageWorker baseListBloc;
   RefreshController refreshController = RefreshController();
   ListConfig listConfig;
-  List<dynamic> dataList = [];
+  List<dynamic> _dataList = [];
   List<Widget> headerView = [];
   Map<String, Widget> headerMap = {};
 
@@ -244,7 +244,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
       return headerView[index];
     }
     int itemIndex = index - headerView.length;
-    return buildItem(context, dataList[itemIndex], itemIndex);
+    return buildItem(context, _dataList[itemIndex], itemIndex);
   }
 
   @override
@@ -279,11 +279,11 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
               if (list?.isNotEmpty ?? false) {
                 if (baseListBloc._page == 2) {
                   /// refresh
-                  dataList.clear();
+                  _dataList.clear();
                   headerView.clear();
                   headerMap.clear();
                 }
-                dataList.addAll(list);
+                _dataList.addAll(list);
               }
               buildHeaderWidget(context, data);
               return SmartRefresher(
@@ -342,7 +342,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   Widget buildListView(D data, int itemAndHeaderCount) {
     return ListView.builder(
       itemBuilder: itemBuilder,
-      itemCount: (dataList.length + headerView.length),
+      itemCount: (_dataList.length + headerView.length),
     );
   }
 
@@ -357,11 +357,13 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
   /// 定义从data中获取list的映射关系，由子类实现
   List<dynamic> getListData(D data);
 
+  List<dynamic> get dataList => _dataList;
+
   /// 获取item和header的总数量
-  int get itemAndHeaderCount => (dataList.length + headerView.length);
+  int get itemAndHeaderCount => (_dataList.length + headerView.length);
 
   /// 获取item的总数量
-  int get itemCount => dataList.length;
+  int get itemCount => _dataList.length;
 
   @override
   void dispose() {
@@ -369,7 +371,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
     refreshController.dispose();
     baseListBloc.disposeAll();
     headerView.clear();
-    dataList.clear();
+    _dataList.clear();
     headerMap.clear();
   }
 
