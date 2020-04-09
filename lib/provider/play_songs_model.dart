@@ -34,6 +34,8 @@ class PlaySongsModel with ChangeNotifier {
 
   int get curPlayMode => _curPlayMode;
 
+  bool _needUpdatePlayList = false;
+
   Future<dynamic> get playListInfo async {
     final songIdList = await MusicWrapper.singleton.getPlayListSongId();
     return songIdList
@@ -62,6 +64,9 @@ class PlaySongsModel with ChangeNotifier {
         print("切换歌曲" + _curSongInfo.songName);
         saveCurPlayingIndex(_curSongInfo.hash);
         needNotify = true;
+        if (_needUpdatePlayList) {
+          saveCurPlayingList();
+        }
       }
 
       /// 状态发生改变，切不是因为网络缓冲原因时通知更新
@@ -141,6 +146,7 @@ class PlaySongsModel with ChangeNotifier {
   }
 
   void saveCurPlayingList() async {
+    _needUpdatePlayList = false;
     SharedPreferences sp = await SharedPreferences.getInstance();
     final List<MusicSongInfo> list = await playListInfo;
     Map<String, dynamic> data = {
@@ -203,13 +209,15 @@ class PlaySongsModel with ChangeNotifier {
     SongPlayEntity entity = songPlayEntityFromJson(
         SongPlayEntity(), json.decode(response.toString()));
     if (entity.status == 1 && (entity?.data?.playUrl?.isNotEmpty == true)) {
-      final duration = entity.data.isFreePart == 1 ? 60000 : entity.data.timelength;
+      final duration =
+          entity.data.isFreePart == 1 ? 60000 : entity.data.timelength;
       _songMap[songId]
         ..playUrl = entity.data.playUrl
         ..sizableCover =
             entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100')
         ..lyrics = entity.data.lyrics
         ..duration = duration;
+      _needUpdatePlayList = true;
       return '${entity.data.playUrl}@$duration';
     }
     ToastUtil.show(context: _context, msg: '加载失败');
