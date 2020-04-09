@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
-import 'package:music/components/music_home_widget.dart';
+import 'package:music/components/BlurRectWidget.dart';
 import 'package:music/entity/bean/music_info.dart';
 import 'package:music/entity/kg_song_sheet_list_entity.dart';
 import 'package:music/http/http_manager.dart';
@@ -13,8 +15,19 @@ import 'package:provider/provider.dart';
 class SongSheetSongListPage extends StatefulWidget {
   final String specialId;
   final String title;
+  final String imageUrl;
+  final String intro;
+  final String username;
+  final String userAvatar;
 
-  const SongSheetSongListPage({Key key, this.specialId, this.title})
+  const SongSheetSongListPage(
+      {Key key,
+      this.specialId,
+      this.title,
+      this.imageUrl,
+      this.intro,
+      this.userAvatar,
+      this.username})
       : super(key: key);
 
   @override
@@ -31,19 +44,89 @@ class SongSheetSongListBloc with ResponseWorker, ListPageWorker {
 
 class SongSheetSongListState
     extends BaseListState<KgSongSheetListEntity, SongSheetSongListPage> {
-  SongSheetSongListState(ListPageWorker baseListBloc) : super(baseListBloc);
+  SongSheetSongListState(ListPageWorker baseListBloc)
+      : super(baseListBloc, listConfig: ListConfig(enablePullDown: false));
 
   @override
   Widget wrapContent(Widget contentWidget) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          MusicHomeWidget(),
-          SizedBox(width: 10),
-        ],
-      ),
-      body: contentWidget,
+        body: NestedScrollView(
+            headerSliverBuilder: _sliverBuilder, body: contentWidget));
+  }
+
+  List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+    return <Widget>[
+      SliverAppBar(
+          //标题居中
+          expandedHeight: 250.0,
+          floating: false,
+          //不随着滑动隐藏标题
+          pinned: true,
+          forceElevated: innerBoxIsScrolled,
+          title: Text(widget.title),
+          //固定在顶部
+          flexibleSpace: _flexibleSpace()),
+    ];
+  }
+
+  Widget _flexibleSpace() {
+    return FlexibleSpaceBar(
+        background: Stack(
+      children: <Widget>[
+        Image.network(
+          widget.imageUrl,
+          fit: BoxFit.fitWidth,
+          width: MediaQuery.of(context).size.width,
+        ),
+        BlurRectWidget(
+          child: Container(),
+        ),
+        Positioned(bottom: 20, child: _spaceContent())
+      ],
+    ));
+  }
+
+  Widget _spaceContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _userInfoWidget(),
+        SizedBox(height: 10),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            widget.intro,
+            style: TextStyle(color: Colors.white),
+            maxLines: 6,
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _userInfoWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+          width: 15,
+        ),
+        CircleAvatar(
+          radius: 14.0,
+          backgroundImage: NetworkImage(widget.userAvatar, scale: 2),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Text(
+          widget.username,
+          style: TextStyle(color: Color(0xffD7AF77), fontSize: 15),
+        )
+      ],
     );
   }
 

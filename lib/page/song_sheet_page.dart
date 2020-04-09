@@ -43,6 +43,10 @@ class SongSheetState extends BaseListState<KgSongSheetEntity, SongSheetPage> {
       return SongSheetSongListPage(
         specialId: itemData.specialid.toString(),
         title: itemData.specialname,
+        intro: itemData.intro,
+        imageUrl: itemData.imgurl.replaceAll('{size}', '150'),
+        userAvatar: itemData.userAvatar,
+        username: itemData.username,
       );
     });
     Navigator.of(context).push(router);
