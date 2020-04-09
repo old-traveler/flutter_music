@@ -167,6 +167,8 @@ class PlaySongsModel with ChangeNotifier {
   }
 
   void playSongList({List<MusicSongInfo> info, int index = 0}) {
+    info.removeWhere((data) => _songMap.containsKey(data.hash));
+    if (info.isEmpty) return;
     List<SongInfo> songInfoList = [];
     for (var value in info) {
       songInfoList.add(value.toSongInfo());

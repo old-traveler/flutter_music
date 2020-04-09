@@ -46,21 +46,24 @@ class SongSheetSongListState
   void buildHeaderWidget(BuildContext context, KgSongSheetListEntity data) {
     addHeaderView('play_all_header', () {
       return Container(
-          height: 40, color: Colors.white, child: _buildPlayAllHeader());
+          height: 40,
+          color: Colors.white,
+          child: GestureDetector(
+            child: _buildPlayAllHeader(),
+            onTap: _onPlayAllButtonTap,
+          ));
     });
   }
 
   Widget _buildPlayAllHeader() {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         SizedBox(width: 15),
         Icon(Icons.play_circle_outline, color: Colors.black),
         SizedBox(width: 10),
-        GestureDetector(
-          child: Text('播放全部', style: TextStyle(color: Colors.black)),
-          onTap: _onPlayAllButtonTap,
-        )
+        Text('播放全部', style: TextStyle(color: Colors.black)),
       ],
     );
   }
