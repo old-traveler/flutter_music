@@ -302,7 +302,7 @@ abstract class BaseListState<D, W extends StatefulWidget> extends State<W>
 
   @protected
   Widget wrapContent(Widget contentWidget) {
-    return widget;
+    return contentWidget;
   }
 
   void onRefresh() {

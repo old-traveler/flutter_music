@@ -124,7 +124,7 @@ class SongSheetSongListState
         ),
         Text(
           widget.username,
-          style: TextStyle(color: Color(0xffD7AF77), fontSize: 15),
+          style: TextStyle(color: Color(0xffD7AF77), fontSize: 16),
         )
       ],
     );
