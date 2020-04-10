@@ -10,6 +10,13 @@ import 'package:music/page/music_play_page.dart';
 import 'package:music/provider/music_record_model.dart';
 import 'package:provider/provider.dart';
 
+openSearchResultPage(BuildContext context, String keyWord) {
+  Provider.of<MusicRecordModel>(context, listen: false)
+      .addSearchHistory(keyWord);
+  Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => SearchResultPage(keyWord: keyWord)));
+}
+
 class SearchResultPage extends StatefulWidget {
   final String keyWord;
 
@@ -36,8 +43,6 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
   void initState() {
     super.initState();
     _fetchSongInfoByKeyWord();
-    Provider.of<MusicRecordModel>(context, listen: false)
-        .addSearchHistory(widget.keyWord);
   }
 
   @override

@@ -104,13 +104,7 @@ class SearchPageState extends State<SearchPage> {
             contentPadding: EdgeInsets.only(left: 5, top: 10, bottom: 10),
             border: InputBorder.none,
             hintText: '请输入歌名'),
-        onSubmitted: (keyword) {
-          /// 点击回车进入搜索结果页
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SearchResultPage(
-                    keyWord: keyword,
-                  )));
-        },
+        onSubmitted: (keyWord) => openSearchResultPage(context, keyWord),
       ),
     );
   }
@@ -137,10 +131,7 @@ class AssociationWidget extends StatelessWidget {
       contentPadding: EdgeInsets.only(left: 20),
       leading: Icon(Icons.search),
       title: Text(itemData.keyword),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SearchResultPage(keyWord: itemData.keyword)));
-      },
+      onTap: () => openSearchResultPage(context, itemData.keyword),
     );
   }
 }
@@ -182,12 +173,7 @@ class HotSearchWidget extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 15)),
         labelPadding: EdgeInsets.symmetric(horizontal: 6),
       ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SearchResultPage(
-                  keyWord: item.keyword,
-                )));
-      },
+      onTap: () => openSearchResultPage(context, item.keyword),
     );
   }
 }
@@ -253,12 +239,7 @@ class SearchHistoryState extends State<SearchHistoryWidget> {
         deleteIcon: Icon(Icons.delete, color: Colors.white, size: 18),
         onDeleted: () => model.removeSearchHistory(keyWord),
       ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SearchResultPage(
-                  keyWord: keyWord,
-                )));
-      },
+      onTap: () => openSearchResultPage(context, keyWord),
     );
   }
 }
