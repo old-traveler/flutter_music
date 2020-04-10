@@ -156,7 +156,13 @@ class SongSheetCard extends StatelessWidget {
       Container(
           height: leadingSize + 30,
           padding: EdgeInsets.only(left: 18, right: 18, top: 13, bottom: 10),
-          child: _buildSongSheetContent(data, leadingSize))
+          child: GestureDetector(
+            child: _buildSongSheetContent(data, leadingSize),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SongSheetPage()));
+            },
+          ))
     ];
   }
 
