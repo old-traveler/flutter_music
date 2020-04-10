@@ -2,6 +2,13 @@
 
 A new Flutter application.
 
+## TODO
+
+* SingerDetail
+* Router url
+* CacheImage
+* README
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
