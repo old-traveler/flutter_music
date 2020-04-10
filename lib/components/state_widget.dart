@@ -56,22 +56,26 @@ class NoNetWidget extends StatelessWidget {
 
 class NoDataWidget extends StatelessWidget {
   final String _title;
+  final double height;
+  final double top;
+  final double size;
 
-  NoDataWidget(this._title);
+  NoDataWidget(this._title, {this.height,this.top,this.size});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: height,
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 50,
+              height: top,
             ),
             Image.asset(
               'images/no_data.png',
-              width: 220,
-              height: 220,
+              width: size,
+              height: size,
             ),
             SizedBox(
               height: 10,

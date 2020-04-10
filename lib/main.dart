@@ -7,6 +7,7 @@ import 'package:music/page/live_page.dart';
 import 'package:music/page/my_profile_page.dart';
 import 'package:music/page/search_page.dart';
 import 'package:music/page/splash_page.dart';
+import 'package:music/provider/music_record_model.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,10 @@ class MusicApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => PlaySongsModel(context)..init(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => MusicRecordModel(),
+        ),
       ],
       child: MaterialApp(
           title: 'Music',

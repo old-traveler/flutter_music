@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music/provider/music_record_model.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class SplashState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _goToHomePage();
+    _initAppConfigInfo();
   }
 
   @override
@@ -47,16 +48,24 @@ class SplashState extends State<SplashPage> {
     );
   }
 
-  void _goToHomePage() {
-    Provider.of<PlaySongsModel>(context, listen: false)
+  void _initAppConfigInfo() {
+    PlaySongsModel playSongsModel =
+        Provider.of<PlaySongsModel>(context, listen: false);
+    MusicRecordModel musicRecordModel =
+        Provider.of<MusicRecordModel>(context, listen: false);
+    playSongsModel
         .initPlayList()
-        .then((value) {
-      Future.delayed(Duration(seconds: 1)).then((value) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) {
-          return MainPage();
-        }), (router) => router == null);
-      });
+        .then((v) => musicRecordModel.initSearchHistory())
+        .then(_goToHomePage);
+  }
+
+  Future _goToHomePage(v) {
+    print('_goToHomePage');
+    return Future.delayed(Duration(seconds: 1)).then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) {
+        return MainPage();
+      }), (router) => router == null);
     });
   }
 }

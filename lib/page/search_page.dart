@@ -6,6 +6,7 @@ import 'package:music/components/state_widget.dart';
 import 'package:music/entity/association_entity.dart';
 import 'package:music/entity/hot_search_entity.dart';
 import 'package:music/page/search_result_page.dart';
+import 'package:music/provider/music_record_model.dart';
 import 'package:provider/provider.dart';
 
 /// 搜索页面
@@ -42,8 +43,15 @@ class SearchPageState extends State<SearchPage> {
           appBar: AppBar(centerTitle: true, title: _buildSearchBar()),
           body: _input?.isNotEmpty ?? false
               ? AssociationWidget()
-              : HotSearchWidget(),
+              : _buildHotSearchAndHistory(),
         ));
+  }
+
+  Widget _buildHotSearchAndHistory() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[HotSearchWidget(), SearchHistoryWidget()],
+    );
   }
 
   Widget _buildSearchBar() {
@@ -178,6 +186,77 @@ class HotSearchWidget extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => SearchResultPage(
                   keyWord: item.keyword,
+                )));
+      },
+    );
+  }
+}
+
+class SearchHistoryWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => SearchHistoryState();
+}
+
+class SearchHistoryState extends State<SearchHistoryWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MusicRecordModel>(
+      builder: (context, model, child) {
+        return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 10),
+                _buildTitle(),
+                SizedBox(height: 5),
+                _buildHistoryBody(model),
+              ],
+            ));
+      },
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: EdgeInsets.only(left: 2),
+      child: Text(
+        "搜索历史",
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildHistoryBody(MusicRecordModel model) {
+    final historyList = model.searchHistory;
+    if (historyList.isEmpty) {
+      return NoDataWidget('暂无历史搜索记录', top: 10, size: 150);
+    }
+    List<Widget> widgetList = [];
+    for (var value in historyList) {
+      widgetList.add(_buildHistoryItem(value, model));
+    }
+    return Wrap(
+      spacing: 8.0,
+      children: widgetList,
+    );
+  }
+
+  Widget _buildHistoryItem(String keyWord, MusicRecordModel model) {
+    return GestureDetector(
+      child: Chip(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+        backgroundColor: Theme.of(context).accentColor,
+        label:
+            Text(keyWord, style: TextStyle(color: Colors.white, fontSize: 15)),
+        labelPadding: EdgeInsets.symmetric(horizontal: 6),
+        deleteIcon: Icon(Icons.delete, color: Colors.white),
+        onDeleted: () => model.removeSearchHistory(keyWord),
+      ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => SearchResultPage(
+                  keyWord: keyWord,
                 )));
       },
     );
