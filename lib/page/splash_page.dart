@@ -60,7 +60,6 @@ class SplashState extends State<SplashPage> {
   }
 
   Future _goToHomePage(v) {
-    print('_goToHomePage');
     return Future.delayed(Duration(seconds: 1)).then((value) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) {

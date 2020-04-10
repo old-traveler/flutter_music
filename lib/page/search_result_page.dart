@@ -7,6 +7,7 @@ import 'package:music/components/state_widget.dart';
 import 'package:music/entity/search_song_entity.dart';
 import 'package:music/http/http_manager.dart';
 import 'package:music/page/music_play_page.dart';
+import 'package:music/provider/music_record_model.dart';
 import 'package:provider/provider.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -35,6 +36,8 @@ class SearchResultState extends State<SearchResultPage> with ResponseWorker {
   void initState() {
     super.initState();
     _fetchSongInfoByKeyWord();
+    Provider.of<MusicRecordModel>(context, listen: false)
+        .addSearchHistory(widget.keyWord);
   }
 
   @override

@@ -202,7 +202,6 @@ class PlaySongsModel with ChangeNotifier {
     int mode = sp.getInt('curPlayMode') ?? MusicPlayMode.REPEAT_MODE_NONE;
     _curPlayMode = mode;
     MusicWrapper.singleton.setPlayMusicMode(mode);
-    print('initPlayList');
   }
 
   void initPlayUrlProvider() {

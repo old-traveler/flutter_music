@@ -8,7 +8,6 @@ class MusicRecordModel with ChangeNotifier {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _searchHistory = sp.getStringList('_searchHistory') ?? [];
     notifyListeners();
-    print('initSearchHistory');
   }
 
   List<String> get searchHistory => _searchHistory;

@@ -68,14 +68,15 @@ class NoDataWidget extends StatelessWidget {
         height: height,
         alignment: Alignment.center,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             SizedBox(
-              height: top,
+              height: top ?? 50,
             ),
             Image.asset(
               'images/no_data.png',
-              width: size,
-              height: size,
+              width: size ?? 200,
+              height: size ?? 200,
             ),
             SizedBox(
               height: 10,

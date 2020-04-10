@@ -245,12 +245,12 @@ class SearchHistoryState extends State<SearchHistoryWidget> {
   Widget _buildHistoryItem(String keyWord, MusicRecordModel model) {
     return GestureDetector(
       child: Chip(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         backgroundColor: Theme.of(context).accentColor,
         label:
             Text(keyWord, style: TextStyle(color: Colors.white, fontSize: 15)),
-        labelPadding: EdgeInsets.symmetric(horizontal: 6),
-        deleteIcon: Icon(Icons.delete, color: Colors.white),
+        labelPadding: EdgeInsets.only(left: 7),
+        deleteIcon: Icon(Icons.delete, color: Colors.white, size: 18),
         onDeleted: () => model.removeSearchHistory(keyWord),
       ),
       onTap: () {
