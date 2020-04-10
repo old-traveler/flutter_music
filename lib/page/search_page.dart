@@ -38,14 +38,12 @@ class SearchPageState extends State<SearchPage> {
     return InheritedProvider.value(
         value: _searchPageBloc.streamManager,
         updateShouldNotify: (old, newManager) => false,
-        child: Container(
-            color: Colors.white,
-            child: Scaffold(
-              appBar: AppBar(centerTitle: true, title: _buildSearchBar()),
-              body: _input?.isNotEmpty ?? false
-                  ? AssociationWidget()
-                  : HotSearchWidget(),
-            )));
+        child: Scaffold(
+          appBar: AppBar(centerTitle: true, title: _buildSearchBar()),
+          body: _input?.isNotEmpty ?? false
+              ? AssociationWidget()
+              : HotSearchWidget(),
+        ));
   }
 
   Widget _buildSearchBar() {
@@ -146,17 +144,7 @@ class HotSearchWidget extends StatelessWidget {
     return SmartStatePage<HotSearchEntity>(builder: (context, data) {
       List<Widget> widgets = List();
       data.data.info?.forEach((item) {
-        widgets.add(Chip(
-          backgroundColor: Theme.of(context).accentColor,
-          avatar: CircleAvatar(
-              backgroundColor: Colors.redAccent,
-              child: Icon(Icons.whatshot, color: Colors.white)),
-          label: Text(
-            item.keyword,
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-          labelPadding: EdgeInsets.only(left: 5, right: 10, top: 1, bottom: 1),
-        ));
+        widgets.add(_buildHotSearchItem(context, item));
       });
       return Padding(
           padding: EdgeInsets.only(left: 15, top: 15, right: 20),
@@ -175,5 +163,23 @@ class HotSearchWidget extends StatelessWidget {
             ],
           ));
     });
+  }
+
+  Widget _buildHotSearchItem(BuildContext context, HotSearchDataInfo item) {
+    return GestureDetector(
+      child: Chip(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+        backgroundColor: Theme.of(context).accentColor,
+        label: Text(item.keyword,
+            style: TextStyle(color: Colors.white, fontSize: 15)),
+        labelPadding: EdgeInsets.symmetric(horizontal: 6),
+      ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => SearchResultPage(
+                  keyWord: item.keyword,
+                )));
+      },
+    );
   }
 }
