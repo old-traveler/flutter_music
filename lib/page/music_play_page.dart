@@ -27,7 +27,7 @@ void openMusicPlayPageByInfo(
     String filename,
     String albumAudioId,
     String songName,
-      String authorId,
+    String authorId,
     String singerName}) {
   final MusicSongInfo musicSongInfo = MusicSongInfo(
       hash: songId,
@@ -36,7 +36,7 @@ void openMusicPlayPageByInfo(
       albumAudioId: albumAudioId,
       sizableCover: "",
       songName: songName.noTag(),
-      singerName: singerName,
+      singerName: singerName.noTag(),
       lyrics: "",
       authorId: authorId,
       duration: -1);

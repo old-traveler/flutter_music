@@ -103,7 +103,6 @@ class SingerSongListState
         singerName: nameInfo.key,
         songName: nameInfo.value,
         lyrics: "",
-        authorId: itemData?.composerInfo[0]?.authorId?.toString(),
         duration: -1);
   }
 

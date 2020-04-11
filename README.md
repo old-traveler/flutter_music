@@ -4,7 +4,6 @@ A new Flutter application.
 
 ## TODO
 
-* SingerDetail
 * Router url
 * CacheImage
 * README
