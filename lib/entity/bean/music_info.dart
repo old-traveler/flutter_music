@@ -12,6 +12,7 @@ class MusicSongInfo {
   String singerName;
   String lyrics;
   int duration;
+  String authorId;
 
   MusicSongInfo(
       {this.hash,
@@ -24,6 +25,7 @@ class MusicSongInfo {
       this.songName,
       this.singerName,
       this.lyrics,
+      this.authorId,
       this.duration = -1});
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/components/widget_img_menu.dart';
 import 'package:music/entity/bean/music_info.dart';
+import 'package:music/page/singer_song_list_page.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
@@ -166,24 +167,66 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
   }
 
   Widget _buildTrailing(MusicSongInfo info, List<MusicSongInfo> playList) {
-    bool canDelete = (info != model.curSongInfo || playList.length > 1);
+    bool isPlaying =
+        model.curSongInfo?.hash == info.hash && PlaySongsModel.isPlaying(model);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        model.curSongInfo?.hash == info.hash && PlaySongsModel.isPlaying(model)
-            ? Icon(Icons.pause_circle_outline, size: 20)
-            : Icon(Icons.play_circle_outline, size: 20),
-        canDelete ? SizedBox(width: 5) : Container(),
-        canDelete
-            ? GestureDetector(
-                child: Icon(Icons.delete_outline, size: 22),
-                onTap: () {
-                  setState(() => playList.remove(info));
-                  model.removeSongInfoById(info.hash);
-                },
-              )
-            : Container()
+        isPlaying ? Icon(Icons.pause_circle_outline, size: 20) : Container(),
+        _buildPopTrailing(info, playList, isPlaying)
       ],
+    );
+  }
+
+  Widget _buildPopTrailing(
+      MusicSongInfo info, List<MusicSongInfo> playList, bool isPlaying) {
+    bool canDelete = (info != model.curSongInfo || playList.length > 1);
+    final popupList = <PopupMenuEntry<String>>[
+      PopupMenuItem<String>(
+        value: "play",
+        child: ListTile(
+          leading: Icon(Icons.play_circle_outline),
+          title: Text(isPlaying ? '暂停' : '播放'),
+        ),
+      ),
+    ];
+    if (info?.authorId?.isNotEmpty == true) {
+      popupList.add(PopupMenuItem<String>(
+        value: "singer",
+        child: ListTile(
+          leading: Icon(Icons.person_outline),
+          title: Text('歌手'),
+        ),
+      ));
+    }
+    if (canDelete) {
+      popupList.add(PopupMenuDivider());
+      popupList.add(PopupMenuItem<String>(
+        value: "remove",
+        child: ListTile(
+          leading: Icon(Icons.delete),
+          title: Text('删除'),
+        ),
+      ));
+    }
+
+    return PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      onSelected: (value) {
+        if (value == 'remove') {
+          setState(() => playList.remove(info));
+          model.removeSongInfoById(info.hash);
+        } else if (value == 'singer') {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SingerSongListPage(
+                    singerId: info.authorId,
+                    singerName: info.singerName,
+                  )));
+        } else if (value == 'play') {
+          _onItemTap(info);
+        }
+      },
+      itemBuilder: (context) => popupList,
     );
   }
 

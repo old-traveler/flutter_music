@@ -228,6 +228,7 @@ class PlaySongsModel with ChangeNotifier {
         ..sizableCover =
             entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100')
         ..lyrics = entity.data.lyrics
+        ..authorId = entity.data.authorId
         ..duration = duration;
       _needUpdatePlayList = true;
       return '${entity.data.playUrl}@$duration';
