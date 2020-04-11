@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
@@ -83,7 +84,8 @@ class SongSheetState extends BaseListState<KgSongSheetEntity, SongSheetPage> {
         playCount > 10000 ? '${playCount ~/ 10000}万' : playCount.toString();
     return Stack(
       children: <Widget>[
-        Image.network(itemData.imgurl.replaceAll('{size}', '150')),
+        CachedNetworkImage(
+            imageUrl: itemData.imgurl.replaceAll('{size}', '150')),
         Positioned(
             left: 5,
             bottom: 5,

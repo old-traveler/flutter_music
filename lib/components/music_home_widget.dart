@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
@@ -97,7 +98,8 @@ class MusicHomeState extends State<MusicHomeWidget>
         turns: controller,
         child: CircleAvatar(
           radius: 21,
-          backgroundImage: NetworkImage(model.curSongInfo.sizableCover),
+          backgroundImage:
+              CachedNetworkImageProvider(model.curSongInfo.sizableCover),
         ),
       )),
     );

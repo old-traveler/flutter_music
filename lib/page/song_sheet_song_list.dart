@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
@@ -73,8 +74,8 @@ class SongSheetSongListState
     return FlexibleSpaceBar(
         background: Stack(
       children: <Widget>[
-        Image.network(
-          widget.imageUrl,
+        CachedNetworkImage(
+          imageUrl: widget.imageUrl,
           fit: BoxFit.fitWidth,
           width: MediaQuery.of(context).size.width,
         ),
@@ -117,7 +118,8 @@ class SongSheetSongListState
         ),
         CircleAvatar(
           radius: 14.0,
-          backgroundImage: NetworkImage(widget.userAvatar, scale: 2),
+          backgroundImage:
+              CachedNetworkImageProvider(widget.userAvatar, scale: 2),
         ),
         SizedBox(
           width: 10,

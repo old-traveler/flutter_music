@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
@@ -451,7 +452,7 @@ class SongListWidget extends StatelessWidget {
           for (var value in data.data.info) {
             widgets.add(ListTile(
               contentPadding: EdgeInsets.only(left: 20, right: 20),
-              leading: Image.network(value.imgurl),
+              leading: CachedNetworkImage(imageUrl: value.imgurl),
               title: Padding(
                 padding: EdgeInsets.only(bottom: 5),
                 child: Text(

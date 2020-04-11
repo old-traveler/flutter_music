@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart' as api_url;
@@ -48,8 +49,8 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
   Widget _buildHeaderView(HotSingerDataInfo firstData) {
     return Stack(
       children: <Widget>[
-        Image.network(
-          firstData.imgurl.replaceFirst("{size}", '200'),
+        CachedNetworkImage(
+          imageUrl: firstData.imgurl.replaceFirst("{size}", '200'),
           height: 270,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.fitWidth,
@@ -91,7 +92,7 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
     return ListTile(
       contentPadding: EdgeInsets.only(left: 5, right: 15),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(
+        backgroundImage: CachedNetworkImageProvider(
           itemData.imgurl.replaceFirst('{size}', '100'),
         ),
       ),

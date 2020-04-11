@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
@@ -80,8 +81,8 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
   Widget _buildLiveInfo(LiveDataList itemData) {
     return Stack(
       children: <Widget>[
-        Image.network(
-          itemData.imgPath.contains("http")
+        CachedNetworkImage(
+          imageUrl: itemData.imgPath.contains("http")
               ? itemData.imgPath
               : itemData.userLogo,
           width: MediaQuery.of(context).size.width / 2 - 10,
@@ -126,8 +127,8 @@ class LivePageState extends BaseListState<LiveEntity, LivePage> {
     }
     final tag = tags[0];
     if (tag?.tagUrl?.isNotEmpty ?? false) {
-      return Image.network(
-        tag.tagUrl,
+      return CachedNetworkImage(
+        imageUrl: tag.tagUrl,
         height: 20,
         fit: BoxFit.fitHeight,
       );

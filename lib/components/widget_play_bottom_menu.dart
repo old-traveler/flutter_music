@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/components/widget_img_menu.dart';
@@ -142,7 +143,8 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
             final itemData = playList[index];
             return ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(itemData.sizableCover),
+                backgroundImage:
+                    CachedNetworkImageProvider(itemData.sizableCover),
               ),
               title: _buildItemTitle(itemData),
               subtitle: Text(itemData.singerName),

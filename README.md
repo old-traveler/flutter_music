@@ -5,7 +5,6 @@ A new Flutter application.
 ## TODO
 
 * Router url
-* CacheImage
 * README
 
 ## Getting Started

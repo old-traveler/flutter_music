@@ -52,6 +52,7 @@ class MusicSongInfo {
     data['singerName'] = this.singerName;
     data['lyrics'] = this.lyrics;
     data['duration'] = this.duration;
+    data['authorId'] = this.authorId;
     return json.encode(data);
   }
 
@@ -69,5 +70,6 @@ class MusicSongInfo {
     this.singerName = data['singerName'];
     this.lyrics = data['lyrics'];
     this.duration = data['duration'];
+    this.authorId = data['authorId'];
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:music/bloc/home_page_bloc.dart';
@@ -73,7 +74,7 @@ class HomePageBanner extends StatelessWidget {
   Widget _buildBanner(BannerEntity bannerEntity) {
     return Swiper(
       itemBuilder: (context, index) =>
-          Image.network(bannerEntity.banner[index]),
+          CachedNetworkImage(imageUrl: bannerEntity.banner[index]),
       itemCount: bannerEntity.banner.length,
       pagination: SwiperPagination(
           alignment: Alignment.bottomRight,
@@ -118,8 +119,8 @@ class StationCard extends StatelessWidget {
 
   Widget _buildItem(StationEntity data, BuildContext context, int index) {
     final List<Widget> widgets = [
-      Image.network(
-        data.links[index].url,
+      CachedNetworkImage(
+        imageUrl: data.links[index].url,
         height: MediaQuery.of(context).size.width / 5 - 28,
         fit: BoxFit.fitHeight,
       ),
@@ -226,8 +227,8 @@ class SongSheetCard extends StatelessWidget {
       height: small ? size : height,
       child: Stack(
         children: <Widget>[
-          Image.network(
-            info.url,
+          CachedNetworkImage(
+            imageUrl: info.url,
             fit: BoxFit.fitHeight,
             height: height,
           ),
@@ -337,8 +338,8 @@ class HotRecommendCard extends StatelessWidget {
       children: <Widget>[
         ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: Image.network(
-            info.bannerurl,
+          child: CachedNetworkImage(
+            imageUrl: info.bannerurl,
             height: MediaQuery.of(context).size.width / 3 - 18,
             fit: BoxFit.fitHeight,
           ),
@@ -424,8 +425,8 @@ class ElaborateSelectCard extends StatelessWidget {
       children: <Widget>[
         ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: Image.network(
-            children.bannerurl,
+          child: CachedNetworkImage(
+            imageUrl: children.bannerurl,
             height: MediaQuery.of(context).size.width / 3 - 18,
             fit: BoxFit.fitHeight,
           ),
