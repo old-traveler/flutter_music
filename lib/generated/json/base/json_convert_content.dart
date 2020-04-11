@@ -17,6 +17,8 @@ import 'package:music/entity/singer_portrait_entity.dart';
 import 'package:music/generated/json/singer_portrait_entity_helper.dart';
 import 'package:music/entity/hot_singer_entity.dart';
 import 'package:music/generated/json/hot_singer_entity_helper.dart';
+import 'package:music/entity/singer_song_list_entity.dart';
+import 'package:music/generated/json/singer_song_list_entity_helper.dart';
 
 class JsonConvert<T> {
 	T fromJson(Map<String, dynamic> json) {
@@ -58,7 +60,13 @@ class JsonConvert<T> {
 			return singerPortraitDataAuthorImgs4FromJson(data as SingerPortraitDataAuthorImgs4, json) as T;			case HotSingerEntity:
 			return hotSingerEntityFromJson(data as HotSingerEntity, json) as T;			case HotSingerData:
 			return hotSingerDataFromJson(data as HotSingerData, json) as T;			case HotSingerDataInfo:
-			return hotSingerDataInfoFromJson(data as HotSingerDataInfo, json) as T;    }
+			return hotSingerDataInfoFromJson(data as HotSingerDataInfo, json) as T;			case SingerSongListEntity:
+			return singerSongListEntityFromJson(data as SingerSongListEntity, json) as T;			case SingerSongListData:
+			return singerSongListDataFromJson(data as SingerSongListData, json) as T;			case SingerSongListDataInfo:
+			return singerSongListDataInfoFromJson(data as SingerSongListDataInfo, json) as T;			case SingerSongListDataInfoTransParam:
+			return singerSongListDataInfoTransParamFromJson(data as SingerSongListDataInfoTransParam, json) as T;			case SingerSongListDataInfoComposerInfo:
+			return singerSongListDataInfoComposerInfoFromJson(data as SingerSongListDataInfoComposerInfo, json) as T;			case SingerSongListDataInfoLyricsInfo:
+			return singerSongListDataInfoLyricsInfoFromJson(data as SingerSongListDataInfoLyricsInfo, json) as T;    }
     return data as T;
   }
 
@@ -93,7 +101,13 @@ class JsonConvert<T> {
 			return singerPortraitDataAuthorImgs4ToJson(data as SingerPortraitDataAuthorImgs4);			case HotSingerEntity:
 			return hotSingerEntityToJson(data as HotSingerEntity);			case HotSingerData:
 			return hotSingerDataToJson(data as HotSingerData);			case HotSingerDataInfo:
-			return hotSingerDataInfoToJson(data as HotSingerDataInfo);    }
+			return hotSingerDataInfoToJson(data as HotSingerDataInfo);			case SingerSongListEntity:
+			return singerSongListEntityToJson(data as SingerSongListEntity);			case SingerSongListData:
+			return singerSongListDataToJson(data as SingerSongListData);			case SingerSongListDataInfo:
+			return singerSongListDataInfoToJson(data as SingerSongListDataInfo);			case SingerSongListDataInfoTransParam:
+			return singerSongListDataInfoTransParamToJson(data as SingerSongListDataInfoTransParam);			case SingerSongListDataInfoComposerInfo:
+			return singerSongListDataInfoComposerInfoToJson(data as SingerSongListDataInfoComposerInfo);			case SingerSongListDataInfoLyricsInfo:
+			return singerSongListDataInfoLyricsInfoToJson(data as SingerSongListDataInfoLyricsInfo);    }
     return data as T;
   }
   //Go back to a single instance by type
@@ -128,7 +142,13 @@ class JsonConvert<T> {
 			return SingerPortraitDataAuthorImgs4().fromJson(json);			case 'HotSingerEntity':
 			return HotSingerEntity().fromJson(json);			case 'HotSingerData':
 			return HotSingerData().fromJson(json);			case 'HotSingerDataInfo':
-			return HotSingerDataInfo().fromJson(json);    }
+			return HotSingerDataInfo().fromJson(json);			case 'SingerSongListEntity':
+			return SingerSongListEntity().fromJson(json);			case 'SingerSongListData':
+			return SingerSongListData().fromJson(json);			case 'SingerSongListDataInfo':
+			return SingerSongListDataInfo().fromJson(json);			case 'SingerSongListDataInfoTransParam':
+			return SingerSongListDataInfoTransParam().fromJson(json);			case 'SingerSongListDataInfoComposerInfo':
+			return SingerSongListDataInfoComposerInfo().fromJson(json);			case 'SingerSongListDataInfoLyricsInfo':
+			return SingerSongListDataInfoLyricsInfo().fromJson(json);    }
     return null;
   }
 
@@ -164,7 +184,13 @@ class JsonConvert<T> {
 			return List<SingerPortraitDataAuthorImgs4>();			case 'HotSingerEntity':
 			return List<HotSingerEntity>();			case 'HotSingerData':
 			return List<HotSingerData>();			case 'HotSingerDataInfo':
-			return List<HotSingerDataInfo>();    }
+			return List<HotSingerDataInfo>();			case 'SingerSongListEntity':
+			return List<SingerSongListEntity>();			case 'SingerSongListData':
+			return List<SingerSongListData>();			case 'SingerSongListDataInfo':
+			return List<SingerSongListDataInfo>();			case 'SingerSongListDataInfoTransParam':
+			return List<SingerSongListDataInfoTransParam>();			case 'SingerSongListDataInfoComposerInfo':
+			return List<SingerSongListDataInfoComposerInfo>();			case 'SingerSongListDataInfoLyricsInfo':
+			return List<SingerSongListDataInfoLyricsInfo>();    }
     return null;
   }
 
