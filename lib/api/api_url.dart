@@ -47,5 +47,5 @@ String getKgSongSheetList(String id, int page) =>
     'plist/list/$id?json=true&page=$page';
 
 String getSingerSongList(String singerId, int page, int pageSize) =>
-    'singer/song?sorttype=2&version=9108&identity=3&plat=0&pagesize=$pageSize&singerid=$singerId&area_code=1&page=$page&with_res_tag=1';
+    'singer/song?sorttype=2&version=9108&&plat=0&pagesize=$pageSize&singerid=$singerId&area_code=1&page=$page&with_res_tag=1';
 

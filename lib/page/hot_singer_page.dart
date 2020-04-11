@@ -4,6 +4,7 @@ import 'package:music/api/api_url.dart' as api_url;
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/hot_singer_entity.dart';
 import 'package:music/http/http_manager.dart';
+import 'package:music/page/singer_song_list_page.dart';
 
 /// 热门歌手页面
 class HotSingerPage extends StatefulWidget {
@@ -88,32 +89,40 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
 
   Widget _buildSingerInfo(HotSingerDataInfo itemData) {
     return ListTile(
-        contentPadding: EdgeInsets.only(left: 5, right: 15),
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(
-            itemData.imgurl.replaceFirst('{size}', '100'),
-          ),
+      contentPadding: EdgeInsets.only(left: 5, right: 15),
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(
+          itemData.imgurl.replaceFirst('{size}', '100'),
         ),
-        title: Text(
-          itemData.singername,
-          style: TextStyle(fontSize: 15),
-        ),
-        subtitle: Text('${itemData.heat}热度'),
-        trailing: SizedBox(
-          height: 25,
-          width: 60,
-          child: FlatButton(
-            padding: EdgeInsets.zero,
-            color: Colors.blue,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: Text(
-              '关注',
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {},
+      ),
+      title: Text(
+        itemData.singername,
+        style: TextStyle(fontSize: 15),
+      ),
+      subtitle: Text('${itemData.heat}热度'),
+      trailing: SizedBox(
+        height: 25,
+        width: 60,
+        child: FlatButton(
+          padding: EdgeInsets.zero,
+          color: Colors.blue,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Text(
+            '关注',
+            style: TextStyle(color: Colors.white),
           ),
-        ));
+          onPressed: () {},
+        ),
+      ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => SingerSongListPage(
+                  singerId: itemData.singerid.toString(),
+                  singerName: itemData.singername,
+                )));
+      },
+    );
   }
 
   Widget _buildRanking(HotSingerDataInfo itemData, int index) {
