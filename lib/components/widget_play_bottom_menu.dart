@@ -210,22 +210,24 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
       ));
     }
 
+    void _onMenuSelected(String value) {
+      if (value == 'remove') {
+        setState(() => playList.remove(info));
+        model.removeSongInfoById(info.hash);
+      } else if (value == 'singer') {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => SingerSongListPage(
+                  singerId: info.authorId,
+                  singerName: info.singerName,
+                )));
+      } else if (value == 'play') {
+        _onItemTap(info);
+      }
+    }
+
     return PopupMenuButton<String>(
       padding: EdgeInsets.zero,
-      onSelected: (value) {
-        if (value == 'remove') {
-          setState(() => playList.remove(info));
-          model.removeSongInfoById(info.hash);
-        } else if (value == 'singer') {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SingerSongListPage(
-                    singerId: info.authorId,
-                    singerName: info.singerName,
-                  )));
-        } else if (value == 'play') {
-          _onItemTap(info);
-        }
-      },
+      onSelected: _onMenuSelected,
       itemBuilder: (context) => popupList,
     );
   }
