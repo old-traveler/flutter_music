@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_plugin/flutter_music_plugin.dart';
 import 'package:music/components/widget_img_menu.dart';
 import 'package:music/entity/bean/music_info.dart';
-import 'package:music/page/singer_song_list_page.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
@@ -126,15 +125,31 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
 
   List<Widget> _buildPlayList(
       ScrollController scrollController, List<MusicSongInfo> playList) {
+    _buildPlayListTitle() {
+      return Container(
+          height: 50,
+          alignment: Alignment.center,
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  '播放列表（${playList.length}首）',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(right: 20),
+                width: 50,
+                alignment: Alignment.centerRight,
+                child: Icon(Icons.more_horiz, color: Colors.grey),
+              )
+            ],
+          ));
+    }
+
     return <Widget>[
-      Container(
-        height: 40,
-        alignment: Alignment.center,
-        child: Text(
-          '播放列表',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
+      _buildPlayListTitle(),
       Divider(height: 1),
       Expanded(
         child: ListView.builder(
@@ -142,6 +157,7 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
           itemBuilder: (context, index) {
             final itemData = playList[index];
             return ListTile(
+              contentPadding: EdgeInsets.only(left: 20, right: 2),
               leading: CircleAvatar(
                 backgroundImage:
                     CachedNetworkImageProvider(itemData.sizableCover),
