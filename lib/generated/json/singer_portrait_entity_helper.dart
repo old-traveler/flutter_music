@@ -29,9 +29,11 @@ Map<String, dynamic> singerPortraitEntityToJson(SingerPortraitEntity entity) {
 singerPortraitDataFromJson(SingerPortraitData data, Map<String, dynamic> json) {
 	if (json['album'] != null) {
 		data.album = new List<SingerPortraitDataAlbum>();
-		(json['album'] as List).forEach((v) {
-			data.album.add(new SingerPortraitDataAlbum().fromJson(v));
-		});
+		if(json['album'] is List){
+			(json['album'] as List).forEach((v) {
+				data.album.add(new SingerPortraitDataAlbum().fromJson(v));
+			});
+		}
 	}
 	if (json['author'] != null) {
 		data.author = new List<SingerPortraitDataAuthor>();

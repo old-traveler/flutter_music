@@ -229,6 +229,7 @@ class PlaySongsModel with ChangeNotifier {
           entity.data.isFreePart == 1 ? 60000 : entity.data.timelength;
       final sizableCover =
           entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100');
+      final needNotify = _songMap[songId]?.lyrics?.isNotEmpty != true;
       _songMap[songId]
         ..playUrl = entity.data.playUrl
         ..sizableCover = sizableCover
@@ -237,6 +238,9 @@ class PlaySongsModel with ChangeNotifier {
         ..duration = duration;
 
       _needUpdatePlayList = true;
+      if (needNotify) {
+        notifyListeners();
+      }
       return '${entity.data.playUrl}@$duration@$sizableCover';
     }
     ToastUtil.show(context: _context, msg: '加载失败');
