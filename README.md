@@ -5,7 +5,6 @@ A new Flutter application.
 ## TODO
 
 * README
-* removeAll PlayList
 
 ## Getting Started
 

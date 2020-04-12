@@ -106,10 +106,7 @@ class PlaySongsModel with ChangeNotifier {
     assert(info != null && info.hash.isNotEmpty);
     _songMap[info.hash] = info;
     SongInfo songInfo = info.toSongInfo();
-    MusicWrapper.singleton
-        .playSong(songInfo.songId, songInfo.songUrl,
-            duration: songInfo.duration)
-        .whenComplete(() {
+    MusicWrapper.singleton.playSongByInfo(songInfo).whenComplete(() {
       saveCurPlayingList();
     });
   }
@@ -230,15 +227,17 @@ class PlaySongsModel with ChangeNotifier {
     if (entity.status == 1 && (entity?.data?.playUrl?.isNotEmpty == true)) {
       final duration =
           entity.data.isFreePart == 1 ? 60000 : entity.data.timelength;
+      final sizableCover =
+          entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100');
       _songMap[songId]
         ..playUrl = entity.data.playUrl
-        ..sizableCover =
-            entity.data.authors[0].sizableAvatar.replaceFirst('{size}', '100')
+        ..sizableCover = sizableCover
         ..lyrics = entity.data.lyrics
         ..authorId = entity.data.authorId
         ..duration = duration;
+
       _needUpdatePlayList = true;
-      return '${entity.data.playUrl}@$duration';
+      return '${entity.data.playUrl}@$duration@$sizableCover';
     }
     ToastUtil.show(context: _context, msg: '加载失败');
     return null;
@@ -256,6 +255,9 @@ class PlaySongsModel with ChangeNotifier {
 
 // ignore: sdk_version_extension_methods
 extension MusicInfoConvert on MusicSongInfo {
-  SongInfo toSongInfo() =>
-      SongInfo(this.hash, this.playUrl, duration: this.duration);
+  SongInfo toSongInfo() => SongInfo(this.hash, this.playUrl,
+      duration: this.duration,
+      singerName: this.singerName,
+      songName: this.songName,
+      imgUrl: this.sizableCover);
 }
