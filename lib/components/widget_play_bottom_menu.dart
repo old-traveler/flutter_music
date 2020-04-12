@@ -217,11 +217,8 @@ class MusicPlayListState extends State<MusicPlayListWidget> {
         setState(() => playList.remove(info));
         model.removeSongInfoById(info.hash);
       } else if (value == 'singer') {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SingerSongListPage(
-                  singerId: info.authorId,
-                  singerName: info.singerName,
-                )));
+        Navigator.of(context).pushNamed('singer_song',
+            arguments: [info.authorId, info.singerName]);
       } else if (value == 'play') {
         _onItemTap(info);
       }

@@ -5,10 +5,9 @@ import 'package:music/page/home_page.dart';
 import 'package:music/page/hot_singer_page.dart';
 import 'package:music/page/live_page.dart';
 import 'package:music/page/my_profile_page.dart';
-import 'package:music/page/search_page.dart';
-import 'package:music/page/splash_page.dart';
 import 'package:music/provider/music_record_model.dart';
 import 'package:music/provider/play_songs_model.dart';
+import 'package:music/router/music_router.dart';
 import 'package:provider/provider.dart';
 
 import 'components/music_home_widget.dart';
@@ -29,11 +28,13 @@ class MusicApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+          initialRoute: 'splash',
+          routes: MusicRouter.routers,
+          onGenerateRoute: MusicRouter.onGenerateRoute,
           title: 'Music',
           theme: ThemeData(
             primarySwatch: Colors.blue,
-          ),
-          home: SplashPage()),
+          )),
     );
   }
 }
@@ -108,8 +109,7 @@ class MainPageState extends State<MainPage> {
         icon: Icon(Icons.search),
         tooltip: 'search',
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => SearchPage()));
+          Navigator.of(context).pushNamed('search');
         },
       )
     ];

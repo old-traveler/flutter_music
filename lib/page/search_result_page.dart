@@ -13,8 +13,7 @@ import 'package:provider/provider.dart';
 openSearchResultPage(BuildContext context, String keyWord) {
   Provider.of<MusicRecordModel>(context, listen: false)
       .addSearchHistory(keyWord);
-  Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => SearchResultPage(keyWord: keyWord)));
+  Navigator.of(context).pushNamed('search_result', arguments: keyWord);
 }
 
 class SearchResultPage extends StatefulWidget {

@@ -7,8 +7,7 @@ import 'package:flutter/services.dart';
 void openWebPage(BuildContext context, url) {
   // 目前只支持Android的浏览器
   if (Platform.isAndroid) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => WebPage(url: url)));
+    Navigator.of(context).pushNamed('web', arguments: url);
   }
 }
 

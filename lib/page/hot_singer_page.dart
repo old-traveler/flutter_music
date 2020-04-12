@@ -5,7 +5,6 @@ import 'package:music/api/api_url.dart' as api_url;
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/entity/hot_singer_entity.dart';
 import 'package:music/http/http_manager.dart';
-import 'package:music/page/singer_song_list_page.dart';
 
 /// 热门歌手页面
 class HotSingerPage extends StatefulWidget {
@@ -117,11 +116,8 @@ class HotSingerState extends BaseListState<HotSingerEntity, HotSingerPage> {
         ),
       ),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SingerSongListPage(
-                  singerId: itemData.singerid.toString(),
-                  singerName: itemData.singername,
-                )));
+        Navigator.of(context).pushNamed('singer_song',
+            arguments: [itemData.singerid.toString(), itemData.singername]);
       },
     );
   }

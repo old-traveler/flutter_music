@@ -7,8 +7,6 @@ import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
-
 class SplashPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SplashState();
@@ -61,10 +59,8 @@ class SplashState extends State<SplashPage> {
 
   Future _goToHomePage(v) {
     return Future.delayed(Duration(seconds: 1)).then((value) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) {
-        return MainPage();
-      }), (router) => router == null);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('main', (router) => router == null);
     });
   }
 }

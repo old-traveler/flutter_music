@@ -48,15 +48,13 @@ openMusicByMusicSongInfo({BuildContext context, MusicSongInfo musicSongInfo}) {
   if (!model.playSongById(musicSongInfo.hash)) {
     model.playSong(musicSongInfo);
   }
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
+  Navigator.of(context).pushNamed('music_play');
 }
 
 openMusicPlayPage(BuildContext context, {PlaySongsModel model}) {
   model ??= Provider.of<PlaySongsModel>(context, listen: false);
   if (model.curSongInfo != null) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MusicPlayPage()));
+    Navigator.of(context).pushNamed('music_play');
   } else {
     ToastUtil.show(context: context, msg: '请先选择音乐');
   }

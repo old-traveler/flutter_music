@@ -4,8 +4,8 @@ A new Flutter application.
 
 ## TODO
 
-* Router url
 * README
+* removeAll PlayList
 
 ## Getting Started
 

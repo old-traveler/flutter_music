@@ -8,7 +8,6 @@ import 'package:music/entity/elaborate_select_model_entity.dart';
 import 'package:music/entity/hot_recommend_entity.dart';
 import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
-import 'package:music/page/song_sheet_page.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -160,8 +159,7 @@ class SongSheetCard extends StatelessWidget {
           child: GestureDetector(
             child: _buildSongSheetContent(data, leadingSize),
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SongSheetPage()));
+              Navigator.of(context).pushNamed('song_sheet');
             },
           ))
     ];
@@ -187,8 +185,7 @@ class SongSheetCard extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SongSheetPage()));
+                Navigator.of(context).pushNamed('song_sheet');
               },
             ),
             Icon(Icons.keyboard_arrow_right, size: 16, color: Colors.grey)
