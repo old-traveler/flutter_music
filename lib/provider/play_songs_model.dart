@@ -137,7 +137,9 @@ class PlaySongsModel with ChangeNotifier {
   }
 
   void playOrPauseMusic() {
-    MusicWrapper.singleton.playOrPauseMusic(songId: _curSongInfo.hash);
+    if (_curSongInfo != null) {
+      MusicWrapper.singleton.playOrPauseMusic(songId: _curSongInfo.hash);
+    }
   }
 
   static isPlaying(PlaySongsModel model) {
@@ -154,6 +156,11 @@ class PlaySongsModel with ChangeNotifier {
     };
     String jsonString = json.encode(data);
     sp.setString('playList', jsonString);
+  }
+
+  void cleanPlayingListCache() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString('playList', '');
   }
 
   void saveCurPlayingIndex(String key) async {
@@ -235,6 +242,15 @@ class PlaySongsModel with ChangeNotifier {
     }
     ToastUtil.show(context: _context, msg: '加载失败');
     return null;
+  }
+
+  void removePlayList() {
+    _curSongInfo = null;
+    _songMap.clear();
+    cleanPlayingListCache();
+    MusicWrapper.singleton.removeMusicList().then((value) {
+      notifyListeners();
+    });
   }
 }
 
