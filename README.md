@@ -30,57 +30,44 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832" margin="10">
     <box width="10"/>
     <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832" margin="10">
 </div>
 
-### 校园说说
+### 首页&搜索
 
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_statement.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_mypublish.png" width = "400" height = "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/home_page.jpg" width = "400" height = "832" margin="10">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/search.jpg" width = "400" height = "832" margin="10">
 </div>
 
-### 二手市场
+### 直播列表&直播详情
 
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_market.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_second.png" width = "400" height = "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live.jpg" width = "400" height = "832">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live_detail.jpg" width = "400" height = "832">
 </div>
 
-### 私信
+### 歌单
 
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_conversation.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_message.png" width = "400" height = "832">
-</div>
-
-
-### 用户信息
-
----
-
-<div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_info.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_other.png" width = "400" height = "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/song_sheet.jpg" width = "400" height = "832">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/song_sheet_detail.jpg" width = "400" height = "832">
 </div>
 
 
-### 失物招领&侧拉信息
+### 热门歌手&个人信息
 
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_lost.png"  width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_left.png" width = "400" height = "832">
-</div>
-
-### 考试计划&成绩
-
----
-
-<div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_exam.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_grade.png" width = "400" height = "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/singer.jpg" width = "400" height = "832">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/personal.jpg" width = "400" height = "832">
 </div>
