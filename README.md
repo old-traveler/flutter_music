@@ -30,7 +30,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "461" height= "960"><img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "461" height= "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832"><img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832">
 </div>
 
 ### 校园说说
@@ -38,7 +38,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_statement.png" width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_mypublish.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_statement.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_mypublish.png" width = "400" height = "832">
 </div>
 
 ### 二手市场
@@ -46,7 +46,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_market.png" width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_second.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_market.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_second.png" width = "400" height = "832">
 </div>
 
 ### 私信
@@ -54,7 +54,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_conversation.png" width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_message.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_conversation.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_message.png" width = "400" height = "832">
 </div>
 
 
@@ -63,7 +63,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_info.png" width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_other.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_info.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_other.png" width = "400" height = "832">
 </div>
 
 
@@ -72,7 +72,7 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_lost.png"  width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_left.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_lost.png"  width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_left.png" width = "400" height = "832">
 </div>
 
 ### 考试计划&成绩
@@ -80,5 +80,5 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_exam.png" width = "461" height = "960"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_grade.png" width = "461" height = "960">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_exam.png" width = "400" height = "832"><img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/screener_grade.png" width = "400" height = "832">
 </div>
