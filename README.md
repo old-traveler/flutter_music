@@ -30,7 +30,9 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832"><img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832">
+    <box width="10"/>
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832" margin="10">
 </div>
 
 ### 校园说说
