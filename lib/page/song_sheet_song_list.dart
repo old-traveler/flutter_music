@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music/api/api_url.dart';
 import 'package:music/bloc/base_bloc.dart';
-import 'package:music/components/BlurRectWidget.dart';
+import 'package:music/components/blur_rect_widget.dart';
 import 'package:music/entity/bean/music_info.dart';
 import 'package:music/entity/kg_song_sheet_list_entity.dart';
 import 'package:music/http/http_manager.dart';
