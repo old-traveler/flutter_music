@@ -38,8 +38,8 @@ dependencies:
   share: ^0.6.3+6
   # https://github.com/flutter/plugins/tree/master/packages/shared_preferences
   shared_preferences: ^0.5.6+3
-  flutter_music_plugin:
-    path: ../flutter_music_plugin
+  flutter_music_plugin: ^0.0.6
+#    path: ../flutter_music_plugin
 
 dev_dependencies:
   flutter_test:
