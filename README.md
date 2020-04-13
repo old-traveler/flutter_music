@@ -30,9 +30,9 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832" margin="10">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_page.jpg" width = "400" height= "832" margin="20">
     <box width="10"/>
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832" margin="10">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832" margin="20">
 </div>
 
 ### 首页&搜索
@@ -40,8 +40,8 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/home_page.jpg" width = "400" height = "832" margin="10">
-    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/search.jpg" width = "400" height = "832" margin="10">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/home_page.jpg" width = "400" height = "832" margin="20">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/search.jpg" width = "400" height = "832" margin="20">
 </div>
 
 ### 直播列表&直播详情
@@ -49,8 +49,8 @@
 ---
 
 <div class="half">
-    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live.jpg" width = "400" height = "832">
-    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live_detail.jpg" width = "400" height = "832">
+    <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live.jpg" width = "400" height = "832" margin="20">
+    <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/live_detail.jpg" width = "400" height = "832" margin="20">
 </div>
 
 ### 歌单
