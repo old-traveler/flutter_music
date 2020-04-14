@@ -10,6 +10,7 @@ import 'package:music/entity/song_sheet_entity.dart';
 import 'package:music/entity/station_entity.dart';
 import 'package:music/util/stream_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:music/util/size_extension.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -97,7 +98,7 @@ class StationCard extends StatelessWidget {
         height: 210,
         builder: (context, data) {
           return Container(
-              height: 190.0,
+              height: 510.0.w,
               padding: EdgeInsets.only(left: 10, right: 10, top: 16),
               child: _buildGirdView(data));
         });
@@ -357,7 +358,7 @@ class HotRecommendCard extends StatelessWidget {
 double getModularHeight(int length) {
   if (length <= 0) return 0.0;
   var height = 0.0;
-  height = (length ~/ 3 + (length % 3 > 0 ? 1 : 0)) * 150.0;
+  height = (length ~/ 3 + (length % 3 > 0 ? 1 : 0)) * 400.0.w;
   return height + 15;
 }
 

@@ -8,6 +8,7 @@ import 'package:music/entity/bean/lyric.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/util/date_util.dart';
 import 'package:provider/provider.dart';
+import 'package:music/util/size_extension.dart';
 
 class LyricWidget extends StatefulWidget {
   final screenCount;
@@ -19,7 +20,7 @@ class LyricWidget extends StatefulWidget {
 }
 
 class LyricState extends State<LyricWidget> {
-  static const double itemHeight = 34.0;
+  static double itemHeight = 100.0.h;
   String _songId;
   List<Lyric> lyricList;
   ScrollController controller;
