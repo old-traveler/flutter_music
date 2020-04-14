@@ -29,51 +29,49 @@ class WebState extends State<WebPage> {
   @override
   Widget build(BuildContext context) {
     print("url  ${widget.url}");
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_title ?? widget.title),
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onTap: () => backOrPop(),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: AndroidView(
+          viewType: 'flutterWebView',
+          creationParams: {
+            'url': widget.url,
+          },
+          onPlatformViewCreated: onPlatformViewCreated,
+          creationParamsCodec: const StandardMessageCodec(),
         ),
-        actions: <Widget>[
-          GestureDetector(
-            child: Icon(
-              Icons.refresh,
-              color: Colors.white,
-            ),
-            onTap: reloadUrl,
-          ),
-          SizedBox(width: 10),
-          GestureDetector(
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          SizedBox(width: 14),
-        ],
       ),
-      body: AndroidView(
-        viewType: 'flutterWebView',
-        creationParams: {
-          'url': widget.url,
-        },
-        onPlatformViewCreated: onPlatformViewCreated,
-        creationParamsCodec: const StandardMessageCodec(),
-      ),
+      onWillPop: _onWillPop,
     );
   }
 
-  void backOrPop() async {
+  Future<bool> _onWillPop() async {
     bool isBacked = await _channel.invokeMethod('back');
-    if (!isBacked) {
-      Navigator.pop(context);
-    }
+    return !isBacked;
+  }
+
+  Widget _buildAppBar() {
+    return AppBar(
+      title: Text(_title ?? widget.title),
+      actions: <Widget>[
+        GestureDetector(
+          child: Icon(
+            Icons.refresh,
+            color: Colors.white,
+          ),
+          onTap: reloadUrl,
+        ),
+        SizedBox(width: 10),
+        GestureDetector(
+          child: Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        SizedBox(width: 14),
+      ],
+    );
   }
 
   void reloadUrl() {
