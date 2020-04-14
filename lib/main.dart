@@ -8,6 +8,7 @@ import 'package:music/page/my_profile_page.dart';
 import 'package:music/provider/music_record_model.dart';
 import 'package:music/provider/play_songs_model.dart';
 import 'package:music/router/music_router.dart';
+import 'package:music/util/toast_util.dart';
 import 'package:provider/provider.dart';
 
 import 'components/music_home_widget.dart';
@@ -73,6 +74,7 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   PageController _pageController;
   int _curIndex = 0;
+  int _lastBackTime = 0;
 
   @override
   void initState() {
@@ -82,6 +84,23 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+      child: _buildMainContent(),
+      onWillPop: _onWillPop,
+    );
+  }
+
+  Future<bool> _onWillPop() {
+    int _backTime = _lastBackTime;
+    _lastBackTime = DateTime.now().millisecondsSinceEpoch;
+    final canBack = _lastBackTime - _backTime < 1000;
+    if (!canBack) {
+      ToastUtil.show(context: context, msg: '再点一次就能退出了');
+    }
+    return Future.value(canBack);
+  }
+
+  Widget _buildMainContent() {
     return Scaffold(
         backgroundColor: Color(0xFFF8F8F8),
         appBar: _buildAppBar(),
