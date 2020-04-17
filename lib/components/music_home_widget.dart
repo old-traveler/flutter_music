@@ -107,7 +107,7 @@ class MusicHomeState extends State<MusicHomeWidget>
 
   @override
   void dispose() {
-    super.dispose();
     controller.dispose();
+    super.dispose();
   }
 }
