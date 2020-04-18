@@ -22,14 +22,6 @@ class MusicHomeState extends State<MusicHomeWidget>
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 15), vsync: this);
-    controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.reset();
-        controller.forward();
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
   }
 
   @override
@@ -38,7 +30,7 @@ class MusicHomeState extends State<MusicHomeWidget>
       builder: (context, model, child) {
         if (model.curState == MusicStateType.STATE_PLAYING ||
             model.curState == MusicStateType.STATE_BUFFERING) {
-          controller.forward();
+          controller.repeat();
         } else if (model.curState == MusicStateType.STATE_PAUSED ||
             model.curState == MusicStateType.STATE_STOPPED) {
           controller.stop();
