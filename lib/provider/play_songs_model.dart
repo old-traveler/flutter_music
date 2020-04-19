@@ -64,9 +64,11 @@ class PlaySongsModel with ChangeNotifier {
         print("切换歌曲" + _curSongInfo.songName);
         saveCurPlayingIndex(_curSongInfo.hash);
         needNotify = true;
-        if (_needUpdatePlayList) {
-          saveCurPlayingList();
-        }
+      }
+
+      /// 需要更新播放列表缓存
+      if (_needUpdatePlayList) {
+        saveCurPlayingList();
       }
 
       /// 状态发生改变，切不是因为网络缓冲原因时通知更新
