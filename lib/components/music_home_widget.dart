@@ -98,6 +98,12 @@ class MusicHomeState extends State<MusicHomeWidget>
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+    controller?.stop();
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
