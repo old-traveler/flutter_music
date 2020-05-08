@@ -35,7 +35,7 @@
     <img src="https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/play_list.jpg" width = "400" height= "832" margin="20">
 </div>
 
-### 首页&搜索
+### 首页 & 搜索
 
 ---
 
@@ -44,7 +44,7 @@
     <img src = "https://raw.githubusercontent.com/old-traveler/flutter_music/master/show_image/search.jpg" width = "400" height = "832" margin="20">
 </div>
 
-### 直播列表&直播详情
+### 直播列表 & 直播详情
 
 ---
 
@@ -63,7 +63,7 @@
 </div>
 
 
-### 热门歌手&个人信息
+### 热门歌手 & 个人信息
 
 ---
 
