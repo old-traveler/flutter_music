@@ -334,13 +334,16 @@ class HotRecommendCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: CachedNetworkImage(
-            imageUrl: info.bannerurl,
-            height: MediaQuery.of(context).size.width / 3 - 18,
-            fit: BoxFit.fitHeight,
+        GestureDetector(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: CachedNetworkImage(
+              imageUrl: info.bannerurl,
+              height: MediaQuery.of(context).size.width / 3 - 18,
+              fit: BoxFit.fitHeight,
+            ),
           ),
+          onTap: () => Navigator.of(context).pushNamed('song_sheet'),
         ),
         Expanded(
           child: Center(
