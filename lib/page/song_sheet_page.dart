@@ -57,7 +57,10 @@ class SongSheetState extends BaseListState<KgSongSheetEntity, SongSheetPage> {
     final widgets = <Widget>[
       ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: _buildSongSheet(itemData)),
+          child: Hero(
+            tag: itemData.specialid.toString(),
+            child: _buildSongSheet(itemData),
+          )),
       SizedBox(
         height: 2,
       ),

@@ -73,18 +73,24 @@ class SongSheetSongListState
   Widget _flexibleSpace() {
     return FlexibleSpaceBar(
         background: Stack(
-      children: <Widget>[
-        CachedNetworkImage(
-          imageUrl: widget.imageUrl,
-          fit: BoxFit.fitWidth,
-          width: MediaQuery.of(context).size.width,
-        ),
-        BlurRectWidget(
-          child: Container(),
-        ),
-        Positioned(bottom: 20, child: _spaceContent())
-      ],
-    ));
+          children: <Widget>[
+            Hero(
+              child: CachedNetworkImage(
+                imageUrl: widget.imageUrl,
+                fit: BoxFit.fitWidth,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+              ),
+              tag: widget.specialId,
+            ),
+            BlurRectWidget(
+              child: Container(),
+            ),
+            Positioned(bottom: 20, child: _spaceContent())
+          ],
+        ));
   }
 
   Widget _spaceContent() {
