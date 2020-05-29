@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:music/bloc/base_bloc.dart';
 import 'package:music/bloc/smart_state_widget.dart';
 import 'package:music/components/input_dialog.dart';
+import 'package:music/components/slide_direction_transtion.dart';
 import 'package:music/entity/song_list_entity.dart';
 import 'package:music/entity/user_entity.dart';
 import 'package:music/http/http_manager.dart';
@@ -340,14 +341,12 @@ class PromoteWidget extends StatefulWidget {
 
 class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
   Timer _timer;
-  PageController _pageController;
   int _curIndex = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _pageController = PageController();
     _startAnimation();
   }
 
@@ -357,8 +356,7 @@ class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
     Timer.periodic(period, (timer) {
       _timer = timer;
       setState(() {
-        _pageController.animateToPage(++_curIndex,
-            duration: Duration(seconds: 1), curve: Curves.easeInOut);
+        ++_curIndex;
       });
     });
   }
@@ -409,28 +407,34 @@ class PromoteState extends State<PromoteWidget> with WidgetsBindingObserver {
             width: 10,
           ),
           Expanded(
-            child: PageView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              controller: _pageController,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                return _buildPromoteItem(index);
-              },
-            ),
-          )
+              child: AnimatedSwitcher(
+            child: _buildPromoteItem(_curIndex),
+            duration: Duration(milliseconds: 2000),
+            transitionBuilder: (child, animation) {
+              return ClipRect(
+                child: SlideDirectionTransition(
+                  child: child,
+                  position: animation,
+                  direction: AxisDirection.up,
+                ),
+              );
+            },
+          ))
         ],
       ),
     );
   }
 
   Widget _buildPromoteItem(int index) {
-    return Align(
+    Widget child = Align(
+      key: ValueKey(_curIndex),
       alignment: Alignment.centerLeft,
       child: Text(
         widget.textList[index % widget.textList.length],
         style: TextStyle(color: Colors.black54),
       ),
     );
+    return child;
   }
 }
 
